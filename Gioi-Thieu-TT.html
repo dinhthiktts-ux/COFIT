@@ -1,6 +1,60 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Mô phỏng tránh va trên biển và các câu hỏi ôn tập</title>
+<style>
+:root{
+  --ocean-light:#BFE3F0;
+  --ocean-pale:#E3F3F9;
+  --ocean-mid:#4E9FCB;
+  --ocean-deep:#0B2E4A;
+  --navy:#123C5C;
+  --navy-soft:#1C4E73;
+  --foam:#F6FBFD;
+  --paper:#FFFFFF;
+  --brass:#C99A44;
+  --brass-soft:#E4C077;
+  --giveway:#D6524A;
+  --giveway-soft:#F6D9D6;
+  --standon:#2F9E68;
+  --standon-soft:#D6F0E1;
+  --both:#DB8F2E;
+  --both-soft:#F7E4C3;
+  --ink:#0B2E4A;
+  --ink-soft:#4A6C82;
+  --line:#CFE4EE;
+  --line-soft:#E4F1F6;
+  --shadow-sm: 0 2px 8px rgba(11,46,74,0.08);
+  --shadow-md: 0 8px 28px rgba(11,46,74,0.14);
+  --shadow-lg: 0 18px 48px rgba(11,46,74,0.20);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --font-display: "Bahnschrift", "Segoe UI Semibold", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "Cascadia Mono", "SF Mono", Consolas, Menlo, monospace;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:var(--font-body);
+  color:var(--ink);
+  background:
+    radial-gradient(1200px 600px at 100% -10%, var(--ocean-pale) 0%, transparent 60%),
+    radial-gradient(900px 500px at -10% 20%, var(--ocean-light) 0%, transparent 55%),
+    var(--foam);
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:var(--font-display);color:var(--navy);margin:0 0 8px 0;letter-spacing:0.02em;}
+p{line-height:1.6;color:var(--ink-soft);margin:0 0 12px 0;}
+button{font-family:var(--font-body);cursor:pointer;}
+::selection{background:var(--ocean-mid);color:#fff;}
+a{color:var(--ocean-mid);}
+<html lang="vi">
+<head>
   <meta charset="UTF-8">
   <title>Giới thiệu Trung tâm Đào tạo Thuyền viên</title>
   <style>
