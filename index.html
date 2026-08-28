@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<title>TRUNG TÂM ĐÀO TẠO THUYỀN VIÊN VÀ PHÁT TRIỂN CÔNG NGHỆ BIỂN</title>
+<title>Mô phỏng tránh va trên biển và các câu hỏi ôn tập</title>
 <style>
 :root{
   --ocean-light:#BFE3F0;
@@ -32,8 +32,8 @@
   --radius-sm: 8px;
   --radius-md: 14px;
   --radius-lg: 22px;
-  --font-display: "Arial", "Arial", "Arial", "Arial", Arial, sans-serif;
-  --font-body: -apple-system, BlinkMacSystemFont, "Arial", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Bahnschrift", "Segoe UI Semibold", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-mono: "Cascadia Mono", "SF Mono", Consolas, Menlo, monospace;
 }
 *{box-sizing:border-box;}
@@ -237,6 +237,8 @@ main{flex:1 1 auto;padding:28px 22px 60px;max-width:1180px;margin:0 auto;width:1
 .form-field textarea{resize:vertical;min-height:70px;}
 .form-field input:focus,.form-field textarea:focus,.form-field select:focus{outline:2px solid var(--ocean-mid);outline-offset:1px;border-color:var(--ocean-mid);}
 .form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.signal-row{display:flex;gap:8px;margin-bottom:8px;align-items:center;}
+.signal-row input{flex:1;min-width:0;}
 .form-error{color:var(--giveway);font-size:12.5px;margin-top:-6px;margin-bottom:12px;min-height:16px;}
 .edit-card{border:1.5px dashed var(--brass);background:#FFFBF2;border-radius:var(--radius-md);padding:20px;margin-top:14px;}
 .edit-card h4{font-size:13px;text-transform:uppercase;letter-spacing:0.06em;color:var(--brass);margin-bottom:12px;}
@@ -271,7 +273,7 @@ main{flex:1 1 auto;padding:28px 22px 60px;max-width:1180px;margin:0 auto;width:1
     <div class="brand">
       <svg id="brand-emblem" class="brand-emblem" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"></svg>
       <div class="brand-text">
-        <span class="brand-org" id="org-name-display">TRUNG TÂM ĐÀO TẠO THUYỀN VIÊN VÀ PHÁT TRIỂN CÔNG NGHỆ BIỂN</span>
+        <span class="brand-org" id="org-name-display">TRUNG TÂM ĐÀO TẠO THUYỀN VIÊN</span>
         <span class="brand-app">Mô phỏng tránh va trên biển</span>
       </div>
     </div>
@@ -290,7 +292,7 @@ main{flex:1 1 auto;padding:28px 22px 60px;max-width:1180px;margin:0 auto;width:1
   <main id="view-root"></main>
 
   <footer class="app-footer">
-    <div id="footer-text">© <strong id="footer-org">Trung tâm Đào tạo Thuyền viên và Phát triển Công nghệ biển</strong> — Tài liệu nội bộ phục vụ giảng dạy</div>
+    <div id="footer-text">© <strong id="footer-org">Trung tâm Đào tạo Thuyền viên</strong> — Tài liệu nội bộ phục vụ giảng dạy COLREG 72</div>
   </footer>
 </div>
 
@@ -384,7 +386,7 @@ const DEFAULT_SCENARIOS = [
   summary:"Hai tàu máy đi ngược hướng nhau, cả hai đều phải chuyển hướng sang phải.",
   description:`Hai tàu máy đi ngược hướng hoặc gần như ngược hướng nhau, mỗi tàu nhìn thấy đèn cột / hình dáng tàu kia gần như thẳng phía trước mũi — có nguy cơ đâm va trực diện.`,
   action:`Cả hai tàu đều phải chủ động chuyển hướng sang bên phải (mạn phải) để đi qua mạn trái của nhau. Không tàu nào được coi là tàu giữ hướng trong tình huống này; hành động phải sớm và rõ ràng.`,
-  soundSignal:`Mỗi tàu phát 1 tiếng còi ngắn khi bắt đầu chuyển hướng sang phải.`,
+  soundSignals:[`Mỗi tàu phát 1 tiếng còi ngắn khi bắt đầu chuyển hướng sang phải.`],
   showTurnArrows:true,
   ownShip:{name:"Tàu ta",type:"power",x:210,y:322,heading:0,role:"both"},
   targetShip:{name:"Tàu mục tiêu",type:"power",x:210,y:108,heading:180,role:"both"},
@@ -395,7 +397,7 @@ const DEFAULT_SCENARIOS = [
   summary:"Tàu mục tiêu ở mạn phải của tàu ta — tàu ta phải nhường đường.",
   description:`Tàu ta và tàu mục tiêu đang cắt hướng nhau. Tàu mục tiêu ở phía mạn phải của tàu ta, hai hướng đi có khả năng giao nhau ở phía trước.`,
   action:`Tàu ta là tàu nhường đường: hành động sớm, dứt khoát — thường là giảm tốc độ và/hoặc chuyển hướng sang phải để đi qua phía sau lái tàu mục tiêu, tránh cắt ngang phía trước tàu đó.`,
-  soundSignal:`1 tiếng còi ngắn khi bắt đầu chuyển hướng sang phải (Điều 34).`,
+  soundSignals:[`1 tiếng còi ngắn khi bắt đầu chuyển hướng sang phải (Điều 34).`],
   showTurnArrows:true,
   ownShip:{name:"Tàu ta",type:"power",x:145,y:290,heading:5,role:"giveway"},
   targetShip:{name:"Tàu mục tiêu",type:"power",x:320,y:230,heading:222,role:"standon"},
@@ -406,7 +408,7 @@ const DEFAULT_SCENARIOS = [
   summary:"Tàu mục tiêu ở mạn trái của tàu ta và phải nhường đường; tàu ta giữ hướng.",
   description:`Tàu mục tiêu đang tiếp cận từ phía mạn trái của tàu ta và có nghĩa vụ nhường đường theo Điều 15.`,
   action:`Tàu ta là tàu giữ hướng: giữ nguyên hướng đi, tốc độ. Chỉ tự hành động tránh va khi thấy rõ tàu mục tiêu không hành động thích hợp, hoặc khi hai tàu đã đến quá gần.`,
-  soundSignal:`Nếu buộc phải tự hành động: phát tín hiệu tương ứng (1 hoặc 2 tiếng ngắn); có thể phát 5 tiếng ngắn nếu nghi ngờ ý định của tàu kia.`,
+  soundSignals:[`Nếu buộc phải tự hành động: phát tín hiệu tương ứng (1 hoặc 2 tiếng ngắn).`,`Có thể phát 5 tiếng ngắn liên tiếp nếu nghi ngờ ý định của tàu kia.`],
   showTurnArrows:false,
   ownShip:{name:"Tàu ta",type:"power",x:272,y:288,heading:355,role:"standon"},
   targetShip:{name:"Tàu mục tiêu",type:"power",x:112,y:222,heading:130,role:"giveway"},
@@ -417,7 +419,7 @@ const DEFAULT_SCENARIOS = [
   summary:"Tàu ta tiếp cận từ phía sau trong cung 135° sau lái — tàu ta là tàu vượt.",
   description:`Tàu ta tiếp cận tàu mục tiêu từ phía sau, trong phạm vi cung 135° tính từ chính lái (quá 22,5° so với trục ngang về phía sau) — ban đêm chỉ nhìn thấy đèn lái của tàu mục tiêu.`,
   action:`Tàu ta là tàu vượt: phải nhường đường, giữ khoảng cách an toàn cho đến khi vượt hẳn và cách xa. Nghĩa vụ này vẫn còn ngay cả khi sau đó tình huống chuyển thành cắt hướng.`,
-  soundSignal:`Trong luồng hẹp: 2 tiếng dài + 1 ngắn (xin vượt mạn phải) hoặc 2 dài + 2 ngắn (xin vượt mạn trái); tàu bị vượt đồng ý bằng 1 dài–1 ngắn–1 dài–1 ngắn.`,
+  soundSignals:[`Trong luồng hẹp, xin vượt mạn phải: 2 tiếng dài + 1 tiếng ngắn.`,`Trong luồng hẹp, xin vượt mạn trái: 2 tiếng dài + 2 tiếng ngắn.`,`Tàu bị vượt đồng ý: 1 dài – 1 ngắn – 1 dài – 1 ngắn.`],
   showTurnArrows:false,showOvertakingSector:"target",
   ownShip:{name:"Tàu ta",type:"power",x:210,y:312,heading:0,role:"giveway"},
   targetShip:{name:"Tàu mục tiêu",type:"power",x:210,y:170,heading:0,role:"standon"},
@@ -428,7 +430,7 @@ const DEFAULT_SCENARIOS = [
   summary:"Tàu mục tiêu tiếp cận từ phía sau tàu ta trong cung sau lái — tàu ta được vượt.",
   description:`Tàu mục tiêu tiếp cận tàu ta từ phía sau, trong cung 135° sau lái tàu ta — tàu mục tiêu là tàu vượt, tàu ta là tàu bị vượt.`,
   action:`Về nguyên tắc, tàu ta giữ nguyên hướng đi, tốc độ như một tàu giữ hướng; chỉ hành động nếu thấy rõ tàu vượt không hành động thích hợp hoặc tình huống trở nên quá gần.`,
-  soundSignal:`Theo dõi tín hiệu xin vượt của tàu mục tiêu (nếu trong luồng hẹp) và phản hồi phù hợp.`,
+  soundSignals:[`Theo dõi tín hiệu xin vượt của tàu mục tiêu (nếu trong luồng hẹp) và phản hồi phù hợp.`],
   showTurnArrows:false,showOvertakingSector:"own",
   ownShip:{name:"Tàu ta",type:"power",x:210,y:170,heading:0,role:"standon"},
   targetShip:{name:"Tàu mục tiêu",type:"power",x:210,y:312,heading:0,role:"giveway"},
@@ -439,7 +441,7 @@ const DEFAULT_SCENARIOS = [
   summary:"Tàu ta (tàu máy) phải nhường đường cho tàu buồm.",
   description:`Tàu ta (tàu máy) và tàu mục tiêu (tàu buồm) có nguy cơ đâm va khi cả hai đang chạy — đây không phải trường hợp vượt.`,
   action:`Tàu ta (tàu máy) phải nhường đường cho tàu buồm: chuyển hướng hoặc giảm tốc độ sớm để giữ khoảng cách an toàn.`,
-  soundSignal:`1 hoặc 2 tiếng ngắn tuỳ hướng chuyển động thực tế.`,
+  soundSignals:[`1 tiếng ngắn nếu chuyển hướng sang phải.`,`2 tiếng ngắn nếu chuyển hướng sang trái.`],
   showTurnArrows:true,
   ownShip:{name:"Tàu ta",type:"power",x:150,y:288,heading:20,role:"giveway"},
   targetShip:{name:"Tàu mục tiêu",type:"sail",x:296,y:196,heading:250,role:"standon"},
@@ -450,7 +452,7 @@ const DEFAULT_SCENARIOS = [
   summary:"Hai tàu đi ngược chiều trong luồng hẹp — mỗi tàu giữ sát mép phải.",
   description:`Tàu ta hành trình dọc theo luồng hẹp, gặp tàu mục tiêu đi ngược chiều trong cùng luồng.`,
   action:`Cả hai tàu phải giữ càng gần mép ngoài cùng bên phải của luồng càng tốt (nếu an toàn, thực tế); không cản trở tàu chỉ có thể an toàn trong phạm vi luồng; đặc biệt thận trọng tại khúc quanh.`,
-  soundSignal:`1 tiếng dài khi tiếp cận khúc quanh hoặc đoạn luồng bị che khuất tầm nhìn.`,
+  soundSignals:[`1 tiếng dài khi tiếp cận khúc quanh hoặc đoạn luồng bị che khuất tầm nhìn.`],
   showTurnArrows:false,showChannel:true,
   ownShip:{name:"Tàu ta",type:"power",x:165,y:300,heading:345,role:"neutral"},
   targetShip:{name:"Tàu mục tiêu",type:"power",x:255,y:130,heading:165,role:"neutral"},
@@ -461,7 +463,7 @@ const DEFAULT_SCENARIOS = [
   summary:"Sương mù — mục tiêu chỉ được phát hiện qua radar, chưa nhìn thấy bằng mắt.",
   description:`Trời có sương mù, tầm nhìn xa bị hạn chế. Tàu ta phát hiện một mục tiêu qua radar nhưng chưa nhìn thấy bằng mắt thường.`,
   action:`Chạy tốc độ an toàn phù hợp tầm nhìn hạn chế, sẵn sàng máy. Dùng radar đánh giá nguy cơ đâm va sớm; nếu mục tiêu ở phía trước trục ngang, tránh chuyển hướng sang trái hoặc về phía tàu đang ở ngang/sau ngang. Nếu nghe tín hiệu sương mù phía trước trục ngang hoặc không tránh được tình huống quá gần, giảm tốc tối thiểu, sẵn sàng dừng hẳn trớn tới.`,
-  soundSignal:`Tàu ta (có trớn tới) phát 1 tiếng dài mỗi khoảng không quá 2 phút.`,
+  soundSignals:[`Tàu ta (có trớn tới) phát 1 tiếng dài mỗi khoảng không quá 2 phút.`],
   showTurnArrows:false,showFog:true,
   ownShip:{name:"Tàu ta",type:"power",x:210,y:296,heading:0,role:"neutral"},
   targetShip:{name:"Mục tiêu radar",type:"power",x:300,y:150,heading:200,role:"caution",radarOnly:true},
@@ -568,11 +570,124 @@ const DEFAULT_SETTINGS = {
   heroLead:"Trực quan hoá các tình huống tránh va theo Bảng quy tắc quốc tế phòng ngừa đâm va tàu thuyền trên biển năm 1972 (COLREG 72) — phục vụ giảng dạy và tự ôn luyện.",
   footerNote:"Tài liệu nội bộ phục vụ giảng dạy COLREG 72",
   emblem:"anchor",
-  logoImageUrl:""
+  logoImageUrl:"",
+  resultsWebhookUrl:""
 };
 
 const AUTH_USER = "TTDT";
 const AUTH_PASS = "demo";
+
+/* =========================================================
+   NHẬP CÂU HỎI HÀNG LOẠT (Excel / Google Sheet) — tiện ích
+========================================================= */
+
+// Bộ phân tích CSV đơn giản (hỗ trợ ô có dấu phẩy/ngoặc kép/ xuống dòng bên trong)
+function parseCSV(text){
+  const rows = [];
+  let row = [], field = '', inQuotes = false;
+  for (let i=0; i<text.length; i++){
+    const c = text[i];
+    if (inQuotes){
+      if (c === '"'){
+        if (text[i+1] === '"'){ field += '"'; i++; }
+        else { inQuotes = false; }
+      } else { field += c; }
+    } else {
+      if (c === '"'){ inQuotes = true; }
+      else if (c === ','){ row.push(field); field=''; }
+      else if (c === '\n'){ row.push(field); rows.push(row); row=[]; field=''; }
+      else if (c === '\r'){ /* bỏ qua, \n sẽ theo sau */ }
+      else { field += c; }
+    }
+  }
+  if (field.length>0 || row.length>0){ row.push(field); rows.push(row); }
+  return rows;
+}
+
+function extractSheetIdAndGid(url){
+  const idMatch = url.match(/\/d\/([a-zA-Z0-9-_]+)/);
+  const gidMatch = url.match(/[#&]gid=([0-9]+)/);
+  return { id: idMatch ? idMatch[1] : null, gid: gidMatch ? gidMatch[1] : "0" };
+}
+function buildSheetCsvUrl(id, gid){
+  return `https://docs.google.com/spreadsheets/d/${id}/export?format=csv&gid=${gid}`;
+}
+
+// Chuyển các dòng dữ liệu thô (mảng-của-mảng) thành câu hỏi trắc nghiệm, bỏ qua dòng tiêu đề/dòng lỗi
+function rowsToQuizDrafts(rows){
+  const drafts = [], errors = [];
+  (rows||[]).forEach((row, idx)=>{
+    if (!row || row.every(c=>!String(c==null?'':c).trim())) return; // dòng trống
+    const cells = row.map(v=>String(v==null?'':v).trim());
+    const [q,a,b,c,d,correctLetter,explain] = cells;
+    if (idx===0 && !/^[ABCDabcd]$/.test(correctLetter||'')){
+      return; // có vẻ là dòng tiêu đề -> bỏ qua
+    }
+    if (!q || !a || !b || !c || !d || !/^[ABCDabcd]$/.test(correctLetter||'')){
+      errors.push(`Dòng ${idx+1}: thiếu dữ liệu hoặc "Đáp án đúng" không hợp lệ (phải là A/B/C/D).`);
+      return;
+    }
+    const correctIdx = "ABCD".indexOf(correctLetter.toUpperCase());
+    drafts.push({ id:'q-'+Date.now()+'-'+idx+'-'+Math.floor(Math.random()*1000), prompt:q, options:[a,b,c,d], correct:correctIdx, explain: explain||"" });
+  });
+  return { drafts, errors };
+}
+
+// Tải thư viện đọc/ghi Excel (SheetJS) từ CDN khi cần, thử lần lượt vài nguồn để tăng độ tin cậy
+function loadScriptOnce(url){
+  return new Promise((resolve, reject)=>{
+    const already = Array.from(document.querySelectorAll('script[data-dyn-src]')).find(s=>s.getAttribute('data-dyn-src')===url);
+    if (already){ resolve(); return; }
+    const s = document.createElement('script');
+    s.src = url; s.async = true; s.setAttribute('data-dyn-src', url);
+    s.onload = ()=>resolve();
+    s.onerror = ()=>reject(new Error('Không tải được: '+url));
+    document.head.appendChild(s);
+  });
+}
+const XLSX_CDN_CANDIDATES = [
+  'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',
+  'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js',
+  'https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js'
+];
+async function ensureXLSX(){
+  if (window.XLSX) return true;
+  let lastErr = null;
+  for (const url of XLSX_CDN_CANDIDATES){
+    try{ await loadScriptOnce(url); if (window.XLSX) return true; }catch(e){ lastErr = e; }
+  }
+  throw new Error('Không tải được thư viện đọc Excel (cần kết nối Internet). ' + (lastErr?lastErr.message:''));
+}
+
+/* =========================================================
+   LƯU TRỮ KẾT QUẢ ÔN TẬP (tách riêng khỏi nội dung quản trị)
+========================================================= */
+const RESULTS_KEY = "colreg-quiz-results";
+let QUIZ_RESULTS = [];
+
+async function loadQuizResults(){
+  if (!window.storage) return QUIZ_RESULTS;
+  try{
+    const res = await window.storage.get(RESULTS_KEY, true);
+    if (res && res.value) return JSON.parse(res.value);
+    return [];
+  }catch(e){ return []; }
+}
+async function appendQuizResult(record){
+  if (!window.storage){ QUIZ_RESULTS.push(record); return; }
+  try{
+    const current = await loadQuizResults();
+    current.push(record);
+    await window.storage.set(RESULTS_KEY, JSON.stringify(current), true);
+    QUIZ_RESULTS = current;
+  }catch(e){ QUIZ_RESULTS.push(record); }
+}
+async function clearQuizResultsStorage(){
+  QUIZ_RESULTS = [];
+  if (window.storage){
+    try{ await window.storage.set(RESULTS_KEY, JSON.stringify([]), true); }catch(e){ /* ignore */ }
+  }
+}
 
 /* =========================================================
    TIỆN ÍCH LƯU TRỮ (window.storage với dự phòng bộ nhớ tạm)
@@ -583,6 +698,16 @@ let memoryFallback = null;
 
 function deepClone(o){ return JSON.parse(JSON.stringify(o)); }
 
+function normalizeScenarios(list){
+  return (list||[]).map(sc=>{
+    if (!Array.isArray(sc.soundSignals)){
+      sc.soundSignals = sc.soundSignal ? [sc.soundSignal] : [];
+    }
+    delete sc.soundSignal;
+    return sc;
+  });
+}
+
 async function loadAppData(){
   const fallbackData = { rules:deepClone(DEFAULT_RULES), scenarios:deepClone(DEFAULT_SCENARIOS), quiz:deepClone(DEFAULT_QUIZ), settings:deepClone(DEFAULT_SETTINGS) };
   if (!window.storage){ storageAvailable=false; memoryFallback = fallbackData; return fallbackData; }
@@ -592,7 +717,7 @@ async function loadAppData(){
       const parsed = JSON.parse(res.value);
       return {
         rules: parsed.rules && parsed.rules.length ? parsed.rules : fallbackData.rules,
-        scenarios: parsed.scenarios && parsed.scenarios.length ? parsed.scenarios : fallbackData.scenarios,
+        scenarios: normalizeScenarios(parsed.scenarios && parsed.scenarios.length ? parsed.scenarios : fallbackData.scenarios),
         quiz: parsed.quiz && parsed.quiz.length ? parsed.quiz : fallbackData.quiz,
         settings: Object.assign({}, fallbackData.settings, parsed.settings||{})
       };
@@ -827,6 +952,14 @@ let scenarioEditOpen = false;
 let editingRuleId = null;
 let quizManageMode = false;
 let editingQuizId = null;
+let quizTaker = null; // {name, birthYear} — bắt buộc điền trước khi làm bài ôn tập
+let webhookPanelOpen = false;
+let importPanelOpen = false;
+let resultsViewOpen = false;
+let pendingImportDrafts = [];
+let pendingImportErrors = [];
+let importStatusMessage = "";
+let quizImportSheetUrlDraft = "";
 
 /* =========================================================
    TRANG CHỦ
@@ -899,7 +1032,7 @@ function viewHomeHTML(){
       ${isLoggedIn?`<button class="btn btn-brass btn-sm" data-toggle-settings-edit>${iconSpan('edit')} Chỉnh giao diện</button>`:''}
     </div>
     <div class="grid-cards">
-      <div class="card home-nav-card" data-goto="rules"><div class="icon-wrap" style="color:var(--ocean-mid)">${iconSvg('book')}</div><h3>Quy tắc phòng ngừa đâm và tàu thuyền trên biển (COLREG 72)</h3><p>Tra cứu nội dung diễn giải từng điều theo Phần A–E.</p></div>
+      <div class="card home-nav-card" data-goto="rules"><div class="icon-wrap" style="color:var(--ocean-mid)">${iconSvg('book')}</div><h3>Quy tắc COLREG 72</h3><p>Tra cứu nội dung diễn giải từng điều theo Phần A–E.</p></div>
       <div class="card home-nav-card" data-goto="scenarios"><div class="icon-wrap" style="color:var(--ocean-mid)">${iconSvg('radar')}</div><h3>Mô phỏng tình huống</h3><p>Sơ đồ ra-đa trực quan cho từng tình huống tránh va thường gặp.</p></div>
       <div class="card home-nav-card" data-goto="quiz"><div class="icon-wrap" style="color:var(--ocean-mid)">${iconSvg('quiz')}</div><h3>Câu hỏi ôn tập</h3><p>${DATA.quiz.length} câu hỏi trắc nghiệm để tự kiểm tra kiến thức.</p></div>
     </div>
@@ -1017,7 +1150,13 @@ function scenarioEditFormHTML(sc){
     <div class="form-field"><label>Tóm tắt (hiển thị ở danh sách)</label><input type="text" id="ef-${sc.id}-summary" value="${escapeAttr(sc.summary)}"></div>
     <div class="form-field"><label>Mô tả tình huống</label><textarea id="ef-${sc.id}-description">${escapeHtml(sc.description)}</textarea></div>
     <div class="form-field"><label>Hành động cần thực hiện</label><textarea id="ef-${sc.id}-action">${escapeHtml(sc.action)}</textarea></div>
-    <div class="form-field"><label>Tín hiệu còi</label><input type="text" id="ef-${sc.id}-soundSignal" value="${escapeAttr(sc.soundSignal)}"></div>
+    <div class="form-field">
+      <label>Tín hiệu còi (có thể thêm nhiều tín hiệu)</label>
+      <div id="signals-list-${sc.id}">
+        ${(sc.soundSignals||[]).map(s=>`<div class="signal-row"><input type="text" class="signal-input" value="${escapeAttr(s)}" placeholder="Nhập tín hiệu còi..."><button type="button" class="btn btn-ghost btn-sm" data-remove-signal title="Xoá tín hiệu này">${iconSpan('x')}</button></div>`).join('')}
+      </div>
+      <button type="button" class="btn btn-ghost btn-sm" data-add-signal="${sc.id}">${iconSpan('plus')} Thêm tín hiệu còi</button>
+    </div>
 
     ${vesselEditFieldsHTML(sc,'ownShip')}
     ${vesselEditFieldsHTML(sc,'targetShip')}
@@ -1076,7 +1215,7 @@ function viewScenarioDetailHTML(id){
         <div>
           <div class="detail-block"><h4>Mô tả tình huống</h4><p>${escapeHtml(sc.description)}</p></div>
           <div class="detail-block"><h4>Hành động cần thực hiện</h4><p>${escapeHtml(sc.action)}</p></div>
-          <div class="detail-block"><h4>Tín hiệu còi</h4><div><span class="sound-badge">🔊 ${escapeHtml(sc.soundSignal)}</span></div></div>
+          <div class="detail-block"><h4>Tín hiệu còi</h4>${(sc.soundSignals&&sc.soundSignals.length) ? sc.soundSignals.map(s=>`<div style="margin-bottom:8px;"><span class="sound-badge">🔊 ${escapeHtml(s)}</span></div>`).join('') : `<p style="font-style:italic;">Chưa có tín hiệu còi được thiết lập cho tình huống này.</p>`}</div>
         </div>
       </div>
       ${(scenarioEditOpen && isLoggedIn) ? scenarioEditFormHTML(sc) : ''}
@@ -1087,17 +1226,20 @@ function viewScenarioDetailHTML(id){
 /* =========================================================
    ÔN TẬP — TRẮC NGHIỆM
 ========================================================= */
-function viewQuizTakeHTML(){
-  if (DATA.quiz.length===0) return `<section class="view"><div class="empty-note">Chưa có câu hỏi ôn tập nào.</div></section>`;
-  if (quizFinished) return quizResultHTML();
+function quizTakerFormInnerHTML(){
+  const nowYear = new Date().getFullYear();
+  return `<div class="card quiz-card">
+      <p style="margin-bottom:18px;">Vui lòng nhập thông tin trước khi bắt đầu làm bài. Thông tin này sẽ được ghi lại cùng với kết quả bài làm của bạn.</p>
+      <div class="form-field"><label>Họ và tên</label><input type="text" id="taker-name" placeholder="Nguyễn Văn A"></div>
+      <div class="form-field"><label>Năm sinh</label><input type="number" id="taker-birthyear" placeholder="1995" min="1940" max="${nowYear}"></div>
+      <div class="form-error" id="taker-form-error"></div>
+      <button class="btn btn-primary" data-start-quiz>Bắt đầu làm bài</button>
+    </div>`;
+}
+function quizActiveInnerHTML(){
   const total = DATA.quiz.length;
   const q = DATA.quiz[quizIndex];
-  return `<section class="view">
-    <div class="section-head">
-      <div><span class="section-eyebrow">Tự kiểm tra</span><h2>Câu hỏi ôn tập</h2></div>
-      ${isLoggedIn?`<button class="btn btn-ghost btn-sm" data-toggle-quiz-manage>${iconSpan('edit')} Quản lý câu hỏi</button>`:''}
-    </div>
-    <div class="card quiz-card">
+  return `<div class="card quiz-card">
       <div class="quiz-progress">Câu ${quizIndex+1} / ${total} · Điểm hiện tại: ${quizScore}</div>
       <div class="quiz-bar"><div class="quiz-bar-fill" style="width:${(quizIndex/total)*100}%"></div></div>
       <div class="quiz-q">${escapeHtml(q.prompt)}</div>
@@ -1108,23 +1250,71 @@ function viewQuizTakeHTML(){
       }).join('')}
       ${quizSelected!==null?`<div class="quiz-explain"><strong>${quizSelected===q.correct?'Chính xác!':'Chưa đúng.'}</strong> ${escapeHtml(q.explain)}</div>
       <div class="edit-actions"><button class="btn btn-primary btn-sm" data-quiz-next>${quizIndex+1<total?'Câu tiếp theo':'Xem kết quả'}</button></div>`:''}
-    </div>
-  </section>`;
+    </div>`;
 }
-function quizResultHTML(){
+function viewQuizTakeHTML(){
+  const manageBtn = isLoggedIn?`<button class="btn btn-ghost btn-sm" data-toggle-quiz-manage>${iconSpan('edit')} Quản lý câu hỏi</button>`:'';
+  const header = `<div class="section-head"><div><span class="section-eyebrow">Tự kiểm tra</span><h2>Câu hỏi ôn tập</h2></div>${manageBtn}</div>`;
+  if (DATA.quiz.length===0) return `<section class="view">${header}<div class="empty-note">Chưa có câu hỏi ôn tập nào.</div></section>`;
+  let inner;
+  if (!quizTaker) inner = quizTakerFormInnerHTML();
+  else if (quizFinished) inner = quizResultInnerHTML();
+  else inner = quizActiveInnerHTML();
+  return `<section class="view">${header}${inner}</section>`;
+}
+function startQuizWithTakerInfo(){
+  const nameEl = document.getElementById('taker-name');
+  const yearEl = document.getElementById('taker-birthyear');
+  const errEl = document.getElementById('taker-form-error');
+  const name = nameEl.value.trim();
+  const yearStr = yearEl.value.trim();
+  const year = parseInt(yearStr,10);
+  const nowYear = new Date().getFullYear();
+  if (!name){ errEl.textContent = 'Vui lòng nhập họ và tên.'; return; }
+  if (!yearStr || isNaN(year) || year < 1940 || year > nowYear){ errEl.textContent = 'Vui lòng nhập năm sinh hợp lệ.'; return; }
+  quizTaker = { name, birthYear: year };
+  quizIndex=0; quizScore=0; quizSelected=null; quizFinished=false;
+  renderView();
+}
+async function submitQuizResult(){
+  if (!quizTaker) return;
+  const total = DATA.quiz.length;
+  const record = {
+    name: quizTaker.name,
+    birthYear: quizTaker.birthYear,
+    score: quizScore,
+    total,
+    percent: total? Math.round((quizScore/total)*100) : 0,
+    submittedAt: new Date().toISOString()
+  };
+  // 1) luôn lưu bản sao trong ứng dụng để quản trị viên xem được dù chưa cấu hình Google Sheet
+  try{ await appendQuizResult(record); }catch(e){ /* bỏ qua */ }
+  // 2) nếu đã cấu hình, cố gắng gửi thêm sang Google Apps Script Web App (best-effort)
+  const url = DATA.settings.resultsWebhookUrl;
+  if (url){
+    try{
+      await fetch(url, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {'Content-Type':'text/plain;charset=utf-8'},
+        body: JSON.stringify(record)
+      });
+    }catch(e){ /* lỗi mạng/CORS khi dùng no-cors là bình thường, bỏ qua */ }
+  }
+}
+function quizResultInnerHTML(){
   const total = DATA.quiz.length;
   const pct = total? Math.round((quizScore/total)*100) : 0;
   const msg = pct>=80?'Xuất sắc! Bạn nắm rất vững quy tắc.':pct>=50?'Khá tốt — nên ôn lại một số điều còn nhầm lẫn.':'Nên xem lại phần Quy tắc và làm lại bài ôn tập.';
-  return `<section class="view">
-    <div class="card quiz-card">
+  return `<div class="card quiz-card">
       <div class="quiz-result">
-        <div class="quiz-progress">Kết quả</div>
+        <div class="quiz-progress">Kết quả${quizTaker?` — ${escapeHtml(quizTaker.name)}`:''}</div>
         <div class="score-num">${quizScore}/${total}</div>
         <p>${msg}</p>
+        <p style="font-size:12.5px;color:var(--ink-soft);">Kết quả của bạn đã được ghi nhận.</p>
         <button class="btn btn-primary" data-quiz-restart>Làm lại từ đầu</button>
       </div>
-    </div>
-  </section>`;
+    </div>`;
 }
 function quizEditFormHTML(q){
   return `<div class="edit-card">
@@ -1152,15 +1342,97 @@ function quizManageItemHTML(q,idx){
     ${editing?quizEditFormHTML(q):''}
   </div>`;
 }
+function quizWebhookPanelHTML(){
+  if (!webhookPanelOpen) return "";
+  const url = DATA.settings.resultsWebhookUrl || "";
+  return `<div class="edit-card" style="margin-bottom:20px;">
+    <h4>${iconSpan('edit')} Nhận kết quả bài ôn tập vào Google Sheet (tuỳ chọn)</h4>
+    <p style="font-size:13px;">Dán vào đây URL "Web App" của Google Apps Script đã triển khai trên Google Sheet của bạn. Mỗi khi có người nộp bài, kết quả (họ tên, năm sinh, điểm) sẽ được gửi tới đó. Dù có cấu hình hay không, kết quả luôn được lưu lại trong mục "Xem kết quả đã nộp" bên dưới.</p>
+    <div class="form-field"><input type="text" id="set-webhookUrl" placeholder="https://script.google.com/macros/s/xxx/exec" value="${escapeAttr(url)}"></div>
+    <div class="edit-actions">
+      <button class="btn btn-primary btn-sm" data-save-webhook>Lưu liên kết</button>
+      <button class="btn btn-ghost btn-sm" data-toggle-webhook-panel>Đóng</button>
+    </div>
+  </div>`;
+}
+
+function quizImportPanelHTML(){
+  if (!importPanelOpen) return "";
+  return `<div class="edit-card" style="margin-bottom:20px;">
+    <h4>${iconSpan('plus')} Nhập câu hỏi hàng loạt (Excel / Google Sheet)</h4>
+    <p style="font-size:13px;">Chuẩn bị bảng tính theo đúng 7 cột theo thứ tự: <b>Câu hỏi, Đáp án A, Đáp án B, Đáp án C, Đáp án D, Đáp án đúng (A/B/C/D), Giải thích</b>. Dòng tiêu đề (nếu có) sẽ tự động được bỏ qua.</p>
+    <div class="form-row-2">
+      <div class="form-field"><label>Tải lên file Excel (.xlsx)</label><input type="file" id="quiz-import-file" accept=".xlsx,.xls"></div>
+      <div class="form-field"><label>...hoặc dán link Google Sheet (đã chia sẻ "Người xem")</label><input type="text" id="quiz-import-sheet-url" placeholder="https://docs.google.com/spreadsheets/d/..." value="${escapeAttr(quizImportSheetUrlDraft)}"></div>
+    </div>
+    <div class="edit-actions">
+      <button class="btn btn-ghost btn-sm" data-download-template>Tải file mẫu (.xlsx)</button>
+      <button class="btn btn-primary btn-sm" data-import-file>Xử lý file đã chọn</button>
+      <button class="btn btn-primary btn-sm" data-import-sheet>Nhập từ Google Sheet</button>
+      <button class="btn btn-ghost btn-sm" data-toggle-import-panel>Đóng</button>
+    </div>
+    ${importStatusMessage ? `<div class="quiz-explain" style="margin-top:10px;">${escapeHtml(importStatusMessage)}</div>` : ''}
+    ${pendingImportErrors.length ? `<div class="quiz-explain" style="margin-top:8px;border-left:3px solid var(--giveway);">${pendingImportErrors.map(e=>escapeHtml(e)).join('<br>')}</div>` : ''}
+    ${pendingImportDrafts.length ? `
+      <div style="margin-top:14px;">
+        <strong>Xem trước ${pendingImportDrafts.length} câu hỏi sẽ được thêm:</strong>
+        <ol style="font-size:13.5px;padding-left:20px;">
+          ${pendingImportDrafts.map(d=>`<li>${escapeHtml(d.prompt)} <em>(đúng: ${escapeHtml(d.options[d.correct])})</em></li>`).join('')}
+        </ol>
+        <div class="edit-actions">
+          <button class="btn btn-primary btn-sm" data-commit-import>Xác nhận thêm ${pendingImportDrafts.length} câu hỏi</button>
+          <button class="btn btn-ghost btn-sm" data-cancel-import>Huỷ bỏ</button>
+        </div>
+      </div>` : ''}
+  </div>`;
+}
+
+function quizResultsPanelHTML(){
+  if (!resultsViewOpen) return "";
+  return `<div class="edit-card" style="margin-bottom:20px;">
+    <h4>${iconSpan('check')} Kết quả đã nộp (${QUIZ_RESULTS.length})</h4>
+    ${QUIZ_RESULTS.length ? `
+    <div style="overflow-x:auto;">
+    <table style="width:100%;border-collapse:collapse;font-size:13px;">
+      <thead><tr style="text-align:left;border-bottom:2px solid var(--line);">
+        <th style="padding:6px;">#</th><th style="padding:6px;">Họ và tên</th><th style="padding:6px;">Năm sinh</th><th style="padding:6px;">Điểm</th><th style="padding:6px;">Tỉ lệ</th><th style="padding:6px;">Thời điểm nộp</th>
+      </tr></thead>
+      <tbody>
+        ${QUIZ_RESULTS.slice().reverse().map((r,i)=>`<tr style="border-bottom:1px solid var(--line-soft);">
+          <td style="padding:6px;">${QUIZ_RESULTS.length-i}</td>
+          <td style="padding:6px;">${escapeHtml(r.name)}</td>
+          <td style="padding:6px;">${escapeHtml(String(r.birthYear))}</td>
+          <td style="padding:6px;">${r.score}/${r.total}</td>
+          <td style="padding:6px;">${r.percent}%</td>
+          <td style="padding:6px;">${escapeHtml(new Date(r.submittedAt).toLocaleString('vi-VN'))}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+    </div>` : `<p style="font-size:13px;">Chưa có ai nộp bài.</p>`}
+    <div class="edit-actions">
+      <button class="btn btn-ghost btn-sm" data-refresh-results>Làm mới</button>
+      ${QUIZ_RESULTS.length? `<button class="btn btn-ghost btn-sm" data-export-results-csv>Xuất CSV</button>`:''}
+      <button class="btn btn-ghost btn-sm" data-toggle-results-view>Đóng</button>
+      ${QUIZ_RESULTS.length? `<button class="btn btn-danger btn-sm" data-clear-results style="margin-left:auto;">${iconSpan('trash')} Xoá toàn bộ kết quả</button>`:''}
+    </div>
+  </div>`;
+}
+
 function viewQuizManageHTML(){
   return `<section class="view">
     <div class="section-head">
       <div><span class="section-eyebrow">Quản trị</span><h2>Quản lý câu hỏi ôn tập</h2></div>
-      <div style="display:flex;gap:8px;">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn btn-ghost btn-sm" data-toggle-webhook-panel>Cài đặt nhận kết quả</button>
+        <button class="btn btn-ghost btn-sm" data-toggle-import-panel>Nhập hàng loạt</button>
+        <button class="btn btn-ghost btn-sm" data-toggle-results-view>Xem kết quả đã nộp</button>
         <button class="btn btn-brass btn-sm" data-add-quiz>${iconSpan('plus')} Thêm câu hỏi</button>
         <button class="btn btn-ghost btn-sm" data-toggle-quiz-manage>${iconSpan('x')} Đóng quản lý</button>
       </div>
     </div>
+    ${quizWebhookPanelHTML()}
+    ${quizImportPanelHTML()}
+    ${quizResultsPanelHTML()}
     ${DATA.quiz.map((q,idx)=>quizManageItemHTML(q,idx)).join('') || `<div class="empty-note">Chưa có câu hỏi nào. Hãy thêm câu hỏi mới.</div>`}
   </section>`;
 }
@@ -1299,7 +1571,11 @@ function saveScenarioFromForm(id){
   sc.summary = g('summary').value.trim() || sc.summary;
   sc.description = g('description').value.trim() || sc.description;
   sc.action = g('action').value.trim() || sc.action;
-  sc.soundSignal = g('soundSignal').value.trim() || sc.soundSignal;
+  sc.soundSignals = (function(){
+    const container = document.getElementById(`signals-list-${id}`);
+    if (!container) return sc.soundSignals || [];
+    return Array.from(container.querySelectorAll('.signal-input')).map(inp=>inp.value.trim()).filter(v=>v.length>0);
+  })();
   ['ownShip','targetShip'].forEach(key=>{
     const v = sc[key];
     const gv = suffix => document.getElementById(`ef-${id}-${key}-${suffix}`);
@@ -1338,7 +1614,7 @@ function addNewScenario(){
     summary:"Mô tả ngắn gọn hiển thị ở danh sách.",
     description:"Nhập mô tả diễn biến tình huống ở đây.",
     action:"Nhập hành động cần thực hiện.",
-    soundSignal:"Nhập tín hiệu còi tương ứng (nếu có).",
+    soundSignals:["Nhập tín hiệu còi (nếu có)."],
     showTurnArrows:false,
     ownShip:{name:"Tàu ta",type:"power",x:210,y:300,heading:0,role:"neutral"},
     targetShip:{name:"Tàu mục tiêu",type:"power",x:210,y:130,heading:180,role:"neutral"},
@@ -1387,6 +1663,142 @@ function addNewQuiz(){
 }
 
 /* =========================================================
+   HÀNH ĐỘNG: CÀI ĐẶT NHẬN KẾT QUẢ (Google Apps Script Webhook)
+========================================================= */
+function saveWebhookUrl(){
+  DATA.settings.resultsWebhookUrl = document.getElementById('set-webhookUrl').value.trim();
+  persistAppData();
+  showToast('Đã lưu liên kết nhận kết quả.');
+}
+
+/* =========================================================
+   HÀNH ĐỘNG: NHẬP CÂU HỎI HÀNG LOẠT
+========================================================= */
+async function downloadQuizTemplate(){
+  importStatusMessage = 'Đang chuẩn bị file mẫu...';
+  renderView();
+  try{
+    await ensureXLSX();
+    const aoa = [
+      ["Câu hỏi","Đáp án A","Đáp án B","Đáp án C","Đáp án D","Đáp án đúng (A/B/C/D)","Giải thích"],
+      ["Ví dụ: Tín hiệu 1 tiếng còi ngắn có nghĩa là gì?","Chuyển hướng sang trái","Chuyển hướng sang phải","Máy đang chạy lùi","Xin vượt","B","Theo Điều 34, 1 tiếng ngắn nghĩa là chuyển hướng sang phải."]
+    ];
+    const ws = XLSX.utils.aoa_to_sheet(aoa);
+    ws['!cols'] = [{wch:42},{wch:22},{wch:22},{wch:22},{wch:22},{wch:20},{wch:42}];
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "CauHoi");
+    XLSX.writeFile(wb, "mau-cau-hoi-on-tap.xlsx");
+    importStatusMessage = 'Đã tải file mẫu. Điền câu hỏi theo đúng cột rồi tải lên lại ở trên.';
+  }catch(e){
+    importStatusMessage = 'Không tải được thư viện Excel để tạo file mẫu: ' + e.message;
+  }
+  renderView();
+}
+
+function processImportedRows(rows){
+  const { drafts, errors } = rowsToQuizDrafts(rows);
+  pendingImportDrafts = drafts;
+  pendingImportErrors = errors;
+  importStatusMessage = drafts.length
+    ? `Đã đọc được ${drafts.length} câu hỏi hợp lệ.` + (errors.length ? ` (${errors.length} dòng bị bỏ qua do lỗi, xem bên dưới)` : '')
+    : 'Không tìm thấy câu hỏi hợp lệ nào trong dữ liệu. Kiểm tra lại định dạng theo file mẫu.';
+}
+
+async function handleExcelFileImport(){
+  const fileInput = document.getElementById('quiz-import-file');
+  const file = fileInput && fileInput.files && fileInput.files[0];
+  if (!file){ importStatusMessage = 'Vui lòng chọn một file Excel trước.'; renderView(); return; }
+  importStatusMessage = 'Đang tải thư viện đọc Excel...';
+  pendingImportDrafts = []; pendingImportErrors = [];
+  renderView();
+  try{
+    await ensureXLSX();
+    importStatusMessage = 'Đang đọc file...';
+    renderView();
+    const data = await file.arrayBuffer();
+    const wb = XLSX.read(data, {type:'array'});
+    const sheet = wb.Sheets[wb.SheetNames[0]];
+    const rows = XLSX.utils.sheet_to_json(sheet, {header:1, raw:false, defval:""});
+    processImportedRows(rows);
+  }catch(e){
+    importStatusMessage = 'Lỗi khi đọc file: ' + e.message;
+  }
+  renderView();
+}
+
+async function handleSheetImport(){
+  const urlInput = document.getElementById('quiz-import-sheet-url');
+  const url = urlInput.value.trim();
+  quizImportSheetUrlDraft = url;
+  if (!url){ importStatusMessage = 'Vui lòng dán link Google Sheet.'; renderView(); return; }
+  const { id, gid } = extractSheetIdAndGid(url);
+  if (!id){ importStatusMessage = 'Không nhận diện được ID của Google Sheet từ link này.'; renderView(); return; }
+  importStatusMessage = 'Đang tải dữ liệu từ Google Sheet...';
+  pendingImportDrafts = []; pendingImportErrors = [];
+  renderView();
+  try{
+    const csvUrl = buildSheetCsvUrl(id, gid);
+    const resp = await fetch(csvUrl);
+    if (!resp.ok) throw new Error('Không truy cập được (HTTP '+resp.status+'). Hãy chắc chắn Sheet đã chia sẻ ở chế độ "Bất kỳ ai có đường liên kết – Người xem".');
+    const text = await resp.text();
+    const rows = parseCSV(text);
+    processImportedRows(rows);
+  }catch(e){
+    importStatusMessage = 'Lỗi khi nhập từ Google Sheet: ' + e.message;
+  }
+  renderView();
+}
+
+function commitImportedQuiz(){
+  if (!pendingImportDrafts.length) return;
+  DATA.quiz.push(...pendingImportDrafts);
+  const n = pendingImportDrafts.length;
+  pendingImportDrafts = []; pendingImportErrors = []; importStatusMessage = '';
+  persistAppData();
+  renderView();
+  showToast(`Đã thêm ${n} câu hỏi vào ngân hàng câu hỏi.`);
+}
+function cancelImportedQuiz(){
+  pendingImportDrafts = []; pendingImportErrors = []; importStatusMessage = '';
+  renderView();
+}
+
+/* =========================================================
+   HÀNH ĐỘNG: XEM / XUẤT / XOÁ KẾT QUẢ ĐÃ NỘP
+========================================================= */
+async function toggleResultsView(){
+  resultsViewOpen = !resultsViewOpen;
+  if (resultsViewOpen){ QUIZ_RESULTS = await loadQuizResults(); }
+  renderView();
+}
+async function refreshResultsView(){
+  QUIZ_RESULTS = await loadQuizResults();
+  renderView();
+  showToast('Đã làm mới danh sách kết quả.');
+}
+function exportResultsCSV(){
+  const header = ['Họ và tên','Năm sinh','Điểm','Tổng câu','Tỉ lệ (%)','Thời điểm nộp'];
+  const lines = [header.join(',')];
+  QUIZ_RESULTS.forEach(r=>{
+    const row = [r.name, r.birthYear, r.score, r.total, r.percent, r.submittedAt].map(v=>'"'+String(v).replace(/"/g,'""')+'"');
+    lines.push(row.join(','));
+  });
+  const csv = lines.join('\r\n');
+  const blob = new Blob(["\uFEFF"+csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'ket-qua-on-tap.csv';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+async function clearResultsHandler(){
+  if (!confirm('Xoá toàn bộ kết quả đã nộp? Không thể hoàn tác.')) return;
+  await clearQuizResultsStorage();
+  renderView();
+  showToast('Đã xoá toàn bộ kết quả.');
+}
+
+/* =========================================================
    UỶ QUYỀN SỰ KIỆN (event delegation) TRONG #view-root
 ========================================================= */
 function onViewRootClick(e){
@@ -1410,7 +1822,22 @@ function onViewRootClick(e){
   if ((el = e.target.closest('[data-save-scenario]'))){ saveScenarioFromForm(el.dataset.saveScenario); return; }
   if (e.target.closest('[data-cancel-scenario]')){ scenarioEditOpen = false; renderView(); return; }
   if ((el = e.target.closest('[data-delete-scenario]'))){ deleteScenarioById(el.dataset.deleteScenario); return; }
+  if ((el = e.target.closest('[data-add-signal]'))){
+    const container = document.getElementById('signals-list-' + el.dataset.addSignal);
+    if (container){
+      container.insertAdjacentHTML('beforeend', `<div class="signal-row"><input type="text" class="signal-input" value="" placeholder="Nhập tín hiệu còi..."><button type="button" class="btn btn-ghost btn-sm" data-remove-signal title="Xoá tín hiệu này">${iconSpan('x')}</button></div>`);
+      const inputs = container.querySelectorAll('.signal-input');
+      inputs[inputs.length-1].focus();
+    }
+    return;
+  }
+  if ((el = e.target.closest('[data-remove-signal]'))){
+    const row = el.closest('.signal-row');
+    if (row) row.remove();
+    return;
+  }
 
+  if (e.target.closest('[data-start-quiz]')){ startQuizWithTakerInfo(); return; }
   if ((el = e.target.closest('[data-quiz-opt]'))){
     if (quizSelected===null){
       quizSelected = parseInt(el.dataset.quizOpt,10);
@@ -1422,17 +1849,32 @@ function onViewRootClick(e){
   }
   if (e.target.closest('[data-quiz-next]')){
     quizIndex++; quizSelected=null;
-    if (quizIndex>=DATA.quiz.length) quizFinished = true;
+    if (quizIndex>=DATA.quiz.length){
+      quizFinished = true;
+      submitQuizResult();
+    }
     renderView();
     return;
   }
   if (e.target.closest('[data-quiz-restart]')){
-    quizIndex=0; quizScore=0; quizSelected=null; quizFinished=false;
+    quizIndex=0; quizScore=0; quizSelected=null; quizFinished=false; quizTaker=null;
     renderView();
     return;
   }
   if (e.target.closest('[data-toggle-quiz-manage]')){ quizManageMode = !quizManageMode; editingQuizId=null; renderView(); return; }
   if (e.target.closest('[data-add-quiz]')){ addNewQuiz(); return; }
+  if (e.target.closest('[data-toggle-webhook-panel]')){ webhookPanelOpen = !webhookPanelOpen; renderView(); return; }
+  if (e.target.closest('[data-save-webhook]')){ saveWebhookUrl(); return; }
+  if (e.target.closest('[data-toggle-import-panel]')){ importPanelOpen = !importPanelOpen; renderView(); return; }
+  if (e.target.closest('[data-download-template]')){ downloadQuizTemplate(); return; }
+  if (e.target.closest('[data-import-file]')){ handleExcelFileImport(); return; }
+  if (e.target.closest('[data-import-sheet]')){ handleSheetImport(); return; }
+  if (e.target.closest('[data-commit-import]')){ commitImportedQuiz(); return; }
+  if (e.target.closest('[data-cancel-import]')){ cancelImportedQuiz(); return; }
+  if (e.target.closest('[data-toggle-results-view]')){ toggleResultsView(); return; }
+  if (e.target.closest('[data-refresh-results]')){ refreshResultsView(); return; }
+  if (e.target.closest('[data-export-results-csv]')){ exportResultsCSV(); return; }
+  if (e.target.closest('[data-clear-results]')){ clearResultsHandler(); return; }
   if ((el = e.target.closest('[data-edit-quiz]'))){ editingQuizId = (editingQuizId===el.dataset.editQuiz) ? null : el.dataset.editQuiz; renderView(); return; }
   if ((el = e.target.closest('[data-save-quiz]'))){ saveQuizFromForm(el.dataset.saveQuiz); return; }
   if (e.target.closest('[data-cancel-quiz]')){ editingQuizId = null; renderView(); return; }
