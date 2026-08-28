@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>TRUNG TÂM ĐÀO TẠO THUYỀN VIÊN VÀ PHÁT TRIỂN CÔNG NGHỆ BIỂN</title>
+<style>
+:root{
+  --ocean-light:#BFE3F0;
+  --ocean-pale:#E3F3F9;
+  --ocean-mid:#4E9FCB;
+  --ocean-deep:#0B2E4A;
+  --navy:#123C5C;
+  --navy-soft:#1C4E73;
+  --foam:#F6FBFD;
+  --paper:#FFFFFF;
+  --brass:#C99A44;
+  --brass-soft:#E4C077;
+  --giveway:#D6524A;
+  --giveway-soft:#F6D9D6;
+  --standon:#2F9E68;
+  --standon-soft:#D6F0E1;
+  --both:#DB8F2E;
+  --both-soft:#F7E4C3;
+  --ink:#0B2E4A;
+  --ink-soft:#4A6C82;
+  --line:#CFE4EE;
+  --line-soft:#E4F1F6;
+  --shadow-sm: 0 2px 8px rgba(11,46,74,0.08);
+  --shadow-md: 0 8px 28px rgba(11,46,74,0.14);
+  --shadow-lg: 0 18px 48px rgba(11,46,74,0.20);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --font-display: "Arial", "Arial", "Arial", "Arial", Arial, sans-serif;
+  --font-body: -apple-system, BlinkMacSystemFont, "Arial", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "Cascadia Mono", "SF Mono", Consolas, Menlo, monospace;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:var(--font-body);
+  color:var(--ink);
+  background:
+    radial-gradient(1200px 600px at 100% -10%, var(--ocean-pale) 0%, transparent 60%),
+    radial-gradient(900px 500px at -10% 20%, var(--ocean-light) 0%, transparent 55%),
+    var(--foam);
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:var(--font-display);color:var(--navy);margin:0 0 8px 0;letter-spacing:0.02em;}
+p{line-height:1.6;color:var(--ink-soft);margin:0 0 12px 0;}
+button{font-family:var(--font-body);cursor:pointer;}
+::selection{background:var(--ocean-mid);color:#fff;}
+a{color:var(--ocean-mid);}
+
+/* ===== Layout shell ===== */
+#app-shell{min-height:100vh;display:flex;flex-direction:column;}
+
+/* ===== Topbar ===== */
+.topbar{
+  position:sticky;top:0;z-index:40;
+  display:flex;align-items:center;gap:16px;
+  padding:12px 22px;
+  background:linear-gradient(180deg, var(--navy) 0%, var(--ocean-deep) 100%);
+  box-shadow:var(--shadow-md);
+  flex-wrap:wrap;
+}
+.brand{display:flex;align-items:center;gap:12px;flex:0 0 auto;}
+.brand-emblem{width:40px;height:40px;flex:0 0 auto;}
+.brand-text{display:flex;flex-direction:column;line-height:1.15;}
+.brand-org{font-family:var(--font-display);font-size:11px;letter-spacing:0.14em;color:var(--brass-soft);text-transform:uppercase;}
+.brand-app{font-family:var(--font-display);font-size:17px;letter-spacing:0.03em;color:#fff;text-transform:uppercase;font-weight:700;}
+.main-nav{display:flex;gap:4px;margin-left:8px;flex:1 1 auto;flex-wrap:wrap;}
+.nav-btn{
+  border:none;background:transparent;color:rgba(255,255,255,0.72);
+  padding:9px 16px;border-radius:999px;font-size:14px;font-weight:600;letter-spacing:0.01em;
+  transition:background .15s ease, color .15s ease;
+}
+.nav-btn:hover{background:rgba(255,255,255,0.10);color:#fff;}
+.nav-btn.active{background:var(--ocean-mid);color:#fff;}
+.auth-area{display:flex;align-items:center;gap:10px;flex:0 0 auto;}
+.login-status{font-size:12px;color:rgba(255,255,255,0.65);font-family:var(--font-body);letter-spacing:0.03em;}
+.login-status.on{color:var(--brass-soft);}
+
+/* ===== Buttons ===== */
+.btn{
+  border:1.5px solid transparent;border-radius:10px;padding:9px 18px;font-size:14px;font-weight:700;
+  transition:transform .1s ease, box-shadow .15s ease, background .15s ease;
+}
+.btn:active{transform:translateY(1px);}
+.btn-primary{background:var(--ocean-mid);color:#fff;box-shadow:var(--shadow-sm);}
+.btn-primary:hover{background:#3f8fbd;}
+.btn-outline{background:transparent;border-color:rgba(255,255,255,0.5);color:#fff;}
+.btn-outline:hover{background:rgba(255,255,255,0.12);}
+.btn-brass{background:var(--brass);color:#fff;}
+.btn-brass:hover{background:#b5893c;}
+.btn-danger{background:var(--giveway);color:#fff;}
+.btn-ghost{background:transparent;border-color:var(--line);color:var(--navy);}
+.btn-ghost:hover{background:var(--line-soft);}
+.btn-sm{padding:6px 12px;font-size:12.5px;border-radius:8px;}
+.btn:disabled{opacity:0.5;cursor:not-allowed;}
+
+/* ===== Main / Views ===== */
+main{flex:1 1 auto;padding:28px 22px 60px;max-width:1180px;margin:0 auto;width:100%;}
+.view{animation:fadeIn .25s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+/* ===== Hero ===== */
+.hero{
+  position:relative;overflow:hidden;
+  background:linear-gradient(135deg, var(--navy) 0%, var(--ocean-deep) 55%, #082238 100%);
+  border-radius:var(--radius-lg);
+  padding:48px 40px;color:#fff;margin-bottom:28px;
+  box-shadow:var(--shadow-lg);
+}
+.hero-radar{position:absolute;right:-90px;top:50%;transform:translateY(-50%);width:420px;height:420px;opacity:0.35;pointer-events:none;}
+.hero-sweep{transform-origin:210px 210px;animation:sweep 6s linear infinite;}
+@media (prefers-reduced-motion: reduce){.hero-sweep{animation:none;}}
+@keyframes sweep{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+.radar-blip{animation:blipPulse 1.6s ease-in-out infinite;transform-origin:center;}
+@keyframes blipPulse{0%,100%{opacity:1;}50%{opacity:0.35;}}
+@media (prefers-reduced-motion: reduce){.radar-blip{animation:none;}}
+.hero-eyebrow{font-family:var(--font-body);font-size:12.5px;letter-spacing:0.16em;color:var(--brass-soft);text-transform:uppercase;margin-bottom:10px;}
+.hero h1{color:#fff;font-size:34px;max-width:640px;line-height:1.15;margin-bottom:10px;}
+.hero p.lead{color:rgba(255,255,255,0.78);max-width:560px;font-size:15.5px;}
+.hero-actions{display:flex;gap:12px;margin-top:22px;flex-wrap:wrap;}
+.hero-stats{display:flex;gap:28px;margin-top:34px;flex-wrap:wrap;}
+.hero-stat-num{font-family:var(--font-display);font-size:28px;color:#fff;line-height:1;}
+.hero-stat-label{font-family:var(--font-body);font-size:11.5px;color:rgba(255,255,255,0.6);letter-spacing:0.06em;text-transform:uppercase;margin-top:4px;}
+
+/* ===== Section headers ===== */
+.section-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin:36px 0 16px;flex-wrap:wrap;}
+.section-head h2{font-size:20px;}
+.section-eyebrow{font-family:var(--font-body);font-size:11.5px;color:var(--ocean-mid);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:4px;display:block;}
+
+/* ===== Cards ===== */
+.card{
+  background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-md);
+  box-shadow:var(--shadow-sm);
+}
+.grid-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px;}
+.home-nav-card{
+  padding:22px;cursor:pointer;transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  display:flex;flex-direction:column;gap:10px;
+}
+.home-nav-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:var(--ocean-mid);}
+.home-nav-card .icon-wrap{width:44px;height:44px;border-radius:12px;background:var(--ocean-pale);display:flex;align-items:center;justify-content:center;}
+.home-nav-card .icon-wrap svg{width:24px;height:24px;}
+.home-nav-card h3{font-size:16px;margin-bottom:2px;}
+.home-nav-card p{font-size:13.5px;margin:0;}
+
+/* ===== Rules view ===== */
+.rules-layout{display:grid;grid-template-columns:220px 1fr;gap:24px;align-items:start;}
+.rules-parts{display:flex;flex-direction:column;gap:6px;position:sticky;top:88px;}
+.part-btn{
+  text-align:left;border:1px solid var(--line);background:var(--paper);border-radius:10px;
+  padding:11px 14px;font-size:13px;font-weight:700;color:var(--navy-soft);
+}
+.part-btn small{display:block;font-weight:500;color:var(--ink-soft);font-size:11.5px;margin-top:2px;}
+.part-btn.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.part-btn.active small{color:rgba(255,255,255,0.7);}
+.rule-item{padding:18px 20px;margin-bottom:12px;}
+.rule-item .rule-num{
+  display:inline-block;font-family:var(--font-body);font-size:12px;font-weight:700;color:#fff;
+  background:var(--ocean-mid);padding:3px 9px;border-radius:6px;margin-bottom:8px;letter-spacing:0.03em;
+}
+.rule-item h3{font-size:16px;margin-bottom:6px;}
+.rule-item .rule-body{font-size:14px;color:var(--ink-soft);white-space:pre-line;}
+.rule-edit-row{display:flex;justify-content:flex-end;margin-top:8px;}
+
+/* ===== Scenario list ===== */
+.scenario-card{padding:20px;cursor:pointer;transition:transform .15s ease, box-shadow .15s ease;position:relative;overflow:hidden;}
+.scenario-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);}
+.scenario-card .tag{
+  display:inline-flex;align-items:center;gap:5px;font-family:var(--font-body);font-size:11px;font-weight:700;
+  padding:3px 9px;border-radius:999px;letter-spacing:0.03em;margin-bottom:10px;text-transform:uppercase;
+}
+.tag-giveway{background:var(--giveway-soft);color:var(--giveway);}
+.tag-standon{background:var(--standon-soft);color:var(--standon);}
+.tag-both{background:var(--both-soft);color:var(--both);}
+.tag-neutral{background:var(--ocean-pale);color:var(--ocean-deep);}
+.scenario-card h3{font-size:16px;margin-bottom:6px;}
+.scenario-card p{font-size:13.5px;margin-bottom:0;}
+.scenario-card .rule-ref{font-family:var(--font-body);font-size:11.5px;color:var(--ink-soft);margin-top:10px;}
+.scenario-card .mini-radar{position:absolute;right:-30px;bottom:-30px;width:110px;height:110px;opacity:0.12;}
+
+/* ===== Scenario detail ===== */
+.scenario-detail{padding:26px;}
+.scenario-detail-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:18px;}
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--ocean-mid);background:none;border:none;padding:0;margin-bottom:14px;}
+.back-link:hover{text-decoration:underline;}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px;align-items:start;}
+@media (max-width:820px){.detail-grid{grid-template-columns:1fr;}}
+.radar-wrap{background:radial-gradient(circle at 50% 50%, #0F3A57 0%, var(--ocean-deep) 70%, #082238 100%);border-radius:var(--radius-md);padding:14px;box-shadow:var(--shadow-md);}
+.radar-legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px;font-size:12px;color:var(--ink-soft);}
+.radar-legend span{display:inline-flex;align-items:center;gap:6px;}
+.legend-dot{width:10px;height:10px;border-radius:3px;display:inline-block;}
+.detail-block{margin-bottom:18px;}
+.detail-block h4{font-size:13px;text-transform:uppercase;letter-spacing:0.08em;color:var(--ocean-mid);margin-bottom:6px;}
+.detail-block p{font-size:14.5px;white-space:pre-line;}
+.env-row{display:flex;gap:18px;flex-wrap:wrap;font-family:var(--font-body);font-size:12.5px;color:var(--ink-soft);background:var(--ocean-pale);padding:10px 14px;border-radius:10px;}
+.sound-badge{display:inline-flex;align-items:center;gap:8px;background:var(--navy);color:#fff;padding:8px 14px;border-radius:10px;font-size:13.5px;font-weight:600;}
+
+/* ===== Quiz ===== */
+.quiz-card{padding:28px;max-width:640px;margin:0 auto;}
+.quiz-progress{font-family:var(--font-body);font-size:12px;color:var(--ink-soft);margin-bottom:8px;}
+.quiz-bar{height:6px;border-radius:3px;background:var(--line-soft);overflow:hidden;margin-bottom:22px;}
+.quiz-bar-fill{height:100%;background:var(--ocean-mid);transition:width .3s ease;}
+.quiz-q{font-size:17px;font-weight:700;color:var(--navy);margin-bottom:18px;}
+.quiz-opt{
+  display:block;width:100%;text-align:left;border:1.5px solid var(--line);background:var(--paper);
+  border-radius:12px;padding:13px 16px;margin-bottom:10px;font-size:14.5px;color:var(--ink);
+  transition:border-color .15s ease, background .15s ease;
+}
+.quiz-opt:hover:not(:disabled){border-color:var(--ocean-mid);background:var(--ocean-pale);}
+.quiz-opt.correct{border-color:var(--standon);background:var(--standon-soft);font-weight:700;}
+.quiz-opt.incorrect{border-color:var(--giveway);background:var(--giveway-soft);font-weight:700;}
+.quiz-opt:disabled{cursor:default;}
+.quiz-explain{background:var(--ocean-pale);border-radius:10px;padding:14px 16px;font-size:13.5px;color:var(--navy-soft);margin-top:6px;}
+.quiz-result{text-align:center;padding:20px 0;}
+.quiz-result .score-num{font-family:var(--font-display);font-size:52px;color:var(--navy);}
+
+/* ===== Modal ===== */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(8,34,56,0.55);backdrop-filter:blur(2px);
+  display:flex;align-items:center;justify-content:center;z-index:100;padding:20px;
+}
+.modal-overlay.hidden{display:none;}
+.modal-box{background:var(--paper);border-radius:var(--radius-md);padding:28px;width:100%;max-width:400px;box-shadow:var(--shadow-lg);position:relative;}
+.modal-close{position:absolute;top:14px;right:14px;background:none;border:none;color:var(--ink-soft);font-size:18px;padding:4px;}
+.form-field{margin-bottom:14px;}
+.form-field label{display:block;font-size:12.5px;font-weight:700;color:var(--navy-soft);margin-bottom:5px;}
+.form-field input[type=text],.form-field input[type=password],.form-field input[type=number],.form-field textarea,.form-field select{
+  width:100%;border:1.5px solid var(--line);border-radius:9px;padding:9px 12px;font-size:14px;font-family:var(--font-body);color:var(--ink);background:var(--foam);
+}
+.form-field textarea{resize:vertical;min-height:70px;}
+.form-field input:focus,.form-field textarea:focus,.form-field select:focus{outline:2px solid var(--ocean-mid);outline-offset:1px;border-color:var(--ocean-mid);}
+.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.form-error{color:var(--giveway);font-size:12.5px;margin-top:-6px;margin-bottom:12px;min-height:16px;}
+.edit-card{border:1.5px dashed var(--brass);background:#FFFBF2;border-radius:var(--radius-md);padding:20px;margin-top:14px;}
+.edit-card h4{font-size:13px;text-transform:uppercase;letter-spacing:0.06em;color:var(--brass);margin-bottom:12px;}
+.edit-actions{display:flex;gap:10px;margin-top:14px;}
+.edit-fab{position:absolute;top:14px;right:14px;background:var(--brass);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:5px;z-index:5;}
+
+/* ===== Footer ===== */
+.app-footer{background:var(--navy);color:rgba(255,255,255,0.65);padding:22px;text-align:center;font-size:12.5px;margin-top:auto;}
+.app-footer strong{color:#fff;}
+
+/* ===== Toast ===== */
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--navy);color:#fff;padding:12px 22px;border-radius:10px;box-shadow:var(--shadow-lg);font-size:13.5px;font-weight:600;z-index:200;opacity:0;transition:opacity .2s ease, transform .2s ease;pointer-events:none;}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ===== Misc ===== */
+.badge-edit-mode{background:var(--brass);color:#fff;font-family:var(--font-body);font-size:11px;padding:3px 10px;border-radius:999px;letter-spacing:0.05em;}
+.empty-note{text-align:center;padding:40px 20px;color:var(--ink-soft);font-size:14px;}
+::-webkit-scrollbar{width:10px;height:10px;}
+::-webkit-scrollbar-thumb{background:var(--line);border-radius:6px;}
+@media (max-width:720px){
+  .rules-layout{grid-template-columns:1fr;}
+  .rules-parts{position:static;flex-direction:row;overflow-x:auto;padding-bottom:4px;}
+  .hero{padding:32px 22px;}
+  .hero h1{font-size:26px;}
+  .hero-radar{display:none;}
+}
+</style>
+</head>
+<body>
+<div id="app-shell">
+  <header class="topbar">
+    <div class="brand">
+      <svg id="brand-emblem" class="brand-emblem" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"></svg>
+      <div class="brand-text">
+        <span class="brand-org" id="org-name-display">TRUNG TÂM ĐÀO TẠO THUYỀN VIÊN VÀ PHÁT TRIỂN CÔNG NGHỆ BIỂN</span>
+        <span class="brand-app">Mô phỏng tránh va trên biển</span>
+      </div>
+    </div>
+    <nav class="main-nav" id="main-nav">
+      <button class="nav-btn" data-view="home">Trang chủ</button>
+      <button class="nav-btn" data-view="rules">Quy tắc</button>
+      <button class="nav-btn" data-view="scenarios">Mô phỏng</button>
+      <button class="nav-btn" data-view="quiz">Ôn tập</button>
+    </nav>
+    <div class="auth-area">
+      <span class="login-status" id="login-status">Chế độ xem</span>
+      <button class="btn btn-outline btn-sm" id="login-toggle-btn">Đăng nhập</button>
+    </div>
+  </header>
+
+  <main id="view-root"></main>
+
+  <footer class="app-footer">
+    <div id="footer-text">© <strong id="footer-org">Trung tâm Đào tạo Thuyền viên và Phát triển Công nghệ biển</strong> — Tài liệu nội bộ phục vụ giảng dạy</div>
+  </footer>
+</div>
+
+<div class="modal-overlay hidden" id="login-modal">
+  <div class="modal-box">
+    <button class="modal-close" id="login-modal-close" aria-label="Đóng">✕</button>
+    <h3>Đăng nhập quản trị</h3>
+    <p style="font-size:13px;margin-bottom:18px;">Đăng nhập để chỉnh sửa quy tắc, tình huống mô phỏng, câu hỏi ôn tập và giao diện.</p>
+    <div class="form-field">
+      <label for="login-user">Tài khoản</label>
+      <input type="text" id="login-user" autocomplete="username">
+    </div>
+    <div class="form-field">
+      <label for="login-pass">Mật khẩu</label>
+      <input type="password" id="login-pass" autocomplete="current-password">
+    </div>
+    <div class="form-error" id="login-error"></div>
+    <button class="btn btn-primary" id="login-submit-btn" style="width:100%;">Đăng nhập</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+'use strict';
+/* =========================================================
+   DỮ LIỆU MẶC ĐỊNH — COLREG 72
+   (Nội dung diễn giải phục vụ giảng dạy, không phải văn bản luật gốc)
+========================================================= */
+const PART_LABELS = {
+  A:  {title:"Phần A", sub:"Quy định chung"},
+  B1: {title:"Phần B · Mục I", sub:"Hành động trong mọi tầm nhìn xa"},
+  B2: {title:"Phần B · Mục II", sub:"Hành động khi nhìn thấy nhau"},
+  B3: {title:"Phần B · Mục III", sub:"Hành động khi tầm nhìn xa hạn chế"},
+  C:  {title:"Phần C", sub:"Đèn và dấu hiệu"},
+  D:  {title:"Phần D", sub:"Tín hiệu âm thanh, ánh sáng"},
+  E:  {title:"Phần E", sub:"Miễn trừ"}
+};
+const PART_ORDER = ["A","B1","B2","B3","C","D","E"];
+
+const DEFAULT_RULES = [
+{id:"r1",part:"A",num:"Điều 1",title:"Áp dụng",body:`Bộ quy tắc áp dụng cho mọi tàu thuyền hoạt động trên biển cả và các vùng nước liên thông mà tàu biển có thể qua lại được.`},
+{id:"r2",part:"A",num:"Điều 2",title:"Trách nhiệm",body:`Không điều khoản nào của quy tắc miễn trừ trách nhiệm cho tàu, chủ tàu, thuyền trưởng hay thuyền viên nếu không thực hiện đầy đủ các biện pháp phòng ngừa theo thông lệ hàng hải thông thường, hoặc theo yêu cầu đặc biệt của hoàn cảnh cụ thể lúc đó.`},
+{id:"r3",part:"A",num:"Điều 3",title:"Định nghĩa chung",body:`Giải thích các thuật ngữ dùng trong quy tắc: "tàu thuyền", "tàu máy", "tàu buồm", "tàu đang đánh cá", "thuỷ phi cơ", "tàu mất chủ động", "tàu bị hạn chế khả năng điều động", "tàu bị hạn chế do mớn nước", "đang chạy" (underway), chiều dài/chiều rộng tàu, và "tầm nhìn xa bị hạn chế".`},
+
+{id:"r4",part:"B1",num:"Điều 4",title:"Áp dụng",body:`Các quy tắc trong Mục I áp dụng cho tàu thuyền trong mọi điều kiện tầm nhìn xa.`},
+{id:"r5",part:"B1",num:"Điều 5",title:"Cảnh giới",body:`Mọi tàu thuyền phải luôn duy trì cảnh giới thích hợp bằng mắt và tai, cũng như bằng mọi phương tiện sẵn có phù hợp với hoàn cảnh, điều kiện hiện tại, để đánh giá đầy đủ tình huống và nguy cơ đâm va.`},
+{id:"r6",part:"B1",num:"Điều 6",title:"Tốc độ an toàn",body:`Mọi tàu thuyền phải luôn chạy với tốc độ an toàn để có hành động tránh va hiệu quả và dừng lại trong khoảng cách phù hợp với hoàn cảnh. Cần xem xét: tầm nhìn xa, mật độ giao thông, khả năng quay trở của tàu, ánh sáng ban đêm, điều kiện gió nước dòng chảy, mớn nước so với độ sâu, và khả năng sử dụng radar.`},
+{id:"r7",part:"B1",num:"Điều 7",title:"Nguy cơ đâm va",body:`Mọi tàu phải dùng mọi phương tiện sẵn có, phù hợp hoàn cảnh, để xác định sớm có tồn tại nguy cơ đâm va hay không; nếu còn nghi ngờ phải coi như nguy cơ đó tồn tại. Không được phán đoán chỉ dựa trên thông tin ít ỏi, đặc biệt là dữ liệu radar chưa đầy đủ. Cần đặc biệt chú ý xem phương vị la bàn của tàu đang đến gần có thay đổi đáng kể hay không — nếu gần như không đổi, nguy cơ đâm va có thể đang tồn tại.`},
+{id:"r8",part:"B1",num:"Điều 8",title:"Hành động tránh va",body:`Hành động tránh va, nếu hoàn cảnh cho phép, phải rõ ràng, thực hiện sớm và phù hợp thực tiễn hàng hải tốt. Thay đổi hướng đi/tốc độ phải đủ lớn để tàu khác dễ nhận biết; tránh nhiều thay đổi nhỏ liên tiếp. Nếu đủ khoảng nước, chỉ thay đổi hướng đi có thể là biện pháp hiệu quả nhất nếu thực hiện sớm, dứt khoát. Hành động phải dẫn tới việc thông qua ở khoảng cách an toàn; nếu cần, phải giảm tốc, dừng máy hoặc cho máy chạy lùi.`},
+{id:"r9",part:"B1",num:"Điều 9",title:"Luồng hẹp",body:`Tàu chạy dọc luồng hẹp phải giữ càng gần mép ngoài cùng bên phải của luồng càng tốt, nếu an toàn và thực tế. Tàu dài dưới 20m và tàu buồm không được cản trở tàu chỉ có thể hành trình an toàn trong phạm vi luồng; tàu đánh cá không được cản trở tàu khác đang chạy trong luồng. Cấm vượt nếu đòi hỏi tàu bị vượt phải hỗ trợ — tàu định vượt phải phát tín hiệu xin đường và được đồng ý. Khi tiếp cận khúc quanh hoặc đoạn bị che khuất, phải cảnh giác đặc biệt và phát tín hiệu phù hợp. Tránh neo trong luồng hẹp nếu có thể tránh được.`},
+{id:"r10",part:"B1",num:"Điều 10",title:"Hệ thống phân luồng giao thông",body:`Tàu dùng hệ thống phân luồng phải chạy đúng hướng làn đường quy định, tránh xa đường/vùng phân cách, thường nhập và thoát ở đầu làn; khi buộc phải cắt ngang, nên cắt theo hướng vuông góc nhất có thể. Tàu đánh cá, tàu buồm, tàu dài dưới 20m không được cản trở tàu máy đang hành trình an toàn trong làn đường. Tránh neo đậu trong hệ thống phân luồng hoặc gần khu vực đầu/cuối luồng.`},
+
+{id:"r11",part:"B2",num:"Điều 11",title:"Áp dụng",body:`Các quy tắc trong Mục II áp dụng cho tàu thuyền nhìn thấy nhau.`},
+{id:"r12",part:"B2",num:"Điều 12",title:"Tàu buồm",body:`Khi hai tàu buồm có nguy cơ đâm va: nếu gió thổi vào các mạn khác nhau, tàu có gió thổi vào mạn trái phải nhường đường; nếu gió thổi cùng mạn, tàu ở phía trên gió nhường tàu ở phía dưới gió; nếu không xác định được tàu kia nhận gió mạn nào, phải nhường đường.`},
+{id:"r13",part:"B2",num:"Điều 13",title:"Vượt",body:`Bất kể các quy định khác của Mục II, tàu vượt phải nhường đường cho tàu bị vượt. Một tàu được coi là đang vượt khi tiếp cận tàu khác từ hướng lệch quá 22,5° so với trục ngang về phía sau — ban đêm chỉ nhìn thấy đèn lái, không thấy đèn mạn nào của tàu kia. Khi còn nghi ngờ, phải coi mình là tàu vượt. Nghĩa vụ nhường đường vẫn còn cho đến khi đã vượt qua và cách xa hẳn, dù sau đó tình huống có chuyển thành cắt hướng.`},
+{id:"r14",part:"B2",num:"Điều 14",title:"Tình huống đối đầu",body:`Khi hai tàu máy đi đối hướng hoặc gần đối hướng có nguy cơ đâm va, mỗi tàu phải chuyển hướng sang phải để đi qua mạn trái của nhau. Tình huống được coi là tồn tại khi một tàu thấy tàu kia ở phía trước hoặc gần phía trước, ban đêm thấy đèn cột thẳng hàng/gần thẳng hàng và/hoặc thấy cả hai đèn mạn. Nếu còn nghi ngờ, phải coi như tình huống đối đầu đang tồn tại.`},
+{id:"r15",part:"B2",num:"Điều 15",title:"Tình huống cắt hướng",body:`Khi hai tàu máy cắt hướng nhau có nguy cơ đâm va, tàu nào nhìn thấy tàu kia ở mạn phải của mình phải nhường đường và, nếu hoàn cảnh cho phép, tránh cắt ngang phía trước tàu kia.`},
+{id:"r16",part:"B2",num:"Điều 16",title:"Hành động của tàu nhường đường",body:`Mọi tàu có nghĩa vụ nhường đường phải có hành động sớm và dứt khoát để giữ khoảng cách an toàn với tàu kia.`},
+{id:"r17",part:"B2",num:"Điều 17",title:"Hành động của tàu giữ hướng",body:`Khi một tàu có nghĩa vụ nhường đường, tàu kia (tàu giữ hướng) phải giữ nguyên hướng đi, tốc độ. Tàu giữ hướng có thể tự hành động tránh va ngay khi thấy rõ tàu nhường đường không hành động thích hợp; nếu tình huống trở nên quá gần đến mức không thể tránh va chỉ bằng hành động của tàu nhường đường, tàu giữ hướng phải có hành động tốt nhất giúp tránh va — kể cả không chuyển hướng sang trái đối với tàu đang ở mạn trái mình trong tình huống cắt hướng, nếu khả thi.`},
+{id:"r18",part:"B2",num:"Điều 18",title:"Trách nhiệm giữa các loại tàu",body:`Trừ khi Điều 9, 10, 13 quy định khác: tàu máy đang chạy phải nhường đường cho tàu mất chủ động, tàu bị hạn chế khả năng điều động, tàu đang đánh cá, và tàu buồm (theo thứ tự ưu tiên giảm dần). Tàu buồm đang chạy phải nhường đường cho tàu mất chủ động, tàu bị hạn chế khả năng điều động, và tàu đang đánh cá. Mọi tàu (trừ tàu mất chủ động/hạn chế điều động) phải tránh cản trở tàu bị hạn chế do mớn nước; tàu này phải hành trình đặc biệt thận trọng. Thuỷ phi cơ nói chung phải tránh xa và không cản trở tàu thuyền khác.`},
+{id:"r19",part:"B3",num:"Điều 19",title:"Hành động trong tầm nhìn xa hạn chế",body:`Áp dụng cho tàu không nhìn thấy nhau khi hành trình trong/gần khu vực tầm nhìn xa hạn chế. Mọi tàu máy phải chạy tốc độ an toàn phù hợp, sẵn sàng máy để điều động ngay. Khi phát hiện tàu khác qua radar, phải xác định có hình thành tình huống quá gần/nguy cơ đâm va hay không và hành động tránh va sớm nếu cần, tránh: chuyển hướng sang trái với tàu ở phía trước trục ngang (trừ khi đang vượt); chuyển hướng về phía tàu đang ở chính ngang hoặc sau chính ngang. Trừ khi đã xác định hết nguy cơ, tàu nghe tín hiệu sương mù ở phía trước trục ngang hoặc không tránh được tình huống quá gần phải giảm tốc tối thiểu, sẵn sàng dừng hẳn trớn tới, và hết sức thận trọng cho đến khi hết nguy cơ.`},
+
+{id:"r20",part:"C",num:"Điều 20",title:"Áp dụng",body:`Quy định về đèn có hiệu lực từ hoàng hôn đến bình minh và trong tầm nhìn xa hạn chế; có thể trưng thêm ban ngày nếu cần. Dấu hiệu (hình khối) được trưng ban ngày theo quy định riêng cho từng loại tàu/hoạt động.`},
+{id:"r21",part:"C",num:"Điều 21",title:"Định nghĩa (đèn)",body:`Đèn cột: đèn trắng chiếu cung 225° đặt trên trục dọc tàu. Đèn mạn: xanh lá (mạn phải) và đỏ (mạn trái), mỗi đèn chiếu cung 112,5°. Đèn lái: đèn trắng phía sau, chiếu cung 135°. Đèn kéo: đèn vàng phía sau. Đèn chớp: đèn chớp toàn vòng với tần suất quy định.`},
+{id:"r22",part:"C",num:"Điều 22",title:"Tầm nhìn xa của đèn",body:`Quy định khoảng cách tối thiểu phải nhìn thấy được của từng loại đèn, phân theo chiều dài tàu (từ 50m trở lên, 12–50m, dưới 12m).`},
+{id:"r23",part:"C",num:"Điều 23",title:"Tàu máy đang chạy",body:`Phải trưng: một đèn cột phía trước (tàu từ 50m trở lên trưng thêm đèn cột thứ hai phía sau, cao hơn), đèn mạn hai bên, và đèn lái.`},
+{id:"r25",part:"C",num:"Điều 25",title:"Tàu buồm đang chạy, tàu chèo",body:`Trưng đèn mạn hai bên và đèn lái (không có đèn cột); có thể thêm hai đèn chớp toàn vòng đỏ trên xanh lá ở đỉnh cột.`},
+{id:"r27",part:"C",num:"Điều 27",title:"Tàu mất chủ động, tàu hạn chế khả năng điều động",body:`Trưng hai đèn chớp toàn vòng đỏ–đỏ (hoặc hai hình cầu đen ban ngày) xếp thẳng đứng, kèm đèn/dấu hiệu bổ sung tuỳ loại hoạt động (nạo vét, rà phá thuỷ lôi, kéo phao...).`},
+{id:"r30",part:"C",num:"Điều 30",title:"Tàu neo, tàu mắc cạn",body:`Tàu neo trưng đèn trắng toàn vòng ở mũi (và ở lái, thấp hơn, nếu tàu dài). Tàu mắc cạn trưng thêm hai đèn đỏ toàn vòng thẳng đứng.`},
+{id:"r31",part:"C",num:"Điều 31",title:"Thuỷ phi cơ",body:`Khi không thể trưng đủ đèn/dấu hiệu như tàu máy, thuỷ phi cơ phải trưng đèn/tín hiệu gần giống nhất có thể với quy định.`},
+
+{id:"r32",part:"D",num:"Điều 32",title:"Định nghĩa (còi)",body:`"Tiếng ngắn": âm thanh kéo dài khoảng 1 giây. "Tiếng dài": âm thanh kéo dài khoảng 4–6 giây.`},
+{id:"r34",part:"D",num:"Điều 34",title:"Tín hiệu điều động và cảnh báo",body:`Khi nhìn thấy nhau: 1 tiếng ngắn = "tôi chuyển hướng sang phải"; 2 tiếng ngắn = "tôi chuyển hướng sang trái"; 3 tiếng ngắn = "máy của tôi đang chạy lùi". Trong luồng hẹp khi xin vượt: 2 dài + 1 ngắn (xin vượt mạn phải) hoặc 2 dài + 2 ngắn (xin vượt mạn trái); tàu bị vượt đồng ý bằng 1 dài–1 ngắn–1 dài–1 ngắn. Khi nghi ngờ hành động/ý định của tàu kia: phát ít nhất 5 tiếng ngắn liên tiếp (có thể kèm đèn chớp). Khi tiếp cận khúc quanh/đoạn luồng bị che khuất: phát 1 tiếng dài.`},
+{id:"r35",part:"D",num:"Điều 35",title:"Tín hiệu âm thanh khi tầm nhìn xa hạn chế",body:`Tàu máy có trớn tới: 1 tiếng dài mỗi khoảng không quá 2 phút. Tàu máy đang chạy nhưng dừng trớn: 2 tiếng dài liên tiếp (cách nhau ~2 giây) mỗi khoảng không quá 2 phút. Tàu mất chủ động, hạn chế điều động, hạn chế do mớn nước, tàu buồm, tàu đánh cá, tàu đang kéo/đẩy: 1 dài + 2 ngắn mỗi khoảng không quá 2 phút. Tàu neo: hồi chuông nhanh ~5 giây mỗi khoảng không quá 1 phút (tàu ≥100m thêm chiêng ở lái). Tàu mắc cạn: tín hiệu chuông đặc biệt.`},
+
+{id:"r38",part:"E",num:"Điều 38",title:"Miễn trừ",body:`Cho phép một số tàu đóng hoặc đã đặt sống chính trước ngày quy tắc có hiệu lực được miễn trừ tạm thời hoặc vĩnh viễn một số yêu cầu về vị trí, đặc tính kỹ thuật của đèn, dấu hiệu, tín hiệu âm thanh, trong thời gian chuyển tiếp quy định.`}
+];
+
+/* ===== Tình huống mô phỏng ===== */
+const VESSEL_TYPES = {
+  power:  {label:"Tàu máy"},
+  sail:   {label:"Tàu buồm"},
+  fishing:{label:"Tàu đánh cá"},
+  restricted:{label:"Tàu hạn chế điều động"}
+};
+
+const DEFAULT_SCENARIOS = [
+{
+  id:"sc-headon",title:"Tình huống đối đầu (Head-on)",ruleRef:"Điều 14",roleTag:"both",
+  summary:"Hai tàu máy đi ngược hướng nhau, cả hai đều phải chuyển hướng sang phải.",
+  description:`Hai tàu máy đi ngược hướng hoặc gần như ngược hướng nhau, mỗi tàu nhìn thấy đèn cột / hình dáng tàu kia gần như thẳng phía trước mũi — có nguy cơ đâm va trực diện.`,
+  action:`Cả hai tàu đều phải chủ động chuyển hướng sang bên phải (mạn phải) để đi qua mạn trái của nhau. Không tàu nào được coi là tàu giữ hướng trong tình huống này; hành động phải sớm và rõ ràng.`,
+  soundSignal:`Mỗi tàu phát 1 tiếng còi ngắn khi bắt đầu chuyển hướng sang phải.`,
+  showTurnArrows:true,
+  ownShip:{name:"Tàu ta",type:"power",x:210,y:322,heading:0,role:"both"},
+  targetShip:{name:"Tàu mục tiêu",type:"power",x:210,y:108,heading:180,role:"both"},
+  environment:{currentDir:45,currentSpeed:1.0,windDir:60,windSpeed:12,visibility:"Tốt",showCurrent:true,showWind:false}
+},
+{
+  id:"sc-cross-giveway",title:"Cắt hướng — Tàu ta nhường đường",ruleRef:"Điều 15, 16",roleTag:"giveway",
+  summary:"Tàu mục tiêu ở mạn phải của tàu ta — tàu ta phải nhường đường.",
+  description:`Tàu ta và tàu mục tiêu đang cắt hướng nhau. Tàu mục tiêu ở phía mạn phải của tàu ta, hai hướng đi có khả năng giao nhau ở phía trước.`,
+  action:`Tàu ta là tàu nhường đường: hành động sớm, dứt khoát — thường là giảm tốc độ và/hoặc chuyển hướng sang phải để đi qua phía sau lái tàu mục tiêu, tránh cắt ngang phía trước tàu đó.`,
+  soundSignal:`1 tiếng còi ngắn khi bắt đầu chuyển hướng sang phải (Điều 34).`,
+  showTurnArrows:true,
+  ownShip:{name:"Tàu ta",type:"power",x:145,y:290,heading:5,role:"giveway"},
+  targetShip:{name:"Tàu mục tiêu",type:"power",x:320,y:230,heading:222,role:"standon"},
+  environment:{currentDir:200,currentSpeed:0.5,windDir:180,windSpeed:8,visibility:"Tốt",showCurrent:true,showWind:false}
+},
+{
+  id:"sc-cross-standon",title:"Cắt hướng — Tàu ta giữ hướng",ruleRef:"Điều 17",roleTag:"standon",
+  summary:"Tàu mục tiêu ở mạn trái của tàu ta và phải nhường đường; tàu ta giữ hướng.",
+  description:`Tàu mục tiêu đang tiếp cận từ phía mạn trái của tàu ta và có nghĩa vụ nhường đường theo Điều 15.`,
+  action:`Tàu ta là tàu giữ hướng: giữ nguyên hướng đi, tốc độ. Chỉ tự hành động tránh va khi thấy rõ tàu mục tiêu không hành động thích hợp, hoặc khi hai tàu đã đến quá gần.`,
+  soundSignal:`Nếu buộc phải tự hành động: phát tín hiệu tương ứng (1 hoặc 2 tiếng ngắn); có thể phát 5 tiếng ngắn nếu nghi ngờ ý định của tàu kia.`,
+  showTurnArrows:false,
+  ownShip:{name:"Tàu ta",type:"power",x:272,y:288,heading:355,role:"standon"},
+  targetShip:{name:"Tàu mục tiêu",type:"power",x:112,y:222,heading:130,role:"giveway"},
+  environment:{currentDir:90,currentSpeed:1.2,windDir:100,windSpeed:10,visibility:"Tốt",showCurrent:true,showWind:false}
+},
+{
+  id:"sc-overtaking",title:"Tàu ta vượt tàu khác",ruleRef:"Điều 13",roleTag:"giveway",
+  summary:"Tàu ta tiếp cận từ phía sau trong cung 135° sau lái — tàu ta là tàu vượt.",
+  description:`Tàu ta tiếp cận tàu mục tiêu từ phía sau, trong phạm vi cung 135° tính từ chính lái (quá 22,5° so với trục ngang về phía sau) — ban đêm chỉ nhìn thấy đèn lái của tàu mục tiêu.`,
+  action:`Tàu ta là tàu vượt: phải nhường đường, giữ khoảng cách an toàn cho đến khi vượt hẳn và cách xa. Nghĩa vụ này vẫn còn ngay cả khi sau đó tình huống chuyển thành cắt hướng.`,
+  soundSignal:`Trong luồng hẹp: 2 tiếng dài + 1 ngắn (xin vượt mạn phải) hoặc 2 dài + 2 ngắn (xin vượt mạn trái); tàu bị vượt đồng ý bằng 1 dài–1 ngắn–1 dài–1 ngắn.`,
+  showTurnArrows:false,showOvertakingSector:"target",
+  ownShip:{name:"Tàu ta",type:"power",x:210,y:312,heading:0,role:"giveway"},
+  targetShip:{name:"Tàu mục tiêu",type:"power",x:210,y:170,heading:0,role:"standon"},
+  environment:{currentDir:0,currentSpeed:0.8,windDir:340,windSpeed:6,visibility:"Tốt",showCurrent:true,showWind:false}
+},
+{
+  id:"sc-beingovertaken",title:"Tàu ta bị tàu khác vượt",ruleRef:"Điều 13, 17",roleTag:"standon",
+  summary:"Tàu mục tiêu tiếp cận từ phía sau tàu ta trong cung sau lái — tàu ta được vượt.",
+  description:`Tàu mục tiêu tiếp cận tàu ta từ phía sau, trong cung 135° sau lái tàu ta — tàu mục tiêu là tàu vượt, tàu ta là tàu bị vượt.`,
+  action:`Về nguyên tắc, tàu ta giữ nguyên hướng đi, tốc độ như một tàu giữ hướng; chỉ hành động nếu thấy rõ tàu vượt không hành động thích hợp hoặc tình huống trở nên quá gần.`,
+  soundSignal:`Theo dõi tín hiệu xin vượt của tàu mục tiêu (nếu trong luồng hẹp) và phản hồi phù hợp.`,
+  showTurnArrows:false,showOvertakingSector:"own",
+  ownShip:{name:"Tàu ta",type:"power",x:210,y:170,heading:0,role:"standon"},
+  targetShip:{name:"Tàu mục tiêu",type:"power",x:210,y:312,heading:0,role:"giveway"},
+  environment:{currentDir:0,currentSpeed:0.8,windDir:340,windSpeed:6,visibility:"Tốt",showCurrent:true,showWind:false}
+},
+{
+  id:"sc-power-sail",title:"Tàu máy gặp tàu buồm",ruleRef:"Điều 18",roleTag:"giveway",
+  summary:"Tàu ta (tàu máy) phải nhường đường cho tàu buồm.",
+  description:`Tàu ta (tàu máy) và tàu mục tiêu (tàu buồm) có nguy cơ đâm va khi cả hai đang chạy — đây không phải trường hợp vượt.`,
+  action:`Tàu ta (tàu máy) phải nhường đường cho tàu buồm: chuyển hướng hoặc giảm tốc độ sớm để giữ khoảng cách an toàn.`,
+  soundSignal:`1 hoặc 2 tiếng ngắn tuỳ hướng chuyển động thực tế.`,
+  showTurnArrows:true,
+  ownShip:{name:"Tàu ta",type:"power",x:150,y:288,heading:20,role:"giveway"},
+  targetShip:{name:"Tàu mục tiêu",type:"sail",x:296,y:196,heading:250,role:"standon"},
+  environment:{currentDir:270,currentSpeed:0.6,windDir:250,windSpeed:14,visibility:"Tốt",showCurrent:true,showWind:true}
+},
+{
+  id:"sc-narrowchannel",title:"Hành trình trong luồng hẹp",ruleRef:"Điều 9",roleTag:"neutral",
+  summary:"Hai tàu đi ngược chiều trong luồng hẹp — mỗi tàu giữ sát mép phải.",
+  description:`Tàu ta hành trình dọc theo luồng hẹp, gặp tàu mục tiêu đi ngược chiều trong cùng luồng.`,
+  action:`Cả hai tàu phải giữ càng gần mép ngoài cùng bên phải của luồng càng tốt (nếu an toàn, thực tế); không cản trở tàu chỉ có thể an toàn trong phạm vi luồng; đặc biệt thận trọng tại khúc quanh.`,
+  soundSignal:`1 tiếng dài khi tiếp cận khúc quanh hoặc đoạn luồng bị che khuất tầm nhìn.`,
+  showTurnArrows:false,showChannel:true,
+  ownShip:{name:"Tàu ta",type:"power",x:165,y:300,heading:345,role:"neutral"},
+  targetShip:{name:"Tàu mục tiêu",type:"power",x:255,y:130,heading:165,role:"neutral"},
+  environment:{currentDir:160,currentSpeed:1.5,windDir:170,windSpeed:9,visibility:"Trung bình",showCurrent:true,showWind:false}
+},
+{
+  id:"sc-restrictedvis",title:"Tầm nhìn xa bị hạn chế",ruleRef:"Điều 19, 35",roleTag:"caution",
+  summary:"Sương mù — mục tiêu chỉ được phát hiện qua radar, chưa nhìn thấy bằng mắt.",
+  description:`Trời có sương mù, tầm nhìn xa bị hạn chế. Tàu ta phát hiện một mục tiêu qua radar nhưng chưa nhìn thấy bằng mắt thường.`,
+  action:`Chạy tốc độ an toàn phù hợp tầm nhìn hạn chế, sẵn sàng máy. Dùng radar đánh giá nguy cơ đâm va sớm; nếu mục tiêu ở phía trước trục ngang, tránh chuyển hướng sang trái hoặc về phía tàu đang ở ngang/sau ngang. Nếu nghe tín hiệu sương mù phía trước trục ngang hoặc không tránh được tình huống quá gần, giảm tốc tối thiểu, sẵn sàng dừng hẳn trớn tới.`,
+  soundSignal:`Tàu ta (có trớn tới) phát 1 tiếng dài mỗi khoảng không quá 2 phút.`,
+  showTurnArrows:false,showFog:true,
+  ownShip:{name:"Tàu ta",type:"power",x:210,y:296,heading:0,role:"neutral"},
+  targetShip:{name:"Mục tiêu radar",type:"power",x:300,y:150,heading:200,role:"caution",radarOnly:true},
+  environment:{currentDir:30,currentSpeed:0.7,windDir:20,windSpeed:5,visibility:"Hạn chế (sương mù)",showCurrent:true,showWind:false}
+}
+];
+
+/* ===== Câu hỏi ôn tập ===== */
+const DEFAULT_QUIZ = [
+{id:"q1",prompt:`Theo Điều 13, một tàu được coi là "tàu vượt" khi nào?`,options:[
+  "Khi tiếp cận tàu khác từ phía trước mũi",
+  "Khi tiếp cận tàu khác từ hướng lệch quá 22,5° so với trục ngang về phía sau (chỉ thấy đèn lái)",
+  "Khi hai tàu đi ngược hướng nhau",
+  "Khi tàu kia đang neo đậu"],correct:1,
+  explain:`Theo Điều 13, tàu vượt là tàu tiếp cận từ phía sau trong phạm vi cung sao cho ban đêm chỉ nhìn thấy đèn lái, không thấy đèn mạn nào của tàu bị vượt.`},
+{id:"q2",prompt:`Trong tình huống đối đầu (Điều 14), hai tàu máy phải hành động như thế nào?`,options:[
+  "Cả hai đều chuyển hướng sang trái",
+  "Một tàu giữ nguyên hướng, tàu kia nhường đường",
+  "Cả hai đều chuyển hướng sang phải",
+  "Tàu lớn hơn được quyền ưu tiên"],correct:2,
+  explain:`Điều 14 quy định cả hai tàu máy đi đối hướng đều phải chuyển hướng sang phải để đi qua mạn trái của nhau; không tàu nào là tàu giữ hướng trong tình huống này.`},
+{id:"q3",prompt:`Trong tình huống cắt hướng (Điều 15), tàu nào phải nhường đường?`,options:[
+  "Tàu nhìn thấy tàu kia ở mạn trái của mình",
+  "Tàu nhìn thấy tàu kia ở mạn phải của mình",
+  "Tàu đang chạy chậm hơn",
+  "Tàu có kích thước nhỏ hơn"],correct:1,
+  explain:`Điều 15 quy định tàu nào nhìn thấy tàu kia ở mạn phải của mình phải nhường đường và tránh cắt ngang phía trước tàu đó.`},
+{id:"q4",prompt:`Tàu giữ hướng (Điều 17) được phép/phải tự hành động tránh va khi nào?`,options:[
+  "Ngay khi phát hiện có tàu khác trong tầm nhìn",
+  "Khi thấy rõ tàu nhường đường không có hành động thích hợp, hoặc khi hai tàu đã quá gần",
+  "Chỉ khi được tàu nhường đường xin phép qua tín hiệu còi",
+  "Không bao giờ được phép tự hành động"],correct:1,
+  explain:`Điều 17 quy định tàu giữ hướng phải giữ nguyên hướng và tốc độ, nhưng có thể/phải tự hành động khi thấy rõ tàu nhường đường không hành động phù hợp, hoặc khi tình huống trở nên quá gần.`},
+{id:"q5",prompt:`Theo Điều 18, tàu buồm đang chạy phải nhường đường cho loại tàu nào sau đây?`,options:[
+  "Tàu máy đang chạy bình thường",
+  "Tàu đang đánh cá",
+  "Tàu khách",
+  "Tàu container"],correct:1,
+  explain:`Điều 18 quy định tàu buồm phải nhường đường cho tàu mất chủ động, tàu bị hạn chế khả năng điều động và tàu đang đánh cá.`},
+{id:"q6",prompt:`Tín hiệu còi "1 tiếng ngắn" theo Điều 34 có nghĩa là gì?`,options:[
+  "Tôi đang chuyển hướng sang trái",
+  "Tôi đang chuyển hướng sang phải",
+  "Máy của tôi đang chạy lùi",
+  "Tôi nghi ngờ hành động của tàu kia"],correct:1,
+  explain:`Theo Điều 34: 1 tiếng ngắn = "tôi chuyển hướng sang phải"; 2 tiếng ngắn = sang trái; 3 tiếng ngắn = máy đang chạy lùi.`},
+{id:"q7",prompt:`Tín hiệu nào dùng để thể hiện sự nghi ngờ về hành động hoặc ý định của tàu kia?`,options:[
+  "1 tiếng dài",
+  "2 tiếng dài",
+  "Ít nhất 5 tiếng ngắn liên tiếp",
+  "1 dài + 2 ngắn"],correct:2,
+  explain:`Điều 34 quy định khi nghi ngờ, phải phát ít nhất 5 tiếng ngắn liên tiếp (có thể kèm đèn chớp) để cảnh báo tàu kia.`},
+{id:"q8",prompt:`Trong tầm nhìn xa bị hạn chế, tàu máy có trớn tới phải phát tín hiệu âm thanh nào?`,options:[
+  "1 tiếng dài mỗi khoảng không quá 2 phút",
+  "2 tiếng dài liên tiếp mỗi khoảng không quá 2 phút",
+  "1 dài + 2 ngắn mỗi khoảng không quá 2 phút",
+  "Hồi chuông nhanh mỗi khoảng không quá 1 phút"],correct:0,
+  explain:`Điều 35 quy định tàu máy có trớn tới phát 1 tiếng dài mỗi khoảng không quá 2 phút; tàu dừng trớn phát 2 tiếng dài liên tiếp.`},
+{id:"q9",prompt:`Theo Điều 19, khi phát hiện mục tiêu qua radar ở phía trước trục ngang trong tầm nhìn xa hạn chế, nên TRÁNH hành động nào?`,options:[
+  "Giảm tốc độ",
+  "Chuyển hướng sang trái",
+  "Chuyển hướng sang phải",
+  "Sẵn sàng máy"],correct:1,
+  explain:`Điều 19 khuyến cáo tránh chuyển hướng sang trái đối với tàu ở phía trước trục ngang (trừ khi đang vượt), và tránh chuyển hướng về phía tàu đang ở ngang hoặc sau ngang.`},
+{id:"q10",prompt:`Trong luồng hẹp, tàu nên hành trình ở vị trí nào trong luồng?`,options:[
+  "Giữa luồng",
+  "Càng gần mép ngoài cùng bên trái càng tốt",
+  "Càng gần mép ngoài cùng bên phải càng tốt, nếu an toàn và thực tế",
+  "Không có quy định cụ thể"],correct:2,
+  explain:`Điều 9 quy định tàu chạy dọc luồng hẹp phải giữ càng gần mép ngoài cùng bên phải càng tốt, nếu an toàn và thực tế.`},
+{id:"q11",prompt:`Tàu dài dưới 20m hoặc tàu buồm trong luồng hẹp có nghĩa vụ gì?`,options:[
+  "Được quyền ưu tiên tuyệt đối",
+  "Không được cản trở hành trình của tàu chỉ có thể an toàn trong phạm vi luồng hẹp",
+  "Phải đi giữa luồng",
+  "Không cần tuân theo quy tắc luồng hẹp"],correct:1,
+  explain:`Điều 9 quy định tàu dài dưới 20m và tàu buồm không được cản trở hành trình an toàn của tàu chỉ có thể hành trình an toàn trong phạm vi luồng hẹp.`},
+{id:"q12",prompt:`Theo Điều 6, yếu tố nào KHÔNG phải là căn cứ để xác định tốc độ an toàn?`,options:[
+  "Tầm nhìn xa hiện tại",
+  "Mật độ giao thông",
+  "Khả năng quay trở của tàu",
+  "Màu sơn của tàu"],correct:3,
+  explain:`Điều 6 liệt kê các yếu tố như tầm nhìn xa, mật độ giao thông, khả năng điều động, ánh sáng, điều kiện gió nước, mớn nước so với độ sâu, khả năng radar... màu sơn tàu không liên quan.`},
+{id:"q13",prompt:`Khi hai tàu buồm gặp nhau và gió thổi vào các mạn khác nhau, tàu nào phải nhường đường?`,options:[
+  "Tàu có gió thổi vào mạn phải",
+  "Tàu có gió thổi vào mạn trái",
+  "Tàu lớn hơn",
+  "Tàu đang ở phía dưới gió"],correct:1,
+  explain:`Điều 12 quy định khi gió thổi vào các mạn khác nhau, tàu có gió thổi vào mạn trái phải nhường đường cho tàu có gió thổi vào mạn phải.`},
+{id:"q14",prompt:`Đèn mạn phải (xanh lá) và đèn mạn trái (đỏ) trên tàu máy có góc chiếu sáng bao nhiêu độ mỗi bên?`,options:[
+  "90°","112,5°","135°","225°"],correct:1,
+  explain:`Điều 21 quy định mỗi đèn mạn chiếu sáng một cung 112,5° tính từ hướng mũi tàu về phía mạn tương ứng.`},
+{id:"q15",prompt:`Tàu neo đậu vào ban đêm phải trưng đèn gì?`,options:[
+  "Đèn trắng toàn vòng ở mũi (và ở lái nếu tàu dài)",
+  "Hai đèn đỏ toàn vòng thẳng đứng",
+  "Đèn xanh lá toàn vòng",
+  "Không cần trưng đèn nếu neo trong vùng nước cạn"],correct:0,
+  explain:`Điều 30 quy định tàu neo phải trưng đèn trắng toàn vòng ở nơi dễ thấy nhất phía mũi, và một đèn tương tự ở phía lái, thấp hơn, nếu tàu dài (tàu mắc cạn trưng thêm 2 đèn đỏ toàn vòng thẳng đứng).`}
+];
+
+const DEFAULT_SETTINGS = {
+  appTitle:"Mô phỏng tránh va trên biển",
+  appSubtitle:"và các câu hỏi ôn tập",
+  orgName:"Trung tâm Đào tạo Thuyền viên",
+  heroEyebrow:"COLREG 72 · QUY TẮC QUỐC TẾ PHÒNG NGỪA ĐÂM VA TÀU THUYỀN TRÊN BIỂN",
+  heroLead:"Trực quan hoá các tình huống tránh va theo Bảng quy tắc quốc tế phòng ngừa đâm va tàu thuyền trên biển năm 1972 (COLREG 72) — phục vụ giảng dạy và tự ôn luyện.",
+  footerNote:"Tài liệu nội bộ phục vụ giảng dạy COLREG 72",
+  emblem:"anchor",
+  logoImageUrl:""
+};
+
+const AUTH_USER = "TTDT";
+const AUTH_PASS = "demo";
+
+/* =========================================================
+   TIỆN ÍCH LƯU TRỮ (window.storage với dự phòng bộ nhớ tạm)
+========================================================= */
+const STORAGE_KEY = "colreg-app-data";
+let storageAvailable = true;
+let memoryFallback = null;
+
+function deepClone(o){ return JSON.parse(JSON.stringify(o)); }
+
+async function loadAppData(){
+  const fallbackData = { rules:deepClone(DEFAULT_RULES), scenarios:deepClone(DEFAULT_SCENARIOS), quiz:deepClone(DEFAULT_QUIZ), settings:deepClone(DEFAULT_SETTINGS) };
+  if (!window.storage){ storageAvailable=false; memoryFallback = fallbackData; return fallbackData; }
+  try{
+    const res = await window.storage.get(STORAGE_KEY, true);
+    if (res && res.value){
+      const parsed = JSON.parse(res.value);
+      return {
+        rules: parsed.rules && parsed.rules.length ? parsed.rules : fallbackData.rules,
+        scenarios: parsed.scenarios && parsed.scenarios.length ? parsed.scenarios : fallbackData.scenarios,
+        quiz: parsed.quiz && parsed.quiz.length ? parsed.quiz : fallbackData.quiz,
+        settings: Object.assign({}, fallbackData.settings, parsed.settings||{})
+      };
+    }
+    return fallbackData;
+  }catch(e){
+    // key not found yet -> seed it
+    try{ await window.storage.set(STORAGE_KEY, JSON.stringify(fallbackData), true); }catch(e2){ storageAvailable=false; }
+    return fallbackData;
+  }
+}
+
+async function persistAppData(){
+  if (!storageAvailable || !window.storage){ memoryFallback = DATA; return false; }
+  try{
+    await window.storage.set(STORAGE_KEY, JSON.stringify(DATA), true);
+    return true;
+  }catch(e){
+    storageAvailable = false;
+    memoryFallback = DATA;
+    return false;
+  }
+}
+
+/* =========================================================
+   TRẠNG THÁI ỨNG DỤNG
+========================================================= */
+let DATA = null;
+let isLoggedIn = false;
+let currentView = "home";
+let currentPart = "A";
+let currentScenarioId = null;
+let quizIndex = 0, quizScore = 0, quizSelected = null, quizFinished = false;
+
+/* =========================================================
+   BIỂU TƯỢNG (SVG nội tuyến, stroke=currentColor)
+========================================================= */
+const ICONS = {
+  book:`<path d="M4 5.5C4 4.7 4.7 4 5.5 4H12v16H5.5A1.5 1.5 0 0 1 4 18.5V5.5Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H12v16h6.5c.8 0 1.5-.7 1.5-1.5V5.5Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>`,
+  radar:`<circle cx="12" cy="12" r="8.4" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="4.6" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.6"/><line x1="12" y1="12" x2="18.3" y2="7.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="15.5" cy="15" r="1.3" fill="currentColor"/>`,
+  quiz:`<circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M9.3 9.6c.2-1.4 1.3-2.3 2.7-2.3 1.4 0 2.5.9 2.5 2.1 0 1.5-1.6 1.7-2.2 2.9-.2.4-.3.8-.3 1.3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="12" cy="16.6" r="0.9" fill="currentColor"/>`,
+  home:`<path d="M4 11.5 12 5l8 6.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.5 10.5V19a1 1 0 0 0 1 1H10v-4.5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1V20h2.5a1 1 0 0 0 1-1v-8.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>`,
+  wave:`<path d="M2 15c2 0 2-3 4-3s2 3 4 3 2-3 4-3 2 3 4 3 2-3 4-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M2 19c2 0 2-3 4-3s2 3 4 3 2-3 4-3 2 3 4 3 2-3 4-3" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity="0.55"/>`,
+  edit:`<path d="M4 20h4l10-10-4-4L4 16v4Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M13 5.5 18.5 11" stroke="currentColor" stroke-width="1.6"/>`,
+  check:`<path d="M4 12.5 9.5 18 20 6" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>`,
+  x:`<path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>`,
+  arrowLeft:`<path d="M15 5 8 12l7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`,
+  plus:`<path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>`,
+  trash:`<path d="M5 7h14M9 7V5.2A1.2 1.2 0 0 1 10.2 4h3.6A1.2 1.2 0 0 1 15 5.2V7M7 7l.7 12a1.5 1.5 0 0 0 1.5 1.4h5.6a1.5 1.5 0 0 0 1.5-1.4L17 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>`
+};
+
+const EMBLEMS = {
+  anchor:`<circle cx="24" cy="10" r="4.2" fill="none" stroke="#DDEFF7" stroke-width="2.6"/><line x1="24" y1="14.2" x2="24" y2="38" stroke="#DDEFF7" stroke-width="2.6" stroke-linecap="round"/><line x1="16" y1="18.5" x2="32" y2="18.5" stroke="#DDEFF7" stroke-width="2.6" stroke-linecap="round"/><path d="M9 26a15 15 0 0 0 15 14 15 15 0 0 0 15-14" fill="none" stroke="#DDEFF7" stroke-width="2.6" stroke-linecap="round"/>`,
+  compass:`<circle cx="24" cy="24" r="17" fill="none" stroke="#DDEFF7" stroke-width="2.4"/><path d="M24 10 28 24 24 38 20 24Z" fill="#DDEFF7"/><circle cx="24" cy="24" r="2.4" fill="#0B2E4A"/>`,
+  wheel:`<circle cx="24" cy="24" r="16" fill="none" stroke="#DDEFF7" stroke-width="2.4"/><circle cx="24" cy="24" r="5" fill="none" stroke="#DDEFF7" stroke-width="2.2"/>${[0,45,90,135,180,225,270,315].map(a=>{const r1=9,r2=16,rad=a*Math.PI/180;const x1=24+r1*Math.sin(rad),y1=24-r1*Math.cos(rad),x2=24+r2*Math.sin(rad),y2=24-r2*Math.cos(rad);return `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#DDEFF7" stroke-width="2.2" stroke-linecap="round"/>`;}).join("")}`,
+  ship:`<path d="M10 28h28l-4 9H14l-4-9Z" fill="none" stroke="#DDEFF7" stroke-width="2.4" stroke-linejoin="round"/><line x1="24" y1="28" x2="24" y2="8" stroke="#DDEFF7" stroke-width="2.4"/><path d="M24 10 32 26H24Z" fill="#DDEFF7" opacity="0.85"/>`
+};
+
+function buildEmblemMarkup(){
+  const s = DATA.settings;
+  if (s.logoImageUrl && s.logoImageUrl.trim()){
+    return `<image href="${escapeAttr(s.logoImageUrl.trim())}" x="0" y="0" width="48" height="48" preserveAspectRatio="xMidYMid meet"/>`;
+  }
+  return EMBLEMS[s.emblem] || EMBLEMS.anchor;
+}
+
+function escapeHtml(str){
+  return String(str==null?"":str).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function escapeAttr(str){ return escapeHtml(str); }
+
+function showToast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(showToast._tm);
+  showToast._tm = setTimeout(()=>t.classList.remove("show"), 2600);
+}
+
+/* =========================================================
+   BIỂU ĐỒ RA-ĐA / TÌNH HUỐNG (SVG)
+========================================================= */
+const ROLE_COLOR = { giveway:"#D6524A", standon:"#2F9E68", both:"#DB8F2E", neutral:"#BFE3F0", caution:"#E7B559" };
+const ROLE_LABEL = { giveway:"Tàu nhường đường", standon:"Tàu giữ hướng", both:"Cùng phải nhường đường", neutral:"Trung lập", caution:"Cần chú ý" };
+
+function shipIconSVG(vessel, size){
+  size = size || 1;
+  const color = ROLE_COLOR[vessel.role] || "#BFE3F0";
+  const stroke = "#082238";
+  if (vessel.imageUrl && vessel.imageUrl.trim()){
+    const w=34*size, h=34*size;
+    return `<g transform="translate(${vessel.x},${vessel.y}) rotate(${vessel.heading})">
+      <image href="${escapeAttr(vessel.imageUrl.trim())}" x="${-w/2}" y="${-h/2}" width="${w}" height="${h}" preserveAspectRatio="xMidYMid meet"/>
+    </g>`;
+  }
+  if (vessel.radarOnly){
+    return `<g transform="translate(${vessel.x},${vessel.y})" class="radar-blip">
+      <circle r="10" fill="none" stroke="${color}" stroke-width="1.6" stroke-dasharray="3 3"/>
+      <circle r="3" fill="${color}"/>
+    </g>`;
+  }
+  let extra = "";
+  if (vessel.type === "sail"){
+    extra = `<path d="M0,-14 L0,-30 L7,-15 Z" fill="#F6FBFD" stroke="${stroke}" stroke-width="1" opacity="0.92"/>`;
+  } else if (vessel.type === "fishing"){
+    extra = `<line x1="-5" y1="2" x2="-14" y2="10" stroke="${stroke}" stroke-width="1.4"/><line x1="5" y1="2" x2="14" y2="10" stroke="${stroke}" stroke-width="1.4"/>`;
+  } else if (vessel.type === "restricted"){
+    extra = `<circle cx="0" cy="-22" r="3" fill="${ROLE_COLOR.giveway}" stroke="${stroke}" stroke-width="0.8"/><circle cx="0" cy="-15" r="3" fill="${ROLE_COLOR.giveway}" stroke="${stroke}" stroke-width="0.8"/>`;
+  }
+  const hull = `<path d="M0,-16 L5.5,-4 L5.5,12 L-5.5,12 L-5.5,-4 Z" fill="${color}" stroke="${stroke}" stroke-width="1.3" stroke-linejoin="round"/>`;
+  return `<g transform="translate(${vessel.x},${vessel.y}) rotate(${vessel.heading})">${extra}${hull}</g>`;
+}
+
+function headingLineSVG(vessel, len){
+  len = len || 60;
+  const rad = vessel.heading*Math.PI/180;
+  const x2 = vessel.x + len*Math.sin(rad);
+  const y2 = vessel.y - len*Math.cos(rad);
+  return `<line x1="${vessel.x}" y1="${vessel.y}" x2="${x2}" y2="${y2}" stroke="${ROLE_COLOR[vessel.role]||'#BFE3F0'}" stroke-width="1.4" stroke-dasharray="4 4" opacity="0.75"/>`;
+}
+
+function turnArrowSVG(vessel){
+  // small curved arrow near bow indicating turn to starboard (own right)
+  const rad = vessel.heading*Math.PI/180;
+  const bowX = vessel.x + 20*Math.sin(rad), bowY = vessel.y - 20*Math.cos(rad);
+  const a0 = vessel.heading+20, a1 = vessel.heading+95;
+  const r = 16;
+  const p0x = bowX + r*Math.sin(a0*Math.PI/180), p0y = bowY - r*Math.cos(a0*Math.PI/180);
+  const p1x = bowX + r*Math.sin(a1*Math.PI/180), p1y = bowY - r*Math.cos(a1*Math.PI/180);
+  return `<g opacity="0.95">
+    <path d="M${p0x.toFixed(1)},${p0y.toFixed(1)} A${r},${r} 0 0 1 ${p1x.toFixed(1)},${p1y.toFixed(1)}" fill="none" stroke="#E7B559" stroke-width="2.2" stroke-linecap="round" marker-end="url(#arrowHead)"/>
+  </g>`;
+}
+
+function overtakingSectorSVG(vessel){
+  // 135 deg sector centered on dead-astern of vessel heading
+  const cx=vessel.x, cy=vessel.y, R=95;
+  const astern = vessel.heading+180;
+  const a0 = astern-67.5, a1 = astern+67.5;
+  const pt = a => [cx + R*Math.sin(a*Math.PI/180), cy - R*Math.cos(a*Math.PI/180)];
+  const [x0,y0]=pt(a0), [x1,y1]=pt(a1);
+  return `<path d="M${cx},${cy} L${x0.toFixed(1)},${y0.toFixed(1)} A${R},${R} 0 0 1 ${x1.toFixed(1)},${y1.toFixed(1)} Z" fill="#D6524A" opacity="0.13" stroke="#D6524A" stroke-width="1.2" stroke-dasharray="5 4"/>`;
+}
+
+function envArrowSVG(cx,cy,dir,color,label,dashed){
+  const rad=dir*Math.PI/180, len=26;
+  const x2=cx+len*Math.sin(rad), y2=cy-len*Math.cos(rad);
+  return `<g>
+    <line x1="${cx}" y1="${cy}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="${color}" stroke-width="2.2" ${dashed?'stroke-dasharray="2 3"':''} marker-end="url(#${dashed?'arrowHeadWind':'arrowHeadCurrent'})"/>
+  </g>`;
+}
+
+function radarSceneSVG(sc){
+  const cx=210, cy=210;
+  let out = `<svg viewBox="0 0 420 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
+  <defs>
+    <marker id="arrowHeadCurrent" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#6FC7E8"/></marker>
+    <marker id="arrowHeadWind" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#E7B559"/></marker>
+    <marker id="arrowHead" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#E7B559"/></marker>
+  </defs>`;
+
+  if (sc.showFog){
+    out += `<circle cx="${cx}" cy="${cy}" r="195" fill="url(#fogGrad)"/><radialGradient id="fogGrad" cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#F6FBFD" stop-opacity="0.14"/><stop offset="100%" stop-color="#F6FBFD" stop-opacity="0.32"/></radialGradient>`;
+  }
+
+  if (sc.showChannel){
+    out += `<path d="M40,380 C120,260 140,160 260,20" fill="none" stroke="#6FC7E8" stroke-width="2" opacity="0.55"/>
+    <path d="M120,400 C190,270 220,150 340,40" fill="none" stroke="#6FC7E8" stroke-width="2" opacity="0.55"/>
+    <path d="M80,390 C155,265 180,155 300,30" fill="none" stroke="#DDEFF7" stroke-width="1" stroke-dasharray="6 6" opacity="0.4"/>`;
+  } else {
+    [65,130,195].forEach((r,i)=>{
+      out += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#DDEFF7" stroke-width="1" opacity="0.16"/>`;
+      out += `<text x="${cx+4}" y="${cy-r+12}" fill="#DDEFF7" opacity="0.4" font-size="9" font-family="-apple-system, Segoe UI, Arial, sans-serif">${i+1} hải lý</text>`;
+    });
+    for(let a=0;a<360;a+=30){
+      const rad=a*Math.PI/180, x1=cx+185*Math.sin(rad), y1=cy-185*Math.cos(rad), x2=cx+195*Math.sin(rad), y2=cy-195*Math.cos(rad);
+      out += `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#DDEFF7" stroke-width="1" opacity="0.3"/>`;
+    }
+    const dirs=[["B",0],["Đ",90],["N",180],["T",270]];
+    dirs.forEach(([lab,a])=>{
+      const rad=a*Math.PI/180, x=cx+172*Math.sin(rad), y=cy-172*Math.cos(rad);
+      out += `<text x="${x}" y="${y}" fill="#8FCBE4" font-size="12" font-weight="700" text-anchor="middle" dominant-baseline="middle" font-family="Arial, Helvetica, sans-serif">${lab}</text>`;
+    });
+  }
+
+  if (sc.showOvertakingSector==="own") out += overtakingSectorSVG(sc.ownShip);
+  if (sc.showOvertakingSector==="target") out += overtakingSectorSVG(sc.targetShip);
+
+  out += `<line x1="${sc.ownShip.x}" y1="${sc.ownShip.y}" x2="${sc.targetShip.x}" y2="${sc.targetShip.y}" stroke="#DDEFF7" stroke-width="1" stroke-dasharray="3 5" opacity="0.4"/>`;
+
+  out += headingLineSVG(sc.ownShip);
+  out += headingLineSVG(sc.targetShip);
+  out += shipIconSVG(sc.ownShip);
+  out += shipIconSVG(sc.targetShip);
+
+  if (sc.showTurnArrows){
+    out += turnArrowSVG(sc.ownShip);
+    if (sc.ownShip.role==="both") out += turnArrowSVG(sc.targetShip);
+  }
+
+  const labelFor = (v)=>`<text x="${v.x}" y="${v.y+28}" text-anchor="middle" fill="#F6FBFD" font-size="11" font-weight="700" font-family="-apple-system, Segoe UI, Arial, sans-serif">${escapeHtml(v.name)}</text>`;
+  out += labelFor(sc.ownShip);
+  out += labelFor(sc.targetShip);
+
+  const env = sc.environment||{};
+  if (env.showCurrent){
+    out += envArrowSVG(38,38,env.currentDir||0,"#6FC7E8","Dòng chảy",false);
+    out += `<text x="50" y="34" fill="#6FC7E8" font-size="9.5" font-family="-apple-system, Segoe UI, Arial, sans-serif">Dòng chảy ${env.currentDir||0}° / ${env.currentSpeed||0} hl/h</text>`;
+  }
+  if (env.showWind){
+    out += envArrowSVG(38,80,env.windDir||0,"#E7B559",'Gió',true);
+    out += `<text x="50" y="84" fill="#E7B559" font-size="9.5" font-family="-apple-system, Segoe UI, Arial, sans-serif">Gió ${env.windDir||0}° / ${env.windSpeed||0} hải lý/giờ</text>`;
+  }
+
+  out += `</svg>`;
+  return out;
+}
+
+/* =========================================================
+   TIỆN ÍCH ICON / SỐ
+========================================================= */
+function iconSvg(name,size){ size=size||22; return `<svg viewBox="0 0 24 24" width="${size}" height="${size}" style="display:block;">${ICONS[name]||''}</svg>`; }
+function iconSpan(name){ return `<svg viewBox="0 0 24 24" width="13" height="13" style="display:inline-block;vertical-align:-2px;margin-right:3px;">${ICONS[name]||''}</svg>`; }
+function clampNum(v,min,max,fallback){ if(isNaN(v)) return fallback; return Math.min(max,Math.max(min,v)); }
+function norm360(v,fallback){ if(isNaN(v)) return fallback; return ((Math.round(v)%360)+360)%360; }
+
+/* =========================================================
+   TRẠNG THÁI GIAO DIỆN CHỈNH SỬA
+========================================================= */
+let settingsEditOpen = false;
+let scenarioEditOpen = false;
+let editingRuleId = null;
+let quizManageMode = false;
+let editingQuizId = null;
+
+/* =========================================================
+   TRANG CHỦ
+========================================================= */
+function heroRadarSVG(){
+  return `<svg class="hero-radar" viewBox="0 0 420 420" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs><linearGradient id="sweepGrad" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0%" stop-color="#6FC7E8" stop-opacity="0.55"/><stop offset="100%" stop-color="#6FC7E8" stop-opacity="0"/>
+    </linearGradient></defs>
+    <circle cx="210" cy="210" r="200" fill="none" stroke="#DDEFF7" stroke-width="1" opacity="0.22"/>
+    <circle cx="210" cy="210" r="140" fill="none" stroke="#DDEFF7" stroke-width="1" opacity="0.18"/>
+    <circle cx="210" cy="210" r="70" fill="none" stroke="#DDEFF7" stroke-width="1" opacity="0.16"/>
+    <g class="hero-sweep"><path d="M210,210 L210,10 A200,200 0 0 1 350,70 Z" fill="url(#sweepGrad)"/></g>
+  </svg>`;
+}
+
+function settingsEditPanelHTML(){
+  if (!settingsEditOpen) return "";
+  const s = DATA.settings;
+  return `<div class="edit-card" style="margin-top:20px;">
+    <h4>${iconSpan('edit')} Chỉnh giao diện &amp; thương hiệu</h4>
+    <div class="form-row-2">
+      <div class="form-field"><label>Tên ứng dụng</label><input type="text" id="set-appTitle" value="${escapeAttr(s.appTitle)}"></div>
+      <div class="form-field"><label>Phụ đề</label><input type="text" id="set-appSubtitle" value="${escapeAttr(s.appSubtitle)}"></div>
+    </div>
+    <div class="form-field"><label>Đơn vị quản lý</label><input type="text" id="set-orgName" value="${escapeAttr(s.orgName)}"></div>
+    <div class="form-field"><label>Dòng giới thiệu nhỏ (trên tiêu đề)</label><input type="text" id="set-heroEyebrow" value="${escapeAttr(s.heroEyebrow)}"></div>
+    <div class="form-field"><label>Đoạn giới thiệu</label><textarea id="set-heroLead">${escapeHtml(s.heroLead)}</textarea></div>
+    <div class="form-field"><label>Ghi chú chân trang</label><input type="text" id="set-footerNote" value="${escapeAttr(s.footerNote)}"></div>
+    <div class="form-row-2">
+      <div class="form-field"><label>Biểu tượng logo mặc định</label>
+        <select id="set-emblem">
+          <option value="anchor" ${s.emblem==='anchor'?'selected':''}>Mỏ neo</option>
+          <option value="compass" ${s.emblem==='compass'?'selected':''}>La bàn</option>
+          <option value="wheel" ${s.emblem==='wheel'?'selected':''}>Bánh lái</option>
+          <option value="ship" ${s.emblem==='ship'?'selected':''}>Tàu</option>
+        </select>
+      </div>
+      <div class="form-field"><label>URL ảnh logo tuỳ chỉnh (không bắt buộc)</label><input type="text" id="set-logoUrl" placeholder="https://..." value="${escapeAttr(s.logoImageUrl)}"></div>
+    </div>
+    <div class="edit-actions">
+      <button class="btn btn-primary btn-sm" data-save-settings>Lưu thay đổi</button>
+      <button class="btn btn-ghost btn-sm" data-cancel-settings>Huỷ</button>
+      <button class="btn btn-danger btn-sm" data-reset-defaults style="margin-left:auto;">${iconSpan('trash')} Khôi phục mặc định (xoá mọi chỉnh sửa)</button>
+    </div>
+  </div>`;
+}
+
+function viewHomeHTML(){
+  const s = DATA.settings;
+  return `<section class="view">
+    <div class="hero">
+      ${heroRadarSVG()}
+      <span class="hero-eyebrow">${escapeHtml(s.heroEyebrow)}</span>
+      <h1>${escapeHtml(s.appTitle)}<br>${escapeHtml(s.appSubtitle)}</h1>
+      <p class="lead">${escapeHtml(s.heroLead)}</p>
+      <div class="hero-actions">
+        <button class="btn btn-primary" data-goto="scenarios">Vào phần mô phỏng</button>
+        <button class="btn btn-outline" data-goto="rules">Xem quy tắc</button>
+      </div>
+      <div class="hero-stats">
+        <div><div class="hero-stat-num">${DATA.rules.length}</div><div class="hero-stat-label">Điều quy tắc</div></div>
+        <div><div class="hero-stat-num">${DATA.scenarios.length}</div><div class="hero-stat-label">Tình huống mô phỏng</div></div>
+        <div><div class="hero-stat-num">${DATA.quiz.length}</div><div class="hero-stat-label">Câu hỏi ôn tập</div></div>
+      </div>
+    </div>
+
+    <div class="section-head">
+      <div><span class="section-eyebrow">Bắt đầu</span><h2>Chọn nội dung để xem</h2></div>
+      ${isLoggedIn?`<button class="btn btn-brass btn-sm" data-toggle-settings-edit>${iconSpan('edit')} Chỉnh giao diện</button>`:''}
+    </div>
+    <div class="grid-cards">
+      <div class="card home-nav-card" data-goto="rules"><div class="icon-wrap" style="color:var(--ocean-mid)">${iconSvg('book')}</div><h3>Quy tắc phòng ngừa đâm và tàu thuyền trên biển (COLREG 72)</h3><p>Tra cứu nội dung diễn giải từng điều theo Phần A–E.</p></div>
+      <div class="card home-nav-card" data-goto="scenarios"><div class="icon-wrap" style="color:var(--ocean-mid)">${iconSvg('radar')}</div><h3>Mô phỏng tình huống</h3><p>Sơ đồ ra-đa trực quan cho từng tình huống tránh va thường gặp.</p></div>
+      <div class="card home-nav-card" data-goto="quiz"><div class="icon-wrap" style="color:var(--ocean-mid)">${iconSvg('quiz')}</div><h3>Câu hỏi ôn tập</h3><p>${DATA.quiz.length} câu hỏi trắc nghiệm để tự kiểm tra kiến thức.</p></div>
+    </div>
+    ${settingsEditPanelHTML()}
+  </section>`;
+}
+
+/* =========================================================
+   QUY TẮC
+========================================================= */
+function ruleEditFormHTML(r){
+  return `<div class="edit-card">
+    <h4>${iconSpan('edit')} Chỉnh sửa điều luật</h4>
+    <div class="form-row-2">
+      <div class="form-field"><label>Số điều</label><input type="text" id="rf-${r.id}-num" value="${escapeAttr(r.num)}"></div>
+      <div class="form-field"><label>Tiêu đề</label><input type="text" id="rf-${r.id}-title" value="${escapeAttr(r.title)}"></div>
+    </div>
+    <div class="form-field"><label>Nội dung diễn giải</label><textarea id="rf-${r.id}-body" style="min-height:120px;">${escapeHtml(r.body)}</textarea></div>
+    <div class="edit-actions">
+      <button class="btn btn-primary btn-sm" data-save-rule="${r.id}">Lưu</button>
+      <button class="btn btn-ghost btn-sm" data-cancel-rule>Huỷ</button>
+    </div>
+  </div>`;
+}
+function ruleCardHTML(r){
+  const editing = editingRuleId===r.id;
+  return `<div class="card rule-item">
+    <span class="rule-num">${escapeHtml(r.num)}</span>
+    ${isLoggedIn?`<button class="btn btn-ghost btn-sm" style="float:right" data-edit-rule="${r.id}">${iconSpan('edit')} ${editing?'Đóng':'Sửa'}</button>`:''}
+    <h3>${escapeHtml(r.title)}</h3>
+    <div class="rule-body">${escapeHtml(r.body)}</div>
+    ${editing?ruleEditFormHTML(r):''}
+  </div>`;
+}
+function viewRulesHTML(){
+  const rulesInPart = DATA.rules.filter(r=>r.part===currentPart);
+  return `<section class="view">
+    <div class="section-head"><div><span class="section-eyebrow">Tra cứu</span><h2>Quy tắc COLREG 72</h2></div></div>
+    <div class="rules-layout">
+      <div class="rules-parts">
+        ${PART_ORDER.map(p=>`<button class="part-btn ${p===currentPart?'active':''}" data-part="${p}">${PART_LABELS[p].title}<small>${PART_LABELS[p].sub}</small></button>`).join('')}
+      </div>
+      <div class="rules-list">
+        ${rulesInPart.map(r=>ruleCardHTML(r)).join('') || `<div class="empty-note">Chưa có điều nào trong phần này.</div>`}
+      </div>
+    </div>
+  </section>`;
+}
+
+/* =========================================================
+   MÔ PHỎNG — DANH SÁCH
+========================================================= */
+function scenarioTagMeta(roleTag){
+  if(roleTag==='giveway') return ['tag-giveway','Tàu ta nhường đường'];
+  if(roleTag==='standon') return ['tag-standon','Tàu ta giữ hướng'];
+  if(roleTag==='both') return ['tag-both','Cùng nhường đường'];
+  if(roleTag==='caution') return ['tag-both','Cần chú ý'];
+  return ['tag-neutral','Trung lập'];
+}
+function scenarioCardHTML(sc){
+  const [tagClass,tagLabel] = scenarioTagMeta(sc.roleTag);
+  return `<div class="card scenario-card" data-open-scenario="${sc.id}">
+    <span class="tag ${tagClass}">${tagLabel}</span>
+    <h3>${escapeHtml(sc.title)}</h3>
+    <p>${escapeHtml(sc.summary)}</p>
+    <div class="rule-ref">${escapeHtml(sc.ruleRef)}</div>
+  </div>`;
+}
+function viewScenariosListHTML(){
+  return `<section class="view">
+    <div class="section-head">
+      <div><span class="section-eyebrow">Thực hành</span><h2>Mô phỏng tình huống tránh va</h2></div>
+      ${isLoggedIn?`<button class="btn btn-brass btn-sm" data-add-scenario>${iconSpan('plus')} Thêm tình huống</button>`:''}
+    </div>
+    <div class="grid-cards">
+      ${DATA.scenarios.map(sc=>scenarioCardHTML(sc)).join('') || `<div class="empty-note">Chưa có tình huống nào.</div>`}
+    </div>
+  </section>`;
+}
+
+/* =========================================================
+   MÔ PHỎNG — CHI TIẾT + FORM CHỈNH SỬA
+========================================================= */
+function vesselEditFieldsHTML(sc,key){
+  const v = sc[key];
+  const label = key==='ownShip' ? 'Tàu ta' : 'Tàu mục tiêu';
+  const p = `${sc.id}-${key}`;
+  return `<h4 style="margin-top:16px;">${label}</h4>
+  <div class="form-row-2">
+    <div class="form-field"><label>Tên hiển thị</label><input type="text" id="ef-${p}-name" value="${escapeAttr(v.name)}"></div>
+    <div class="form-field"><label>Loại phương tiện</label>
+      <select id="ef-${p}-type">${Object.keys(VESSEL_TYPES).map(t=>`<option value="${t}" ${v.type===t?'selected':''}>${VESSEL_TYPES[t].label}</option>`).join('')}</select>
+    </div>
+  </div>
+  <div class="form-row-2">
+    <div class="form-field"><label>Vai trò trong tình huống</label>
+      <select id="ef-${p}-role">${Object.keys(ROLE_LABEL).map(r=>`<option value="${r}" ${v.role===r?'selected':''}>${ROLE_LABEL[r]}</option>`).join('')}</select>
+    </div>
+    <div class="form-field"><label>Hướng đi (độ la bàn, 0–359)</label><input type="number" min="0" max="359" id="ef-${p}-heading" value="${v.heading}"></div>
+  </div>
+  <div class="form-row-2">
+    <div class="form-field"><label>Vị trí trên sơ đồ — X (20–400)</label><input type="number" min="20" max="400" id="ef-${p}-x" value="${v.x}"></div>
+    <div class="form-field"><label>Vị trí trên sơ đồ — Y (20–400)</label><input type="number" min="20" max="400" id="ef-${p}-y" value="${v.y}"></div>
+  </div>
+  <div class="form-field"><label>URL ảnh phương tiện tuỳ chỉnh (không bắt buộc, thay thế biểu tượng mặc định)</label><input type="text" id="ef-${p}-img" placeholder="https://..." value="${escapeAttr(v.imageUrl||'')}"></div>`;
+}
+function scenarioEditFormHTML(sc){
+  const env = sc.environment;
+  return `<div class="edit-card">
+    <h4>${iconSpan('edit')} Chỉnh sửa tình huống</h4>
+    <div class="form-row-2">
+      <div class="form-field"><label>Tiêu đề</label><input type="text" id="ef-${sc.id}-title" value="${escapeAttr(sc.title)}"></div>
+      <div class="form-field"><label>Điều tham chiếu</label><input type="text" id="ef-${sc.id}-ruleRef" value="${escapeAttr(sc.ruleRef)}"></div>
+    </div>
+    <div class="form-field"><label>Tóm tắt (hiển thị ở danh sách)</label><input type="text" id="ef-${sc.id}-summary" value="${escapeAttr(sc.summary)}"></div>
+    <div class="form-field"><label>Mô tả tình huống</label><textarea id="ef-${sc.id}-description">${escapeHtml(sc.description)}</textarea></div>
+    <div class="form-field"><label>Hành động cần thực hiện</label><textarea id="ef-${sc.id}-action">${escapeHtml(sc.action)}</textarea></div>
+    <div class="form-field"><label>Tín hiệu còi</label><input type="text" id="ef-${sc.id}-soundSignal" value="${escapeAttr(sc.soundSignal)}"></div>
+
+    ${vesselEditFieldsHTML(sc,'ownShip')}
+    ${vesselEditFieldsHTML(sc,'targetShip')}
+
+    <h4 style="margin-top:16px;">Điều kiện môi trường</h4>
+    <div class="form-row-2">
+      <div class="form-field"><label>Hướng dòng chảy (độ)</label><input type="number" min="0" max="359" id="ef-${sc.id}-currentDir" value="${env.currentDir}"></div>
+      <div class="form-field"><label>Tốc độ dòng chảy (hải lý/giờ)</label><input type="number" step="0.1" min="0" id="ef-${sc.id}-currentSpeed" value="${env.currentSpeed}"></div>
+    </div>
+    <div class="form-row-2">
+      <div class="form-field"><label>Hướng gió (độ)</label><input type="number" min="0" max="359" id="ef-${sc.id}-windDir" value="${env.windDir}"></div>
+      <div class="form-field"><label>Tốc độ gió (hải lý/giờ)</label><input type="number" step="0.5" min="0" id="ef-${sc.id}-windSpeed" value="${env.windSpeed}"></div>
+    </div>
+    <div class="form-row-2">
+      <div class="form-field"><label>Tầm nhìn xa (mô tả)</label><input type="text" id="ef-${sc.id}-visibility" value="${escapeAttr(env.visibility)}"></div>
+      <div class="form-field"><label>Hiển thị dòng chảy?</label>
+        <select id="ef-${sc.id}-showCurrent"><option value="1" ${env.showCurrent?'selected':''}>Có</option><option value="0" ${!env.showCurrent?'selected':''}>Không</option></select>
+      </div>
+    </div>
+    <div class="form-field"><label>Hiển thị mũi tên gió?</label>
+      <select id="ef-${sc.id}-showWind"><option value="1" ${env.showWind?'selected':''}>Có</option><option value="0" ${!env.showWind?'selected':''}>Không</option></select>
+    </div>
+
+    <div class="edit-actions">
+      <button class="btn btn-primary btn-sm" data-save-scenario="${sc.id}">Lưu thay đổi</button>
+      <button class="btn btn-ghost btn-sm" data-cancel-scenario>Huỷ</button>
+      <button class="btn btn-danger btn-sm" data-delete-scenario="${sc.id}" style="margin-left:auto;">${iconSpan('trash')} Xoá tình huống</button>
+    </div>
+  </div>`;
+}
+function viewScenarioDetailHTML(id){
+  const sc = DATA.scenarios.find(s=>s.id===id);
+  if (!sc) return `<section class="view"><button class="back-link" data-back-scenarios>${iconSpan('arrowLeft')} Quay lại danh sách</button><div class="empty-note">Không tìm thấy tình huống.</div></section>`;
+  const env = sc.environment;
+  return `<section class="view">
+    <button class="back-link" data-back-scenarios>${iconSpan('arrowLeft')} Quay lại danh sách</button>
+    <div class="card scenario-detail">
+      <div class="scenario-detail-head">
+        <div><span class="rule-ref">${escapeHtml(sc.ruleRef)}</span><h2 style="margin-top:4px;">${escapeHtml(sc.title)}</h2></div>
+        ${isLoggedIn?`<button class="btn btn-brass btn-sm" data-edit-scenario="${sc.id}">${iconSpan('edit')} ${scenarioEditOpen?'Đóng chỉnh sửa':'Chỉnh sửa tình huống'}</button>`:''}
+      </div>
+      <div class="detail-grid">
+        <div>
+          <div class="radar-wrap">${radarSceneSVG(sc)}</div>
+          <div class="radar-legend">
+            <span><span class="legend-dot" style="background:${ROLE_COLOR.giveway}"></span>Nhường đường</span>
+            <span><span class="legend-dot" style="background:${ROLE_COLOR.standon}"></span>Giữ hướng</span>
+            <span><span class="legend-dot" style="background:${ROLE_COLOR.both}"></span>Cùng nhường</span>
+          </div>
+          <div class="env-row" style="margin-top:14px;">
+            <span>Tầm nhìn xa: ${escapeHtml(env.visibility)}</span>
+            ${env.showCurrent?`<span>Dòng chảy: ${env.currentDir}° / ${env.currentSpeed} hải lý/giờ</span>`:''}
+            ${env.showWind?`<span>Gió: ${env.windDir}° / ${env.windSpeed} hải lý/giờ</span>`:''}
+          </div>
+        </div>
+        <div>
+          <div class="detail-block"><h4>Mô tả tình huống</h4><p>${escapeHtml(sc.description)}</p></div>
+          <div class="detail-block"><h4>Hành động cần thực hiện</h4><p>${escapeHtml(sc.action)}</p></div>
+          <div class="detail-block"><h4>Tín hiệu còi</h4><div><span class="sound-badge">🔊 ${escapeHtml(sc.soundSignal)}</span></div></div>
+        </div>
+      </div>
+      ${(scenarioEditOpen && isLoggedIn) ? scenarioEditFormHTML(sc) : ''}
+    </div>
+  </section>`;
+}
+
+/* =========================================================
+   ÔN TẬP — TRẮC NGHIỆM
+========================================================= */
+function viewQuizTakeHTML(){
+  if (DATA.quiz.length===0) return `<section class="view"><div class="empty-note">Chưa có câu hỏi ôn tập nào.</div></section>`;
+  if (quizFinished) return quizResultHTML();
+  const total = DATA.quiz.length;
+  const q = DATA.quiz[quizIndex];
+  return `<section class="view">
+    <div class="section-head">
+      <div><span class="section-eyebrow">Tự kiểm tra</span><h2>Câu hỏi ôn tập</h2></div>
+      ${isLoggedIn?`<button class="btn btn-ghost btn-sm" data-toggle-quiz-manage>${iconSpan('edit')} Quản lý câu hỏi</button>`:''}
+    </div>
+    <div class="card quiz-card">
+      <div class="quiz-progress">Câu ${quizIndex+1} / ${total} · Điểm hiện tại: ${quizScore}</div>
+      <div class="quiz-bar"><div class="quiz-bar-fill" style="width:${(quizIndex/total)*100}%"></div></div>
+      <div class="quiz-q">${escapeHtml(q.prompt)}</div>
+      ${q.options.map((opt,i)=>{
+        let cls='quiz-opt';
+        if (quizSelected!==null){ if(i===q.correct) cls+=' correct'; else if(i===quizSelected) cls+=' incorrect'; }
+        return `<button class="${cls}" data-quiz-opt="${i}" ${quizSelected!==null?'disabled':''}>${String.fromCharCode(65+i)}. ${escapeHtml(opt)}</button>`;
+      }).join('')}
+      ${quizSelected!==null?`<div class="quiz-explain"><strong>${quizSelected===q.correct?'Chính xác!':'Chưa đúng.'}</strong> ${escapeHtml(q.explain)}</div>
+      <div class="edit-actions"><button class="btn btn-primary btn-sm" data-quiz-next>${quizIndex+1<total?'Câu tiếp theo':'Xem kết quả'}</button></div>`:''}
+    </div>
+  </section>`;
+}
+function quizResultHTML(){
+  const total = DATA.quiz.length;
+  const pct = total? Math.round((quizScore/total)*100) : 0;
+  const msg = pct>=80?'Xuất sắc! Bạn nắm rất vững quy tắc.':pct>=50?'Khá tốt — nên ôn lại một số điều còn nhầm lẫn.':'Nên xem lại phần Quy tắc và làm lại bài ôn tập.';
+  return `<section class="view">
+    <div class="card quiz-card">
+      <div class="quiz-result">
+        <div class="quiz-progress">Kết quả</div>
+        <div class="score-num">${quizScore}/${total}</div>
+        <p>${msg}</p>
+        <button class="btn btn-primary" data-quiz-restart>Làm lại từ đầu</button>
+      </div>
+    </div>
+  </section>`;
+}
+function quizEditFormHTML(q){
+  return `<div class="edit-card">
+    <h4>${iconSpan('edit')} Chỉnh sửa câu hỏi</h4>
+    <div class="form-field"><label>Nội dung câu hỏi</label><textarea id="qf-${q.id}-prompt">${escapeHtml(q.prompt)}</textarea></div>
+    ${q.options.map((opt,i)=>`<div class="form-field"><label>Đáp án ${String.fromCharCode(65+i)}</label><input type="text" id="qf-${q.id}-opt-${i}" value="${escapeAttr(opt)}"></div>`).join('')}
+    <div class="form-field"><label>Đáp án đúng</label>
+      <select id="qf-${q.id}-correct">${q.options.map((opt,i)=>`<option value="${i}" ${q.correct===i?'selected':''}>${String.fromCharCode(65+i)}</option>`).join('')}</select>
+    </div>
+    <div class="form-field"><label>Giải thích</label><textarea id="qf-${q.id}-explain">${escapeHtml(q.explain)}</textarea></div>
+    <div class="edit-actions">
+      <button class="btn btn-primary btn-sm" data-save-quiz="${q.id}">Lưu</button>
+      <button class="btn btn-ghost btn-sm" data-cancel-quiz>Huỷ</button>
+      <button class="btn btn-danger btn-sm" data-delete-quiz="${q.id}" style="margin-left:auto;">${iconSpan('trash')} Xoá câu hỏi</button>
+    </div>
+  </div>`;
+}
+function quizManageItemHTML(q,idx){
+  const editing = editingQuizId===q.id;
+  return `<div class="card rule-item">
+    <span class="rule-num">Câu ${idx+1}</span>
+    <button class="btn btn-ghost btn-sm" style="float:right" data-edit-quiz="${q.id}">${iconSpan('edit')} ${editing?'Đóng':'Sửa'}</button>
+    <h3>${escapeHtml(q.prompt)}</h3>
+    <div class="rule-body">Đáp án đúng: ${escapeHtml(q.options[q.correct]||'')}</div>
+    ${editing?quizEditFormHTML(q):''}
+  </div>`;
+}
+function viewQuizManageHTML(){
+  return `<section class="view">
+    <div class="section-head">
+      <div><span class="section-eyebrow">Quản trị</span><h2>Quản lý câu hỏi ôn tập</h2></div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-brass btn-sm" data-add-quiz>${iconSpan('plus')} Thêm câu hỏi</button>
+        <button class="btn btn-ghost btn-sm" data-toggle-quiz-manage>${iconSpan('x')} Đóng quản lý</button>
+      </div>
+    </div>
+    ${DATA.quiz.map((q,idx)=>quizManageItemHTML(q,idx)).join('') || `<div class="empty-note">Chưa có câu hỏi nào. Hãy thêm câu hỏi mới.</div>`}
+  </section>`;
+}
+function viewQuizHTML(){
+  return (quizManageMode && isLoggedIn) ? viewQuizManageHTML() : viewQuizTakeHTML();
+}
+
+/* =========================================================
+   ĐIỀU HƯỚNG / RENDER GỐC
+========================================================= */
+function setActiveNav(){
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active', b.dataset.view===currentView));
+}
+function renderBrand(){
+  document.getElementById('brand-emblem').innerHTML = buildEmblemMarkup();
+  document.getElementById('org-name-display').textContent = DATA.settings.orgName;
+  document.querySelector('.brand-app').textContent = DATA.settings.appTitle;
+  document.getElementById('footer-text').innerHTML = `© <strong>${escapeHtml(DATA.settings.orgName)}</strong> — ${escapeHtml(DATA.settings.footerNote)}`;
+}
+function renderView(){
+  const root = document.getElementById('view-root');
+  if (currentView==='home') root.innerHTML = viewHomeHTML();
+  else if (currentView==='rules') root.innerHTML = viewRulesHTML();
+  else if (currentView==='scenarios') root.innerHTML = currentScenarioId ? viewScenarioDetailHTML(currentScenarioId) : viewScenariosListHTML();
+  else if (currentView==='quiz') root.innerHTML = viewQuizHTML();
+}
+function switchView(view){
+  currentView = view;
+  currentScenarioId = null;
+  settingsEditOpen = false;
+  scenarioEditOpen = false;
+  editingRuleId = null;
+  setActiveNav();
+  renderView();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* =========================================================
+   ĐĂNG NHẬP / ĐĂNG XUẤT
+========================================================= */
+function updateAuthUI(){
+  const statusEl = document.getElementById('login-status');
+  statusEl.textContent = isLoggedIn ? `Chế độ chỉnh sửa (${AUTH_USER})` : 'Chế độ xem';
+  statusEl.classList.toggle('on', isLoggedIn);
+  document.getElementById('login-toggle-btn').textContent = isLoggedIn ? 'Đăng xuất' : 'Đăng nhập';
+}
+function openLoginModal(){
+  document.getElementById('login-modal').classList.remove('hidden');
+  document.getElementById('login-user').value = '';
+  document.getElementById('login-pass').value = '';
+  document.getElementById('login-error').textContent = '';
+  setTimeout(()=>document.getElementById('login-user').focus(), 30);
+}
+function closeLoginModal(){ document.getElementById('login-modal').classList.add('hidden'); }
+function attemptLogin(){
+  const u = document.getElementById('login-user').value.trim();
+  const p = document.getElementById('login-pass').value;
+  if (u===AUTH_USER && p===AUTH_PASS){
+    isLoggedIn = true;
+    closeLoginModal();
+    updateAuthUI();
+    renderView();
+    showToast('Đăng nhập thành công — chế độ chỉnh sửa đã bật.');
+  } else {
+    document.getElementById('login-error').textContent = 'Sai tài khoản hoặc mật khẩu.';
+  }
+}
+function doLogout(){
+  isLoggedIn = false;
+  settingsEditOpen=false; scenarioEditOpen=false; editingRuleId=null; quizManageMode=false; editingQuizId=null;
+  updateAuthUI();
+  renderView();
+  showToast('Đã đăng xuất khỏi chế độ chỉnh sửa.');
+}
+
+/* =========================================================
+   HÀNH ĐỘNG: CÀI ĐẶT / GIAO DIỆN
+========================================================= */
+function saveSettingsFromForm(){
+  const s = DATA.settings;
+  s.appTitle = document.getElementById('set-appTitle').value.trim() || s.appTitle;
+  s.appSubtitle = document.getElementById('set-appSubtitle').value.trim() || s.appSubtitle;
+  s.orgName = document.getElementById('set-orgName').value.trim() || s.orgName;
+  s.heroEyebrow = document.getElementById('set-heroEyebrow').value.trim() || s.heroEyebrow;
+  s.heroLead = document.getElementById('set-heroLead').value.trim() || s.heroLead;
+  s.footerNote = document.getElementById('set-footerNote').value.trim() || s.footerNote;
+  s.emblem = document.getElementById('set-emblem').value;
+  s.logoImageUrl = document.getElementById('set-logoUrl').value.trim();
+  settingsEditOpen = false;
+  persistAppData();
+  renderBrand();
+  renderView();
+  showToast('Đã lưu thay đổi giao diện.');
+}
+function resetToDefaults(){
+  const ok = confirm('Thao tác này sẽ XOÁ mọi chỉnh sửa hiện có (quy tắc, tình huống, câu hỏi, giao diện) và khôi phục về đúng nội dung mặc định đang có trong mã nguồn (DEFAULT_RULES / DEFAULT_SCENARIOS / DEFAULT_QUIZ / DEFAULT_SETTINGS). Không thể hoàn tác. Bạn có chắc chắn muốn tiếp tục?');
+  if (!ok) return;
+  DATA = {
+    rules: deepClone(DEFAULT_RULES),
+    scenarios: deepClone(DEFAULT_SCENARIOS),
+    quiz: deepClone(DEFAULT_QUIZ),
+    settings: deepClone(DEFAULT_SETTINGS)
+  };
+  settingsEditOpen = false; scenarioEditOpen = false; editingRuleId = null; editingQuizId = null; quizManageMode = false;
+  quizIndex = 0; quizScore = 0; quizSelected = null; quizFinished = false;
+  currentView = 'home'; currentScenarioId = null; currentPart = 'A';
+  persistAppData();
+  renderBrand();
+  setActiveNav();
+  renderView();
+  showToast('Đã khôi phục toàn bộ dữ liệu về mặc định trong mã nguồn.');
+}
+
+/* =========================================================
+   HÀNH ĐỘNG: QUY TẮC
+========================================================= */
+function saveRuleFromForm(id){
+  const r = DATA.rules.find(x=>x.id===id); if (!r) return;
+  r.num = document.getElementById(`rf-${id}-num`).value.trim() || r.num;
+  r.title = document.getElementById(`rf-${id}-title`).value.trim() || r.title;
+  r.body = document.getElementById(`rf-${id}-body`).value.trim() || r.body;
+  editingRuleId = null;
+  persistAppData();
+  renderView();
+  showToast('Đã lưu điều luật.');
+}
+
+/* =========================================================
+   HÀNH ĐỘNG: TÌNH HUỐNG MÔ PHỎNG
+========================================================= */
+function saveScenarioFromForm(id){
+  const sc = DATA.scenarios.find(s=>s.id===id); if (!sc) return;
+  const g = suffix => document.getElementById(`ef-${id}-${suffix}`);
+  sc.title = g('title').value.trim() || sc.title;
+  sc.ruleRef = g('ruleRef').value.trim() || sc.ruleRef;
+  sc.summary = g('summary').value.trim() || sc.summary;
+  sc.description = g('description').value.trim() || sc.description;
+  sc.action = g('action').value.trim() || sc.action;
+  sc.soundSignal = g('soundSignal').value.trim() || sc.soundSignal;
+  ['ownShip','targetShip'].forEach(key=>{
+    const v = sc[key];
+    const gv = suffix => document.getElementById(`ef-${id}-${key}-${suffix}`);
+    v.name = gv('name').value.trim() || v.name;
+    v.type = gv('type').value;
+    v.role = gv('role').value;
+    v.heading = norm360(parseFloat(gv('heading').value), v.heading);
+    v.x = clampNum(parseFloat(gv('x').value), 20, 400, v.x);
+    v.y = clampNum(parseFloat(gv('y').value), 20, 400, v.y);
+    v.imageUrl = gv('img').value.trim();
+  });
+  sc.environment.currentDir = norm360(parseFloat(g('currentDir').value), sc.environment.currentDir);
+  sc.environment.currentSpeed = Math.max(0, parseFloat(g('currentSpeed').value)||0);
+  sc.environment.windDir = norm360(parseFloat(g('windDir').value), sc.environment.windDir);
+  sc.environment.windSpeed = Math.max(0, parseFloat(g('windSpeed').value)||0);
+  sc.environment.visibility = g('visibility').value.trim() || sc.environment.visibility;
+  sc.environment.showCurrent = g('showCurrent').value === '1';
+  sc.environment.showWind = g('showWind').value === '1';
+  scenarioEditOpen = false;
+  persistAppData();
+  renderView();
+  showToast('Đã lưu tình huống mô phỏng.');
+}
+function deleteScenarioById(id){
+  if (!confirm('Xoá tình huống này? Hành động không thể hoàn tác.')) return;
+  DATA.scenarios = DATA.scenarios.filter(s=>s.id!==id);
+  scenarioEditOpen = false; currentScenarioId = null; currentView = 'scenarios';
+  persistAppData();
+  renderView();
+  showToast('Đã xoá tình huống.');
+}
+function addNewScenario(){
+  const id = 'sc-'+Date.now();
+  const newSc = {
+    id, title:"Tình huống mới", ruleRef:"Điều ...", roleTag:"neutral",
+    summary:"Mô tả ngắn gọn hiển thị ở danh sách.",
+    description:"Nhập mô tả diễn biến tình huống ở đây.",
+    action:"Nhập hành động cần thực hiện.",
+    soundSignal:"Nhập tín hiệu còi tương ứng (nếu có).",
+    showTurnArrows:false,
+    ownShip:{name:"Tàu ta",type:"power",x:210,y:300,heading:0,role:"neutral"},
+    targetShip:{name:"Tàu mục tiêu",type:"power",x:210,y:130,heading:180,role:"neutral"},
+    environment:{currentDir:0,currentSpeed:0,windDir:0,windSpeed:0,visibility:"Tốt",showCurrent:true,showWind:false}
+  };
+  DATA.scenarios.push(newSc);
+  currentView='scenarios'; currentScenarioId=id; scenarioEditOpen=true;
+  persistAppData();
+  renderView();
+  showToast('Đã thêm tình huống mới — hãy điền chi tiết bên dưới.');
+}
+
+/* =========================================================
+   HÀNH ĐỘNG: CÂU HỎI ÔN TẬP
+========================================================= */
+function saveQuizFromForm(id){
+  const q = DATA.quiz.find(x=>x.id===id); if (!q) return;
+  q.prompt = document.getElementById(`qf-${id}-prompt`).value.trim() || q.prompt;
+  q.options = q.options.map((opt,i)=>{
+    const el = document.getElementById(`qf-${id}-opt-${i}`);
+    return (el && el.value.trim()) || opt;
+  });
+  q.correct = parseInt(document.getElementById(`qf-${id}-correct`).value,10) || 0;
+  q.explain = document.getElementById(`qf-${id}-explain`).value.trim() || q.explain;
+  editingQuizId = null;
+  persistAppData();
+  renderView();
+  showToast('Đã lưu câu hỏi.');
+}
+function deleteQuizById(id){
+  if (!confirm('Xoá câu hỏi này?')) return;
+  DATA.quiz = DATA.quiz.filter(q=>q.id!==id);
+  editingQuizId = null;
+  if (quizIndex>=DATA.quiz.length) quizIndex = Math.max(0, DATA.quiz.length-1);
+  persistAppData();
+  renderView();
+  showToast('Đã xoá câu hỏi.');
+}
+function addNewQuiz(){
+  const id = 'q-'+Date.now();
+  DATA.quiz.push({id,prompt:"Nhập nội dung câu hỏi mới...",options:["Đáp án A","Đáp án B","Đáp án C","Đáp án D"],correct:0,explain:"Nhập giải thích cho đáp án đúng."});
+  editingQuizId = id;
+  persistAppData();
+  renderView();
+  showToast('Đã thêm câu hỏi mới — hãy điền nội dung.');
+}
+
+/* =========================================================
+   UỶ QUYỀN SỰ KIỆN (event delegation) TRONG #view-root
+========================================================= */
+function onViewRootClick(e){
+  let el;
+  if ((el = e.target.closest('[data-goto]'))){ switchView(el.dataset.goto); return; }
+  if ((el = e.target.closest('[data-open-scenario]'))){ currentScenarioId = el.dataset.openScenario; scenarioEditOpen=false; renderView(); window.scrollTo({top:0,behavior:'smooth'}); return; }
+  if ((el = e.target.closest('[data-back-scenarios]'))){ currentScenarioId = null; scenarioEditOpen=false; renderView(); return; }
+  if ((el = e.target.closest('[data-part]'))){ currentPart = el.dataset.part; editingRuleId=null; renderView(); return; }
+
+  if (e.target.closest('[data-toggle-settings-edit]')){ settingsEditOpen = !settingsEditOpen; renderView(); return; }
+  if (e.target.closest('[data-save-settings]')){ saveSettingsFromForm(); return; }
+  if (e.target.closest('[data-cancel-settings]')){ settingsEditOpen = false; renderView(); return; }
+  if (e.target.closest('[data-reset-defaults]')){ resetToDefaults(); return; }
+
+  if ((el = e.target.closest('[data-edit-rule]'))){ editingRuleId = (editingRuleId===el.dataset.editRule) ? null : el.dataset.editRule; renderView(); return; }
+  if ((el = e.target.closest('[data-save-rule]'))){ saveRuleFromForm(el.dataset.saveRule); return; }
+  if (e.target.closest('[data-cancel-rule]')){ editingRuleId = null; renderView(); return; }
+
+  if (e.target.closest('[data-add-scenario]')){ addNewScenario(); return; }
+  if (e.target.closest('[data-edit-scenario]')){ scenarioEditOpen = !scenarioEditOpen; renderView(); return; }
+  if ((el = e.target.closest('[data-save-scenario]'))){ saveScenarioFromForm(el.dataset.saveScenario); return; }
+  if (e.target.closest('[data-cancel-scenario]')){ scenarioEditOpen = false; renderView(); return; }
+  if ((el = e.target.closest('[data-delete-scenario]'))){ deleteScenarioById(el.dataset.deleteScenario); return; }
+
+  if ((el = e.target.closest('[data-quiz-opt]'))){
+    if (quizSelected===null){
+      quizSelected = parseInt(el.dataset.quizOpt,10);
+      const q = DATA.quiz[quizIndex];
+      if (quizSelected===q.correct) quizScore++;
+      renderView();
+    }
+    return;
+  }
+  if (e.target.closest('[data-quiz-next]')){
+    quizIndex++; quizSelected=null;
+    if (quizIndex>=DATA.quiz.length) quizFinished = true;
+    renderView();
+    return;
+  }
+  if (e.target.closest('[data-quiz-restart]')){
+    quizIndex=0; quizScore=0; quizSelected=null; quizFinished=false;
+    renderView();
+    return;
+  }
+  if (e.target.closest('[data-toggle-quiz-manage]')){ quizManageMode = !quizManageMode; editingQuizId=null; renderView(); return; }
+  if (e.target.closest('[data-add-quiz]')){ addNewQuiz(); return; }
+  if ((el = e.target.closest('[data-edit-quiz]'))){ editingQuizId = (editingQuizId===el.dataset.editQuiz) ? null : el.dataset.editQuiz; renderView(); return; }
+  if ((el = e.target.closest('[data-save-quiz]'))){ saveQuizFromForm(el.dataset.saveQuiz); return; }
+  if (e.target.closest('[data-cancel-quiz]')){ editingQuizId = null; renderView(); return; }
+  if ((el = e.target.closest('[data-delete-quiz]'))){ deleteQuizById(el.dataset.deleteQuiz); return; }
+}
+
+/* =========================================================
+   KHỞI TẠO
+========================================================= */
+function wireGlobalEvents(){
+  document.getElementById('view-root').addEventListener('click', onViewRootClick);
+  document.getElementById('main-nav').addEventListener('click', e=>{
+    const btn = e.target.closest('.nav-btn'); if (!btn) return;
+    switchView(btn.dataset.view);
+  });
+  document.getElementById('login-toggle-btn').addEventListener('click', ()=>{ isLoggedIn ? doLogout() : openLoginModal(); });
+  document.getElementById('login-modal-close').addEventListener('click', closeLoginModal);
+  document.getElementById('login-submit-btn').addEventListener('click', attemptLogin);
+  document.getElementById('login-pass').addEventListener('keydown', e=>{ if (e.key==='Enter') attemptLogin(); });
+  document.getElementById('login-user').addEventListener('keydown', e=>{ if (e.key==='Enter') attemptLogin(); });
+  document.getElementById('login-modal').addEventListener('click', e=>{ if (e.target.id==='login-modal') closeLoginModal(); });
+  document.addEventListener('keydown', e=>{ if (e.key==='Escape') closeLoginModal(); });
+}
+
+async function init(){
+  wireGlobalEvents();
+  DATA = await loadAppData();
+  renderBrand();
+  updateAuthUI();
+  setActiveNav();
+  renderView();
+  if (!storageAvailable){
+    showToast('Lưu ý: chưa kết nối được bộ nhớ lưu trữ — thay đổi chỉ tồn tại trong phiên làm việc này.');
+  }
+}
+init();
+</script>
+</body>
+</html>
