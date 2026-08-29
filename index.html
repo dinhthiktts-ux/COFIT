@@ -1621,7 +1621,7 @@ function switchView(view){
 ========================================================= */
 function updateAuthUI(){
   const statusEl = document.getElementById('login-status');
-  statusEl.textContent = isLoggedIn ? `Chế độ chỉnh sửa (${AUTH_USER})` : 'Chế độ xem';
+  statusEl.textContent = isLoggedIn ? `Chế độ chỉnh sửa (${AUTH_USER})` : 'Chế độ Khách';
   statusEl.classList.toggle('on', isLoggedIn);
   document.getElementById('login-toggle-btn').textContent = isLoggedIn ? 'Đăng xuất' : 'Đăng nhập';
 }
