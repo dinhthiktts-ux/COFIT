@@ -600,6 +600,8 @@ const DEFAULT_SETTINGS = {
 };
 
 const AUTH_USER = "TTDT";
+const AUTH_USER = "TTDT1";
+const AUTH_PASS = "demo";
 const AUTH_PASS = "demo";
 
 /* =========================================================
@@ -1620,8 +1622,8 @@ function switchView(view){
    ĐĂNG NHẬP / ĐĂNG XUẤT
 ========================================================= */
 function updateAuthUI(){
-  const statusEl = document.getElementById('login-status');
-  statusEl.textContent = isLoggedIn ? `Chế độ chỉnh sửa (${AUTH_USER})` : 'Chế độ xem';
+  const statusEl = document.getElementById('org-name-display').textContent = "Chế độ Khách";
+  statusEl.textContent = isLoggedIn ? `Chế độ chỉnh sửa (${AUTH_USER})` : 'Chế độ Khách';
   statusEl.classList.toggle('on', isLoggedIn);
   document.getElementById('login-toggle-btn').textContent = isLoggedIn ? 'Đăng xuất' : 'Đăng nhập';
 }
