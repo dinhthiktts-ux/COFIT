@@ -106,6 +106,18 @@ main{flex:1 1 auto;padding:28px 22px 60px;max-width:1180px;margin:0 auto;width:1
 .view{animation:fadeIn .25s ease;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
 
+/* ===== Banner ảnh tự động thay đổi (trên Hero) ===== */
+.banner-carousel{position:relative;width:100%;overflow:hidden;border-radius:var(--radius-lg);margin-bottom:20px;box-shadow:var(--shadow-md);background:var(--navy);}
+.banner-carousel-img{width:100%;height:300px;object-fit:cover;display:block;transition:opacity .35s ease;}
+.banner-carousel-dots{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:2;}
+.banner-carousel-dot{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,0.5);cursor:pointer;border:none;padding:0;transition:background .15s ease, transform .15s ease;}
+.banner-carousel-dot.active{background:#fff;transform:scale(1.2);}
+.banner-carousel-arrow{position:absolute;top:50%;transform:translateY(-50%);background:rgba(11,46,74,0.45);color:#fff;border:none;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;z-index:2;line-height:1;}
+.banner-carousel-arrow:hover{background:rgba(11,46,74,0.75);}
+.banner-carousel-arrow.prev{left:12px;}
+.banner-carousel-arrow.next{right:12px;}
+@media (max-width:720px){ .banner-carousel-img{height:190px;} }
+
 /* ===== Hero ===== */
 .hero{
   position:relative;overflow:hidden;
@@ -200,11 +212,18 @@ main{flex:1 1 auto;padding:28px 22px 60px;max-width:1180px;margin:0 auto;width:1
 .detail-block h4{font-size:13px;text-transform:uppercase;letter-spacing:0.08em;color:var(--ocean-mid);margin-bottom:6px;}
 .detail-block p{font-size:14.5px;white-space:pre-line;}
 .env-row{display:flex;gap:18px;flex-wrap:wrap;font-family:var(--font-body);font-size:12.5px;color:var(--ink-soft);background:var(--ocean-pale);padding:10px 14px;border-radius:10px;}
-.sound-badge{display:inline-flex;align-items:center;gap:8px;background:var(--navy);color:#fff;padding:8px 14px;border-radius:10px;font-size:13.5px;font-weight:600;}
+.sound-badge{display:inline-flex;align-items:center;gap:8px;background:var(--navy);color:#fff;padding:8px 14px;border-radius:10px;font-size:13.5px;font-weight:600;border:none;font-family:inherit;}
+button.sound-badge{cursor:pointer;transition:background .15s ease, transform .1s ease;}
+button.sound-badge:hover{background:var(--navy-soft);}
+button.sound-badge:active{transform:scale(0.98);}
+button.sound-badge.playing{background:var(--ocean-mid);animation:blipPulse 1s ease-in-out infinite;}
+.sound-badge .play-glyph{font-size:11px;}
 
 /* ===== Quiz ===== */
 .quiz-card{padding:28px;max-width:640px;margin:0 auto;}
 .quiz-progress{font-family:var(--font-body);font-size:12px;color:var(--ink-soft);margin-bottom:8px;}
+.quiz-timer{font-family:var(--font-body);font-size:13px;font-weight:700;color:var(--navy);background:var(--ocean-pale);padding:3px 10px;border-radius:999px;}
+.quiz-timer.quiz-timer-warning{color:#fff;background:var(--giveway);animation:blipPulse 1s ease-in-out infinite;}
 .quiz-bar{height:6px;border-radius:3px;background:var(--line-soft);overflow:hidden;margin-bottom:22px;}
 .quiz-bar-fill{height:100%;background:var(--ocean-mid);transition:width .3s ease;}
 .quiz-q{font-size:17px;font-weight:700;color:var(--navy);margin-bottom:18px;}
@@ -237,8 +256,8 @@ main{flex:1 1 auto;padding:28px 22px 60px;max-width:1180px;margin:0 auto;width:1
 .form-field textarea{resize:vertical;min-height:70px;}
 .form-field input:focus,.form-field textarea:focus,.form-field select:focus{outline:2px solid var(--ocean-mid);outline-offset:1px;border-color:var(--ocean-mid);}
 .form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.signal-row{display:flex;gap:8px;margin-bottom:8px;align-items:center;}
-.signal-row input{flex:1;min-width:0;}
+.signal-row{display:flex;gap:8px;margin-bottom:8px;align-items:center;flex-wrap:wrap;}
+.signal-row input{flex:1;min-width:160px;}
 .form-error{color:var(--giveway);font-size:12.5px;margin-top:-6px;margin-bottom:12px;min-height:16px;}
 .edit-card{border:1.5px dashed var(--brass);background:#FFFBF2;border-radius:var(--radius-md);padding:20px;margin-top:14px;}
 .edit-card h4{font-size:13px;text-transform:uppercase;letter-spacing:0.06em;color:var(--brass);margin-bottom:12px;}
@@ -274,7 +293,7 @@ main{flex:1 1 auto;padding:28px 22px 60px;max-width:1180px;margin:0 auto;width:1
       <svg id="brand-emblem" class="brand-emblem" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"></svg>
       <div class="brand-text">
         <span class="brand-org" id="org-name-display">TRUNG TÂM ĐÀO TẠO THUYỀN VIÊN VÀ PHÁT TRIỂN CÔNG NGHỆ BIỂN</span>
-        <span class="brand-app">Mô phỏng tránh va trên biển</span>
+        <span class="brand-app">Ôn tập lý thuyết Luật và các quy định liên quan</span>
       </div>
     </div>
     <nav class="main-nav" id="main-nav">
@@ -315,6 +334,7 @@ main{flex:1 1 auto;padding:28px 22px 60px;max-width:1180px;margin:0 auto;width:1
 </div>
 
 <div id="toast"></div>
+<audio id="global-audio-player" preload="none"></audio>
 
 <script>
 'use strict';
@@ -571,7 +591,12 @@ const DEFAULT_SETTINGS = {
   footerNote:"Tài liệu nội bộ phục vụ giảng dạy COLREG 72",
   emblem:"anchor",
   logoImageUrl:"",
-  resultsWebhookUrl:""
+  resultsWebhookUrl:"https://script.google.com/macros/s/AKfycbx1q3fYpe_7qyLpZSbTMiQwCd1ecNSXDC3IjkM0f_X6nQiYgJjPs-vO3up2fQy_a7lZYw/exec",
+  examDurationMinutes:10,
+  bannerImages:[
+    {url:"https://trungtamdttv.edu.vn/Uploads/0/Sliders/7/img-2---web-240725212245.png", caption:""},
+    {url:"https://trungtamdttv.edu.vn/Uploads/0/Sliders/1/img_8944---web-240725211527.png", caption:""}
+  ]
 };
 
 const AUTH_USER = "TTDT";
@@ -700,26 +725,31 @@ function deepClone(o){ return JSON.parse(JSON.stringify(o)); }
 
 function normalizeScenarios(list){
   return (list||[]).map(sc=>{
-    if (!Array.isArray(sc.soundSignals)){
-      sc.soundSignals = sc.soundSignal ? [sc.soundSignal] : [];
+    let sigs = sc.soundSignals;
+    if (!Array.isArray(sigs)){
+      sigs = sc.soundSignal ? [sc.soundSignal] : [];
     }
+    sc.soundSignals = sigs.map(s => (typeof s === 'string') ? {text:s, audioUrl:""} : {text:(s&&s.text)||"", audioUrl:(s&&s.audioUrl)||""});
     delete sc.soundSignal;
     return sc;
   });
 }
 
 async function loadAppData(){
-  const fallbackData = { rules:deepClone(DEFAULT_RULES), scenarios:deepClone(DEFAULT_SCENARIOS), quiz:deepClone(DEFAULT_QUIZ), settings:deepClone(DEFAULT_SETTINGS) };
+  const fallbackData = { rules:deepClone(DEFAULT_RULES), scenarios:normalizeScenarios(deepClone(DEFAULT_SCENARIOS)), quiz:deepClone(DEFAULT_QUIZ), settings:deepClone(DEFAULT_SETTINGS) };
   if (!window.storage){ storageAvailable=false; memoryFallback = fallbackData; return fallbackData; }
   try{
     const res = await window.storage.get(STORAGE_KEY, true);
     if (res && res.value){
       const parsed = JSON.parse(res.value);
+      const mergedSettings = Object.assign({}, fallbackData.settings, parsed.settings||{});
+      if (!mergedSettings.resultsWebhookUrl){ mergedSettings.resultsWebhookUrl = fallbackData.settings.resultsWebhookUrl; }
+      if (!mergedSettings.bannerImages || !mergedSettings.bannerImages.length){ mergedSettings.bannerImages = fallbackData.settings.bannerImages; }
       return {
         rules: parsed.rules && parsed.rules.length ? parsed.rules : fallbackData.rules,
         scenarios: normalizeScenarios(parsed.scenarios && parsed.scenarios.length ? parsed.scenarios : fallbackData.scenarios),
         quiz: parsed.quiz && parsed.quiz.length ? parsed.quiz : fallbackData.quiz,
-        settings: Object.assign({}, fallbackData.settings, parsed.settings||{})
+        settings: mergedSettings
       };
     }
     return fallbackData;
@@ -941,6 +971,14 @@ function radarSceneSVG(sc){
 ========================================================= */
 function iconSvg(name,size){ size=size||22; return `<svg viewBox="0 0 24 24" width="${size}" height="${size}" style="display:block;">${ICONS[name]||''}</svg>`; }
 function iconSpan(name){ return `<svg viewBox="0 0 24 24" width="13" height="13" style="display:inline-block;vertical-align:-2px;margin-right:3px;">${ICONS[name]||''}</svg>`; }
+function signalRowHTML(text, audioUrl){
+  return `<div class="signal-row">
+    <input type="text" class="signal-input" value="${escapeAttr(text||'')}" placeholder="Nhập tín hiệu còi...">
+    <input type="text" class="signal-audio-input" value="${escapeAttr(audioUrl||'')}" placeholder="URL âm thanh (không bắt buộc)">
+    <button type="button" class="btn btn-ghost btn-sm" data-test-signal-audio title="Thử phát âm thanh">▶ Thử</button>
+    <button type="button" class="btn btn-ghost btn-sm" data-remove-signal title="Xoá tín hiệu này">${iconSpan('x')}</button>
+  </div>`;
+}
 function clampNum(v,min,max,fallback){ if(isNaN(v)) return fallback; return Math.min(max,Math.max(min,v)); }
 function norm360(v,fallback){ if(isNaN(v)) return fallback; return ((Math.round(v)%360)+360)%360; }
 
@@ -953,6 +991,11 @@ let editingRuleId = null;
 let quizManageMode = false;
 let editingQuizId = null;
 let quizTaker = null; // {name, birthYear} — bắt buộc điền trước khi làm bài ôn tập
+let quizDeadline = null;      // mốc thời gian (ms) khi hết giờ làm bài
+let quizTimerInterval = null; // id của setInterval đếm ngược
+let quizAutoSubmitted = false; // true nếu bài bị tự động nộp do hết giờ
+let bannerCarouselIndex = 0;
+let bannerCarouselInterval = null;
 let webhookPanelOpen = false;
 let importPanelOpen = false;
 let resultsViewOpen = false;
@@ -964,6 +1007,48 @@ let quizImportSheetUrlDraft = "";
 /* =========================================================
    TRANG CHỦ
 ========================================================= */
+function bannerImageRowHTML(url, caption){
+  return `<div class="signal-row">
+    <input type="text" class="banner-img-url-input" value="${escapeAttr(url||'')}" placeholder="URL ảnh (https://...)">
+    <input type="text" class="banner-img-caption-input" value="${escapeAttr(caption||'')}" placeholder="Chú thích (không bắt buộc)">
+    <button type="button" class="btn btn-ghost btn-sm" data-remove-banner-image title="Xoá ảnh này">${iconSpan('x')}</button>
+  </div>`;
+}
+function bannerCarouselHTML(){
+  const imgs = DATA.settings.bannerImages||[];
+  if (!imgs.length) return '';
+  const first = imgs[0];
+  return `<div class="banner-carousel">
+    <img id="banner-carousel-img" class="banner-carousel-img" src="${escapeAttr(first.url)}" alt="${escapeAttr(first.caption||'')}" onerror="this.closest('.banner-carousel').style.display='none'">
+    ${imgs.length>1?`
+    <button type="button" class="banner-carousel-arrow prev" data-banner-prev aria-label="Ảnh trước">‹</button>
+    <button type="button" class="banner-carousel-arrow next" data-banner-next aria-label="Ảnh sau">›</button>
+    <div class="banner-carousel-dots">${imgs.map((_,i)=>`<button type="button" class="banner-carousel-dot ${i===0?'active':''}" data-banner-dot="${i}" aria-label="Ảnh ${i+1}"></button>`).join('')}</div>`:''}
+  </div>`;
+}
+function updateBannerCarouselDisplay(){
+  const imgs = DATA.settings.bannerImages||[];
+  const imgEl = document.getElementById('banner-carousel-img');
+  if (!imgEl || !imgs.length) return;
+  if (bannerCarouselIndex>=imgs.length) bannerCarouselIndex = 0;
+  const img = imgs[bannerCarouselIndex];
+  imgEl.style.opacity = '0';
+  setTimeout(()=>{
+    imgEl.src = img.url;
+    imgEl.alt = img.caption||'';
+    imgEl.style.opacity = '1';
+  }, 220);
+  document.querySelectorAll('.banner-carousel-dot').forEach((d,i)=>d.classList.toggle('active', i===bannerCarouselIndex));
+}
+function startBannerCarousel(){
+  clearInterval(bannerCarouselInterval); bannerCarouselInterval = null;
+  const imgs = DATA.settings.bannerImages||[];
+  if (imgs.length<=1) return;
+  bannerCarouselInterval = setInterval(()=>{
+    bannerCarouselIndex = (bannerCarouselIndex+1) % imgs.length;
+    updateBannerCarouselDisplay();
+  }, 4500);
+}
 function heroRadarSVG(){
   return `<svg class="hero-radar" viewBox="0 0 420 420" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <defs><linearGradient id="sweepGrad" x1="0" y1="1" x2="1" y2="0">
@@ -1000,6 +1085,13 @@ function settingsEditPanelHTML(){
       </div>
       <div class="form-field"><label>URL ảnh logo tuỳ chỉnh (không bắt buộc)</label><input type="text" id="set-logoUrl" placeholder="https://..." value="${escapeAttr(s.logoImageUrl)}"></div>
     </div>
+    <div class="form-field">
+      <label>Ảnh banner tự động thay đổi ở đầu trang chủ (không bắt buộc)</label>
+      <div id="banner-images-list">
+        ${(s.bannerImages||[]).map(img=>bannerImageRowHTML(img.url, img.caption)).join('')}
+      </div>
+      <button type="button" class="btn btn-ghost btn-sm" data-add-banner-image>${iconSpan('plus')} Thêm ảnh</button>
+    </div>
     <div class="edit-actions">
       <button class="btn btn-primary btn-sm" data-save-settings>Lưu thay đổi</button>
       <button class="btn btn-ghost btn-sm" data-cancel-settings>Huỷ</button>
@@ -1011,6 +1103,7 @@ function settingsEditPanelHTML(){
 function viewHomeHTML(){
   const s = DATA.settings;
   return `<section class="view">
+    ${bannerCarouselHTML()}
     <div class="hero">
       ${heroRadarSVG()}
       <span class="hero-eyebrow">${escapeHtml(s.heroEyebrow)}</span>
@@ -1151,9 +1244,9 @@ function scenarioEditFormHTML(sc){
     <div class="form-field"><label>Mô tả tình huống</label><textarea id="ef-${sc.id}-description">${escapeHtml(sc.description)}</textarea></div>
     <div class="form-field"><label>Hành động cần thực hiện</label><textarea id="ef-${sc.id}-action">${escapeHtml(sc.action)}</textarea></div>
     <div class="form-field">
-      <label>Tín hiệu còi (có thể thêm nhiều tín hiệu)</label>
+      <label>Tín hiệu còi (có thể thêm nhiều, mỗi tín hiệu có thể kèm URL âm thanh)</label>
       <div id="signals-list-${sc.id}">
-        ${(sc.soundSignals||[]).map(s=>`<div class="signal-row"><input type="text" class="signal-input" value="${escapeAttr(s)}" placeholder="Nhập tín hiệu còi..."><button type="button" class="btn btn-ghost btn-sm" data-remove-signal title="Xoá tín hiệu này">${iconSpan('x')}</button></div>`).join('')}
+        ${(sc.soundSignals||[]).map(s=>signalRowHTML(s.text, s.audioUrl)).join('')}
       </div>
       <button type="button" class="btn btn-ghost btn-sm" data-add-signal="${sc.id}">${iconSpan('plus')} Thêm tín hiệu còi</button>
     </div>
@@ -1215,7 +1308,12 @@ function viewScenarioDetailHTML(id){
         <div>
           <div class="detail-block"><h4>Mô tả tình huống</h4><p>${escapeHtml(sc.description)}</p></div>
           <div class="detail-block"><h4>Hành động cần thực hiện</h4><p>${escapeHtml(sc.action)}</p></div>
-          <div class="detail-block"><h4>Tín hiệu còi</h4>${(sc.soundSignals&&sc.soundSignals.length) ? sc.soundSignals.map(s=>`<div style="margin-bottom:8px;"><span class="sound-badge">🔊 ${escapeHtml(s)}</span></div>`).join('') : `<p style="font-style:italic;">Chưa có tín hiệu còi được thiết lập cho tình huống này.</p>`}</div>
+          <div class="detail-block"><h4>Tín hiệu còi</h4>${(sc.soundSignals&&sc.soundSignals.length) ? sc.soundSignals.map(s=>{
+            const hasAudio = s.audioUrl && s.audioUrl.trim();
+            return `<div style="margin-bottom:8px;">${hasAudio
+              ? `<button type="button" class="sound-badge" data-play-audio="${escapeAttr(s.audioUrl.trim())}">🔊 ${escapeHtml(s.text)} <span class="play-glyph">▶</span></button>`
+              : `<span class="sound-badge">🔊 ${escapeHtml(s.text)}</span>`}</div>`;
+          }).join('') : `<p style="font-style:italic;">Chưa có tín hiệu còi được thiết lập cho tình huống này.</p>`}</div>
         </div>
       </div>
       ${(scenarioEditOpen && isLoggedIn) ? scenarioEditFormHTML(sc) : ''}
@@ -1228,8 +1326,10 @@ function viewScenarioDetailHTML(id){
 ========================================================= */
 function quizTakerFormInnerHTML(){
   const nowYear = new Date().getFullYear();
+  const durMin = DATA.settings.examDurationMinutes || 10;
   return `<div class="card quiz-card">
-      <p style="margin-bottom:18px;">Vui lòng nhập thông tin trước khi bắt đầu làm bài. Thông tin này sẽ được ghi lại cùng với kết quả bài làm của bạn.</p>
+      <p style="margin-bottom:10px;">Vui lòng nhập thông tin trước khi bắt đầu làm bài. Thông tin này sẽ được ghi lại cùng với kết quả bài làm của bạn.</p>
+      <p style="margin-bottom:18px;font-size:13px;color:var(--ink-soft);">⏱ Thời gian làm bài: <strong>${durMin} phút</strong> — hết giờ sẽ tự động nộp bài.</p>
       <div class="form-field"><label>Họ và tên</label><input type="text" id="taker-name" placeholder="Nguyễn Văn A"></div>
       <div class="form-field"><label>Năm sinh</label><input type="number" id="taker-birthyear" placeholder="1995" min="1940" max="${nowYear}"></div>
       <div class="form-error" id="taker-form-error"></div>
@@ -1240,7 +1340,10 @@ function quizActiveInnerHTML(){
   const total = DATA.quiz.length;
   const q = DATA.quiz[quizIndex];
   return `<div class="card quiz-card">
-      <div class="quiz-progress">Câu ${quizIndex+1} / ${total} · Điểm hiện tại: ${quizScore}</div>
+      <div class="quiz-progress" style="display:flex;justify-content:space-between;align-items:center;">
+        <span>Câu ${quizIndex+1} / ${total} · Điểm hiện tại: ${quizScore}</span>
+        <span class="quiz-timer" id="quiz-timer-display">--:--</span>
+      </div>
       <div class="quiz-bar"><div class="quiz-bar-fill" style="width:${(quizIndex/total)*100}%"></div></div>
       <div class="quiz-q">${escapeHtml(q.prompt)}</div>
       ${q.options.map((opt,i)=>{
@@ -1262,6 +1365,38 @@ function viewQuizTakeHTML(){
   else inner = quizActiveInnerHTML();
   return `<section class="view">${header}${inner}</section>`;
 }
+function clearQuizTimer(){
+  if (quizTimerInterval){ clearInterval(quizTimerInterval); quizTimerInterval = null; }
+}
+function updateQuizTimerDisplay(){
+  const el = document.getElementById('quiz-timer-display');
+  if (!el || !quizDeadline) return;
+  const remain = Math.max(0, quizDeadline - Date.now());
+  const mm = Math.floor(remain/60000);
+  const ss = Math.floor((remain%60000)/1000);
+  el.textContent = `${String(mm).padStart(2,'0')}:${String(ss).padStart(2,'0')}`;
+  el.classList.toggle('quiz-timer-warning', remain <= 60000);
+}
+function startQuizTimer(){
+  clearQuizTimer();
+  const durMin = (DATA.settings.examDurationMinutes && DATA.settings.examDurationMinutes > 0) ? DATA.settings.examDurationMinutes : 10;
+  quizDeadline = Date.now() + durMin*60*1000;
+  updateQuizTimerDisplay();
+  quizTimerInterval = setInterval(()=>{
+    const remain = quizDeadline - Date.now();
+    if (remain <= 0){
+      clearQuizTimer();
+      if (!quizFinished && quizTaker){
+        quizFinished = true;
+        quizAutoSubmitted = true;
+        submitQuizResult();
+        if (currentView==='quiz') renderView();
+      }
+      return;
+    }
+    updateQuizTimerDisplay();
+  }, 1000);
+}
 function startQuizWithTakerInfo(){
   const nameEl = document.getElementById('taker-name');
   const yearEl = document.getElementById('taker-birthyear');
@@ -1273,7 +1408,8 @@ function startQuizWithTakerInfo(){
   if (!name){ errEl.textContent = 'Vui lòng nhập họ và tên.'; return; }
   if (!yearStr || isNaN(year) || year < 1940 || year > nowYear){ errEl.textContent = 'Vui lòng nhập năm sinh hợp lệ.'; return; }
   quizTaker = { name, birthYear: year };
-  quizIndex=0; quizScore=0; quizSelected=null; quizFinished=false;
+  quizIndex=0; quizScore=0; quizSelected=null; quizFinished=false; quizAutoSubmitted=false;
+  startQuizTimer();
   renderView();
 }
 async function submitQuizResult(){
@@ -1311,6 +1447,7 @@ function quizResultInnerHTML(){
         <div class="quiz-progress">Kết quả${quizTaker?` — ${escapeHtml(quizTaker.name)}`:''}</div>
         <div class="score-num">${quizScore}/${total}</div>
         <p>${msg}</p>
+        ${quizAutoSubmitted?`<p style="font-size:12.5px;color:var(--giveway);font-weight:700;">⏱ Đã hết thời gian làm bài — bài của bạn được tự động nộp.</p>`:''}
         <p style="font-size:12.5px;color:var(--ink-soft);">Kết quả của bạn đã được ghi nhận.</p>
         <button class="btn btn-primary" data-quiz-restart>Làm lại từ đầu</button>
       </div>
@@ -1345,12 +1482,18 @@ function quizManageItemHTML(q,idx){
 function quizWebhookPanelHTML(){
   if (!webhookPanelOpen) return "";
   const url = DATA.settings.resultsWebhookUrl || "";
+  const durMin = DATA.settings.examDurationMinutes || 10;
   return `<div class="edit-card" style="margin-bottom:20px;">
-    <h4>${iconSpan('edit')} Nhận kết quả bài ôn tập vào Google Sheet (tuỳ chọn)</h4>
-    <p style="font-size:13px;">Dán vào đây URL "Web App" của Google Apps Script đã triển khai trên Google Sheet của bạn. Mỗi khi có người nộp bài, kết quả (họ tên, năm sinh, điểm) sẽ được gửi tới đó. Dù có cấu hình hay không, kết quả luôn được lưu lại trong mục "Xem kết quả đã nộp" bên dưới.</p>
-    <div class="form-field"><input type="text" id="set-webhookUrl" placeholder="https://script.google.com/macros/s/xxx/exec" value="${escapeAttr(url)}"></div>
+    <h4>${iconSpan('edit')} Cài đặt bài ôn tập — thời gian làm bài &amp; nhận kết quả</h4>
+    <div class="form-field">
+      <label>Thời gian làm bài (phút)</label>
+      <input type="number" id="set-examDuration" min="1" max="180" value="${durMin}">
+    </div>
+    <p style="font-size:12.5px;color:var(--ink-soft);margin-top:-6px;">Hết thời gian này, bài đang làm sẽ tự động được nộp.</p>
+    <p style="font-size:13px;margin-top:14px;">Dán vào đây URL "Web App" của Google Apps Script đã triển khai trên Google Sheet của bạn. Mỗi khi có người nộp bài, kết quả (họ tên, năm sinh, điểm) sẽ được gửi tới đó — dùng chung một liên kết cho mọi thiết bị. Dù có cấu hình hay không, kết quả luôn được lưu lại trong mục "Xem kết quả đã nộp" bên dưới.</p>
+    <div class="form-field"><label>URL Web App (Google Apps Script)</label><input type="text" id="set-webhookUrl" placeholder="https://script.google.com/macros/s/xxx/exec" value="${escapeAttr(url)}"></div>
     <div class="edit-actions">
-      <button class="btn btn-primary btn-sm" data-save-webhook>Lưu liên kết</button>
+      <button class="btn btn-primary btn-sm" data-save-webhook>Lưu cài đặt</button>
       <button class="btn btn-ghost btn-sm" data-toggle-webhook-panel>Đóng</button>
     </div>
   </div>`;
@@ -1423,7 +1566,7 @@ function viewQuizManageHTML(){
     <div class="section-head">
       <div><span class="section-eyebrow">Quản trị</span><h2>Quản lý câu hỏi ôn tập</h2></div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
-        <button class="btn btn-ghost btn-sm" data-toggle-webhook-panel>Cài đặt nhận kết quả</button>
+        <button class="btn btn-ghost btn-sm" data-toggle-webhook-panel>Cài đặt bài ôn tập</button>
         <button class="btn btn-ghost btn-sm" data-toggle-import-panel>Nhập hàng loạt</button>
         <button class="btn btn-ghost btn-sm" data-toggle-results-view>Xem kết quả đã nộp</button>
         <button class="btn btn-brass btn-sm" data-add-quiz>${iconSpan('plus')} Thêm câu hỏi</button>
@@ -1454,10 +1597,13 @@ function renderBrand(){
 }
 function renderView(){
   const root = document.getElementById('view-root');
+  clearInterval(bannerCarouselInterval); bannerCarouselInterval = null;
   if (currentView==='home') root.innerHTML = viewHomeHTML();
   else if (currentView==='rules') root.innerHTML = viewRulesHTML();
   else if (currentView==='scenarios') root.innerHTML = currentScenarioId ? viewScenarioDetailHTML(currentScenarioId) : viewScenariosListHTML();
   else if (currentView==='quiz') root.innerHTML = viewQuizHTML();
+  updateQuizTimerDisplay();
+  if (currentView==='home') startBannerCarousel();
 }
 function switchView(view){
   currentView = view;
@@ -1521,10 +1667,17 @@ function saveSettingsFromForm(){
   s.footerNote = document.getElementById('set-footerNote').value.trim() || s.footerNote;
   s.emblem = document.getElementById('set-emblem').value;
   s.logoImageUrl = document.getElementById('set-logoUrl').value.trim();
+  const bannerContainer = document.getElementById('banner-images-list');
+  if (bannerContainer){
+    const urlInputs = Array.from(bannerContainer.querySelectorAll('.banner-img-url-input'));
+    const capInputs = Array.from(bannerContainer.querySelectorAll('.banner-img-caption-input'));
+    s.bannerImages = urlInputs.map((inp,i)=>({url:inp.value.trim(), caption: capInputs[i]?capInputs[i].value.trim():''})).filter(x=>x.url.length>0);
+  }
   settingsEditOpen = false;
   persistAppData();
   renderBrand();
   renderView();
+  window.scrollTo({top:0, behavior:'instant'});
   showToast('Đã lưu thay đổi giao diện.');
 }
 function resetToDefaults(){
@@ -1532,17 +1685,19 @@ function resetToDefaults(){
   if (!ok) return;
   DATA = {
     rules: deepClone(DEFAULT_RULES),
-    scenarios: deepClone(DEFAULT_SCENARIOS),
+    scenarios: normalizeScenarios(deepClone(DEFAULT_SCENARIOS)),
     quiz: deepClone(DEFAULT_QUIZ),
     settings: deepClone(DEFAULT_SETTINGS)
   };
   settingsEditOpen = false; scenarioEditOpen = false; editingRuleId = null; editingQuizId = null; quizManageMode = false;
+  clearQuizTimer(); quizDeadline = null; quizAutoSubmitted = false; quizTaker = null;
   quizIndex = 0; quizScore = 0; quizSelected = null; quizFinished = false;
   currentView = 'home'; currentScenarioId = null; currentPart = 'A';
   persistAppData();
   renderBrand();
   setActiveNav();
   renderView();
+  window.scrollTo({top:0, behavior:'instant'});
   showToast('Đã khôi phục toàn bộ dữ liệu về mặc định trong mã nguồn.');
 }
 
@@ -1574,7 +1729,16 @@ function saveScenarioFromForm(id){
   sc.soundSignals = (function(){
     const container = document.getElementById(`signals-list-${id}`);
     if (!container) return sc.soundSignals || [];
-    return Array.from(container.querySelectorAll('.signal-input')).map(inp=>inp.value.trim()).filter(v=>v.length>0);
+    const textInputs = Array.from(container.querySelectorAll('.signal-input'));
+    const audioInputs = Array.from(container.querySelectorAll('.signal-audio-input'));
+    const result = [];
+    textInputs.forEach((inp, i)=>{
+      const text = inp.value.trim();
+      if (!text) return;
+      const audioUrl = audioInputs[i] ? audioInputs[i].value.trim() : '';
+      result.push({ text, audioUrl });
+    });
+    return result;
   })();
   ['ownShip','targetShip'].forEach(key=>{
     const v = sc[key];
@@ -1614,7 +1778,7 @@ function addNewScenario(){
     summary:"Mô tả ngắn gọn hiển thị ở danh sách.",
     description:"Nhập mô tả diễn biến tình huống ở đây.",
     action:"Nhập hành động cần thực hiện.",
-    soundSignals:["Nhập tín hiệu còi (nếu có)."],
+    soundSignals: [{text:"Nhập tín hiệu còi (nếu có).", audioUrl:""}],
     showTurnArrows:false,
     ownShip:{name:"Tàu ta",type:"power",x:210,y:300,heading:0,role:"neutral"},
     targetShip:{name:"Tàu mục tiêu",type:"power",x:210,y:130,heading:180,role:"neutral"},
@@ -1667,8 +1831,11 @@ function addNewQuiz(){
 ========================================================= */
 function saveWebhookUrl(){
   DATA.settings.resultsWebhookUrl = document.getElementById('set-webhookUrl').value.trim();
+  const durInput = document.getElementById('set-examDuration');
+  const dur = parseInt(durInput.value, 10);
+  DATA.settings.examDurationMinutes = (!isNaN(dur) && dur > 0) ? dur : (DATA.settings.examDurationMinutes || 10);
   persistAppData();
-  showToast('Đã lưu liên kết nhận kết quả.');
+  showToast('Đã lưu cài đặt bài ôn tập.');
 }
 
 /* =========================================================
@@ -1812,6 +1979,32 @@ function onViewRootClick(e){
   if (e.target.closest('[data-save-settings]')){ saveSettingsFromForm(); return; }
   if (e.target.closest('[data-cancel-settings]')){ settingsEditOpen = false; renderView(); return; }
   if (e.target.closest('[data-reset-defaults]')){ resetToDefaults(); return; }
+  if (e.target.closest('[data-add-banner-image]')){
+    const container = document.getElementById('banner-images-list');
+    if (container) container.insertAdjacentHTML('beforeend', bannerImageRowHTML('',''));
+    return;
+  }
+  if ((el = e.target.closest('[data-remove-banner-image]'))){
+    const row = el.closest('.signal-row');
+    if (row) row.remove();
+    return;
+  }
+  if (e.target.closest('[data-banner-prev]')){
+    const imgs = DATA.settings.bannerImages||[];
+    if (imgs.length){ bannerCarouselIndex = (bannerCarouselIndex-1+imgs.length)%imgs.length; updateBannerCarouselDisplay(); startBannerCarousel(); }
+    return;
+  }
+  if (e.target.closest('[data-banner-next]')){
+    const imgs = DATA.settings.bannerImages||[];
+    if (imgs.length){ bannerCarouselIndex = (bannerCarouselIndex+1)%imgs.length; updateBannerCarouselDisplay(); startBannerCarousel(); }
+    return;
+  }
+  if ((el = e.target.closest('[data-banner-dot]'))){
+    bannerCarouselIndex = parseInt(el.dataset.bannerDot,10)||0;
+    updateBannerCarouselDisplay();
+    startBannerCarousel();
+    return;
+  }
 
   if ((el = e.target.closest('[data-edit-rule]'))){ editingRuleId = (editingRuleId===el.dataset.editRule) ? null : el.dataset.editRule; renderView(); return; }
   if ((el = e.target.closest('[data-save-rule]'))){ saveRuleFromForm(el.dataset.saveRule); return; }
@@ -1825,7 +2018,7 @@ function onViewRootClick(e){
   if ((el = e.target.closest('[data-add-signal]'))){
     const container = document.getElementById('signals-list-' + el.dataset.addSignal);
     if (container){
-      container.insertAdjacentHTML('beforeend', `<div class="signal-row"><input type="text" class="signal-input" value="" placeholder="Nhập tín hiệu còi..."><button type="button" class="btn btn-ghost btn-sm" data-remove-signal title="Xoá tín hiệu này">${iconSpan('x')}</button></div>`);
+      container.insertAdjacentHTML('beforeend', signalRowHTML('', ''));
       const inputs = container.querySelectorAll('.signal-input');
       inputs[inputs.length-1].focus();
     }
@@ -1834,6 +2027,18 @@ function onViewRootClick(e){
   if ((el = e.target.closest('[data-remove-signal]'))){
     const row = el.closest('.signal-row');
     if (row) row.remove();
+    return;
+  }
+  if ((el = e.target.closest('[data-test-signal-audio]'))){
+    const row = el.closest('.signal-row');
+    const audioInput = row ? row.querySelector('.signal-audio-input') : null;
+    const url = audioInput ? audioInput.value.trim() : '';
+    if (!url){ showToast('Chưa nhập URL âm thanh để thử.'); return; }
+    playSignalAudio(url, null);
+    return;
+  }
+  if ((el = e.target.closest('[data-play-audio]'))){
+    playSignalAudio(el.dataset.playAudio, el);
     return;
   }
 
@@ -1851,13 +2056,16 @@ function onViewRootClick(e){
     quizIndex++; quizSelected=null;
     if (quizIndex>=DATA.quiz.length){
       quizFinished = true;
+      clearQuizTimer();
       submitQuizResult();
     }
     renderView();
     return;
   }
   if (e.target.closest('[data-quiz-restart]')){
-    quizIndex=0; quizScore=0; quizSelected=null; quizFinished=false; quizTaker=null;
+    clearQuizTimer();
+    quizDeadline = null;
+    quizIndex=0; quizScore=0; quizSelected=null; quizFinished=false; quizTaker=null; quizAutoSubmitted=false;
     renderView();
     return;
   }
@@ -1884,6 +2092,30 @@ function onViewRootClick(e){
 /* =========================================================
    KHỞI TẠO
 ========================================================= */
+function playSignalAudio(url, btnEl){
+  const player = document.getElementById('global-audio-player');
+  if (!player || !url) return;
+  document.querySelectorAll('.sound-badge.playing').forEach(b=>{ if (b!==btnEl) b.classList.remove('playing'); });
+  if (player.dataset.currentUrl === url && !player.paused){
+    player.pause();
+    player.currentTime = 0;
+    player.dataset.currentUrl = '';
+    if (btnEl) btnEl.classList.remove('playing');
+    return;
+  }
+  player.dataset.currentUrl = url;
+  player.src = url;
+  if (btnEl) btnEl.classList.add('playing');
+  const playPromise = player.play();
+  if (playPromise && playPromise.catch){
+    playPromise.catch(()=>{
+      showToast('Không phát được âm thanh cho tín hiệu này. Kiểm tra lại URL âm thanh.');
+      if (btnEl) btnEl.classList.remove('playing');
+      player.dataset.currentUrl = '';
+    });
+  }
+}
+
 function wireGlobalEvents(){
   document.getElementById('view-root').addEventListener('click', onViewRootClick);
   document.getElementById('main-nav').addEventListener('click', e=>{
@@ -1897,6 +2129,18 @@ function wireGlobalEvents(){
   document.getElementById('login-user').addEventListener('keydown', e=>{ if (e.key==='Enter') attemptLogin(); });
   document.getElementById('login-modal').addEventListener('click', e=>{ if (e.target.id==='login-modal') closeLoginModal(); });
   document.addEventListener('keydown', e=>{ if (e.key==='Escape') closeLoginModal(); });
+  const audioPlayer = document.getElementById('global-audio-player');
+  audioPlayer.addEventListener('ended', ()=>{
+    document.querySelectorAll('.sound-badge.playing').forEach(b=>b.classList.remove('playing'));
+    audioPlayer.dataset.currentUrl = '';
+  });
+  audioPlayer.addEventListener('error', ()=>{
+    if (audioPlayer.dataset.currentUrl){
+      showToast('Không phát được âm thanh — kiểm tra lại URL âm thanh.');
+      document.querySelectorAll('.sound-badge.playing').forEach(b=>b.classList.remove('playing'));
+      audioPlayer.dataset.currentUrl = '';
+    }
+  });
 }
 
 async function init(){
