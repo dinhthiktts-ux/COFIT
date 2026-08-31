@@ -295,8 +295,6 @@ button.sound-badge.playing{background:var(--ocean-mid);animation:blipPulse 1s ea
   <span class="brand-org" id="org-name-display">TRUNG TÂM ĐÀO TẠO THUYỀN VIÊN VÀ PHÁT TRIỂN CÔNG NGHỆ BIỂN</span>
   <span class="brand-app">Ôn tập lý thuyết Luật và các quy định liên quan</span>
 </div>
-
-<script src="app.js"></script>
     </div>
     <nav class="main-nav" id="main-nav">
       <button class="nav-btn" data-view="home">Trang chủ</button>
@@ -585,9 +583,9 @@ const DEFAULT_QUIZ = [
 ];
 
 const DEFAULT_SETTINGS = {
-  appTitle:"Mô phỏng tránh va trên biển",
+  appTitle:"Ôn tập lý thuyết Luật và các quy định liên quan",
   appSubtitle:"và các câu hỏi ôn tập",
-  orgName:"Trung tâm Đào tạo Thuyền viên",
+  orgName:"Trung tâm Đào tạo Thuyền viên và Phát triển Công nghệ biển",
   heroEyebrow:"COLREG 72 · QUY TẮC QUỐC TẾ PHÒNG NGỪA ĐÂM VA TÀU THUYỀN TRÊN BIỂN",
   heroLead:"Trực quan hoá các tình huống tránh va theo Bảng quy tắc quốc tế phòng ngừa đâm va tàu thuyền trên biển năm 1972 (COLREG 72)",
   footerNote:"Tài liệu lưu hành nội bộ",
@@ -595,6 +593,9 @@ const DEFAULT_SETTINGS = {
   logoImageUrl:"",
   resultsWebhookUrl:"https://script.google.com/macros/s/AKfycbx1q3fYpe_7qyLpZSbTMiQwCd1ecNSXDC3IjkM0f_X6nQiYgJjPs-vO3up2fQy_a7lZYw/exec",
   examDurationMinutes:10,
+  quizSheetUrl:"https://docs.google.com/spreadsheets/d/1N327z-MzawM8jiIJ_aBwe3uXwml6N9AmyriitH-YOy8/edit?usp=sharing",
+  quizSheetProxyUrl:"https://script.google.com/macros/s/AKfycbyQYowBTZorSXDCufiSvOSxZYb33_QDKJiTGzF6RGlDjub81NqIHL-wWiEtbADVBWIN5g/exec",
+  quizRandomCount:20,
   bannerImages:[
     {url:"https://trungtamdttv.edu.vn/Uploads/0/Sliders/7/img-2---web-240725212245.png", caption:""},
     {url:"https://trungtamdttv.edu.vn/Uploads/0/Sliders/1/img_8944---web-240725211527.png", caption:""}
@@ -747,6 +748,9 @@ async function loadAppData(){
       const mergedSettings = Object.assign({}, fallbackData.settings, parsed.settings||{});
       if (!mergedSettings.resultsWebhookUrl){ mergedSettings.resultsWebhookUrl = fallbackData.settings.resultsWebhookUrl; }
       if (!mergedSettings.bannerImages || !mergedSettings.bannerImages.length){ mergedSettings.bannerImages = fallbackData.settings.bannerImages; }
+      if (!mergedSettings.quizSheetUrl){ mergedSettings.quizSheetUrl = fallbackData.settings.quizSheetUrl; }
+      if (!mergedSettings.quizSheetProxyUrl){ mergedSettings.quizSheetProxyUrl = fallbackData.settings.quizSheetProxyUrl; }
+      if (!mergedSettings.quizRandomCount){ mergedSettings.quizRandomCount = fallbackData.settings.quizRandomCount; }
       return {
         rules: parsed.rules && parsed.rules.length ? parsed.rules : fallbackData.rules,
         scenarios: normalizeScenarios(parsed.scenarios && parsed.scenarios.length ? parsed.scenarios : fallbackData.scenarios),
@@ -996,6 +1000,9 @@ let quizTaker = null; // {name, birthYear} — bắt buộc điền trước khi
 let quizDeadline = null;      // mốc thời gian (ms) khi hết giờ làm bài
 let quizTimerInterval = null; // id của setInterval đếm ngược
 let quizAutoSubmitted = false; // true nếu bài bị tự động nộp do hết giờ
+let quizSessionQuestions = null; // bộ câu hỏi (rút ngẫu nhiên) dùng cho LƯỢT làm bài hiện tại
+let quizLoadingQuestions = false; // đang tải câu hỏi từ Google Sheet
+let quizLoadError = ''; // thông báo lỗi (nếu có) khi tải câu hỏi từ Google Sheet
 let bannerCarouselIndex = 0;
 let bannerCarouselInterval = null;
 let webhookPanelOpen = false;
@@ -1118,7 +1125,7 @@ function viewHomeHTML(){
       <div class="hero-stats">
         <div><div class="hero-stat-num">${DATA.rules.length}</div><div class="hero-stat-label">Điều quy tắc</div></div>
         <div><div class="hero-stat-num">${DATA.scenarios.length}</div><div class="hero-stat-label">Tình huống mô phỏng</div></div>
-        <div><div class="hero-stat-num">${DATA.quiz.length}</div><div class="hero-stat-label">Câu hỏi ôn tập</div></div>
+        <div><div class="hero-stat-num">${DATA.settings.quizRandomCount||20}</div><div class="hero-stat-label">Câu hỏi mỗi lượt ôn tập</div></div>
       </div>
     </div>
 
@@ -1129,7 +1136,7 @@ function viewHomeHTML(){
     <div class="grid-cards">
       <div class="card home-nav-card" data-goto="rules"><div class="icon-wrap" style="color:var(--ocean-mid)">${iconSvg('book')}</div><h3>Quy tắc COLREG 72</h3><p>Tra cứu nội dung diễn giải từng điều theo Phần A–E.</p></div>
       <div class="card home-nav-card" data-goto="scenarios"><div class="icon-wrap" style="color:var(--ocean-mid)">${iconSvg('radar')}</div><h3>Mô phỏng tình huống</h3><p>Sơ đồ ra-đa trực quan cho từng tình huống tránh va thường gặp.</p></div>
-      <div class="card home-nav-card" data-goto="quiz"><div class="icon-wrap" style="color:var(--ocean-mid)">${iconSvg('quiz')}</div><h3>Câu hỏi ôn tập</h3><p>${DATA.quiz.length} câu hỏi trắc nghiệm để tự kiểm tra kiến thức.</p></div>
+      <div class="card home-nav-card" data-goto="quiz"><div class="icon-wrap" style="color:var(--ocean-mid)">${iconSvg('quiz')}</div><h3>Câu hỏi ôn tập</h3><p>${DATA.settings.quizRandomCount||20} câu hỏi trắc nghiệm ngẫu nhiên mỗi lượt để tự kiểm tra kiến thức.</p></div>
     </div>
     ${settingsEditPanelHTML()}
   </section>`;
@@ -1326,22 +1333,125 @@ function viewScenarioDetailHTML(id){
 /* =========================================================
    ÔN TẬP — TRẮC NGHIỆM
 ========================================================= */
+function pickRandomQuestions(list, n){
+  const arr = (list||[]).slice();
+  for (let i = arr.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    const tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+  }
+  return arr.slice(0, Math.min(n, arr.length));
+}
+
+// Cách 1 — đơn giản, không cần cài thêm gì: tải trực tiếp CSV từ Google Sheet.
+// LƯU Ý: trình duyệt đôi khi CHẶN cách này do chính sách CORS của Google (tuỳ từng
+// trường hợp/trình duyệt) — nếu gặp, hãy cấu hình thêm "URL Apps Script trung chuyển"
+// (Cách 2 bên dưới), vốn không bao giờ bị chặn vì không phải gọi thẳng sang docs.google.com.
+async function fetchQuizFromSheetDirect(sheetUrl){
+  const { id, gid } = extractSheetIdAndGid(sheetUrl);
+  if (!id) throw new Error('Không đọc được ID Google Sheet từ URL đã cấu hình.');
+  const csvUrl = buildSheetCsvUrl(id, gid);
+  const resp = await fetch(csvUrl);
+  if (!resp.ok) throw new Error('HTTP ' + resp.status);
+  const text = await resp.text();
+  const rows = parseCSV(text);
+  const { drafts } = rowsToQuizDrafts(rows);
+  return drafts;
+}
+
+// Cách 2 — đáng tin cậy hơn (không thể bị chặn bởi CORS, vì dùng kỹ thuật JSONP qua thẻ
+// <script>): đọc câu hỏi qua một Google Apps Script Web App trung chuyển do bạn tự triển
+// khai trên chính Sheet câu hỏi. Xem hướng dẫn/đoạn mã doGet() đi kèm.
+function fetchQuizViaAppsScriptJsonp(proxyUrl){
+  return new Promise((resolve, reject) => {
+    const cbName = '__quizJsonpCb_' + Date.now() + '_' + Math.floor(Math.random()*100000);
+    const script = document.createElement('script');
+    const timeoutId = setTimeout(() => { cleanup(); reject(new Error('Hết thời gian chờ phản hồi từ Apps Script (10s).')); }, 10000);
+    function cleanup(){
+      clearTimeout(timeoutId);
+      try{ delete window[cbName]; }catch(e){ window[cbName] = undefined; }
+      if (script.parentNode) script.parentNode.removeChild(script);
+    }
+    window[cbName] = function(data){
+      cleanup();
+      try{
+        const list = (data && Array.isArray(data.questions)) ? data.questions : [];
+        const drafts = list.map(q => {
+          const letter = String(q.correct==null?'':q.correct).trim().toUpperCase();
+          const correctIdx = "ABCD".indexOf(letter) !== -1 ? "ABCD".indexOf(letter) : (typeof q.correct==='number'?q.correct:0);
+          return {
+            id: 'sheet-'+Math.random().toString(36).slice(2),
+            prompt: String(q.prompt||q.question||'').trim(),
+            options: Array.isArray(q.options) ? q.options : [q.a,q.b,q.c,q.d],
+            correct: correctIdx,
+            explain: String(q.explain||'').trim()
+          };
+        }).filter(q => q.prompt && q.options && q.options.length===4 && q.options.every(o=>o!=null && String(o).trim()!==''));
+        resolve(drafts);
+      }catch(e){ reject(e); }
+    };
+    script.onerror = () => { cleanup(); reject(new Error('Không tải được script từ Apps Script trung chuyển.')); };
+    script.src = proxyUrl + (proxyUrl.includes('?') ? '&' : '?') + 'callback=' + cbName;
+    document.head.appendChild(script);
+  });
+}
+
+// Luôn thử lấy câu hỏi MỚI NHẤT trước (Cách 1 rồi tới Cách 2 nếu có cấu hình);
+// chỉ dùng ngân hàng câu hỏi cục bộ (DATA.quiz) khi cả hai đều thất bại hoặc chưa cấu hình.
+async function loadQuizQuestionsForSession(){
+  const sheetUrl = (DATA.settings.quizSheetUrl || '').trim();
+  const proxyUrl = (DATA.settings.quizSheetProxyUrl || '').trim();
+  const wantCount = DATA.settings.quizRandomCount || 20;
+  quizLoadError = '';
+
+  if (sheetUrl){
+    try{
+      const drafts = await fetchQuizFromSheetDirect(sheetUrl);
+      if (drafts.length) return pickRandomQuestions(drafts, wantCount);
+      throw new Error('Không tìm thấy câu hỏi hợp lệ trong Google Sheet.');
+    }catch(e){
+      console.warn('Tải trực tiếp từ Google Sheet thất bại (thường do CORS):', e.message);
+      quizLoadError = 'Không tải trực tiếp được từ Google Sheet (thường do trình duyệt chặn CORS).';
+    }
+  }
+
+  if (proxyUrl){
+    try{
+      const drafts = await fetchQuizViaAppsScriptJsonp(proxyUrl);
+      if (drafts.length){ quizLoadError = ''; return pickRandomQuestions(drafts, wantCount); }
+      throw new Error('Apps Script trung chuyển không trả về câu hỏi hợp lệ nào.');
+    }catch(e){
+      console.warn('Tải qua Apps Script trung chuyển cũng thất bại:', e.message);
+      quizLoadError = (quizLoadError?quizLoadError+' ':'') + 'Tải qua Apps Script trung chuyển cũng không thành công: ' + e.message;
+    }
+  }
+
+  if (quizLoadError) quizLoadError += ' Đang dùng tạm ngân hàng câu hỏi cục bộ.';
+  return pickRandomQuestions(DATA.quiz, Math.min(wantCount, DATA.quiz.length));
+}
+
 function quizTakerFormInnerHTML(){
   const nowYear = new Date().getFullYear();
   const durMin = DATA.settings.examDurationMinutes || 10;
+  const wantCount = DATA.settings.quizRandomCount || 20;
   return `<div class="card quiz-card">
       <p style="margin-bottom:10px;">Vui lòng nhập thông tin trước khi bắt đầu làm bài. Thông tin này sẽ được ghi lại cùng với kết quả bài làm của bạn.</p>
-      <p style="margin-bottom:18px;font-size:13px;color:var(--ink-soft);">⏱ Thời gian làm bài: <strong>${durMin} phút</strong> — hết giờ sẽ tự động nộp bài.</p>
+      <p style="margin-bottom:18px;font-size:13px;color:var(--ink-soft);">⏱ Thời gian làm bài: <strong>${durMin} phút</strong> — hết giờ sẽ tự động nộp bài. Mỗi lượt gồm <strong>${wantCount} câu hỏi</strong> được chọn ngẫu nhiên, lấy mới nhất từ ngân hàng câu hỏi.</p>
       <div class="form-field"><label>Họ và tên</label><input type="text" id="taker-name" placeholder="Nguyễn Văn A"></div>
       <div class="form-field"><label>Năm sinh</label><input type="number" id="taker-birthyear" placeholder="1995" min="1940" max="${nowYear}"></div>
       <div class="form-error" id="taker-form-error"></div>
       <button class="btn btn-primary" data-start-quiz>Bắt đầu làm bài</button>
     </div>`;
 }
+function quizLoadingInnerHTML(){
+  return `<div class="card quiz-card" style="text-align:center;padding:40px 20px;">
+      <p>Đang tải câu hỏi mới nhất...</p>
+    </div>`;
+}
 function quizActiveInnerHTML(){
-  const total = DATA.quiz.length;
-  const q = DATA.quiz[quizIndex];
+  const total = quizSessionQuestions.length;
+  const q = quizSessionQuestions[quizIndex];
   return `<div class="card quiz-card">
+      ${quizLoadError?`<div class="quiz-explain" style="margin-bottom:14px;border-left:3px solid var(--giveway);">${escapeHtml(quizLoadError)}</div>`:''}
       <div class="quiz-progress" style="display:flex;justify-content:space-between;align-items:center;">
         <span>Câu ${quizIndex+1} / ${total} · Điểm hiện tại: ${quizScore}</span>
         <span class="quiz-timer" id="quiz-timer-display">--:--</span>
@@ -1360,10 +1470,11 @@ function quizActiveInnerHTML(){
 function viewQuizTakeHTML(){
   const manageBtn = isLoggedIn?`<button class="btn btn-ghost btn-sm" data-toggle-quiz-manage>${iconSpan('edit')} Quản lý câu hỏi</button>`:'';
   const header = `<div class="section-head"><div><span class="section-eyebrow">Tự kiểm tra</span><h2>Câu hỏi ôn tập</h2></div>${manageBtn}</div>`;
-  if (DATA.quiz.length===0) return `<section class="view">${header}<div class="empty-note">Chưa có câu hỏi ôn tập nào.</div></section>`;
+  if (!quizTaker) return `<section class="view">${header}${quizTakerFormInnerHTML()}</section>`;
+  if (quizLoadingQuestions) return `<section class="view">${header}${quizLoadingInnerHTML()}</section>`;
+  if (!quizSessionQuestions || quizSessionQuestions.length===0) return `<section class="view">${header}<div class="empty-note">Không có câu hỏi khả dụng. Kiểm tra lại đường liên kết Google Sheet hoặc ngân hàng câu hỏi cục bộ.</div></section>`;
   let inner;
-  if (!quizTaker) inner = quizTakerFormInnerHTML();
-  else if (quizFinished) inner = quizResultInnerHTML();
+  if (quizFinished) inner = quizResultInnerHTML();
   else inner = quizActiveInnerHTML();
   return `<section class="view">${header}${inner}</section>`;
 }
@@ -1399,7 +1510,7 @@ function startQuizTimer(){
     updateQuizTimerDisplay();
   }, 1000);
 }
-function startQuizWithTakerInfo(){
+async function startQuizWithTakerInfo(){
   const nameEl = document.getElementById('taker-name');
   const yearEl = document.getElementById('taker-birthyear');
   const errEl = document.getElementById('taker-form-error');
@@ -1410,13 +1521,20 @@ function startQuizWithTakerInfo(){
   if (!name){ errEl.textContent = 'Vui lòng nhập họ và tên.'; return; }
   if (!yearStr || isNaN(year) || year < 1940 || year > nowYear){ errEl.textContent = 'Vui lòng nhập năm sinh hợp lệ.'; return; }
   quizTaker = { name, birthYear: year };
+
+  quizLoadingQuestions = true;
+  renderView();
+
+  quizSessionQuestions = await loadQuizQuestionsForSession();
+
+  quizLoadingQuestions = false;
   quizIndex=0; quizScore=0; quizSelected=null; quizFinished=false; quizAutoSubmitted=false;
   startQuizTimer();
   renderView();
 }
 async function submitQuizResult(){
   if (!quizTaker) return;
-  const total = DATA.quiz.length;
+  const total = quizSessionQuestions ? quizSessionQuestions.length : 0;
   const record = {
     name: quizTaker.name,
     birthYear: quizTaker.birthYear,
@@ -1441,7 +1559,7 @@ async function submitQuizResult(){
   }
 }
 function quizResultInnerHTML(){
-  const total = DATA.quiz.length;
+  const total = quizSessionQuestions ? quizSessionQuestions.length : 0;
   const pct = total? Math.round((quizScore/total)*100) : 0;
   const msg = pct>=80?'Xuất sắc! Bạn nắm rất vững quy tắc.':pct>=50?'Khá tốt — nên ôn lại một số điều còn nhầm lẫn.':'Nên xem lại phần Quy tắc và làm lại bài ôn tập.';
   return `<div class="card quiz-card">
@@ -1485,9 +1603,21 @@ function quizWebhookPanelHTML(){
   if (!webhookPanelOpen) return "";
   const url = DATA.settings.resultsWebhookUrl || "";
   const durMin = DATA.settings.examDurationMinutes || 10;
+  const sheetUrl = DATA.settings.quizSheetUrl || "";
+  const randomCount = DATA.settings.quizRandomCount || 20;
   return `<div class="edit-card" style="margin-bottom:20px;">
-    <h4>${iconSpan('edit')} Cài đặt bài ôn tập — thời gian làm bài &amp; nhận kết quả</h4>
+    <h4>${iconSpan('edit')} Cài đặt bài ôn tập — nguồn câu hỏi, thời gian &amp; nhận kết quả</h4>
+
+    <p style="font-size:13px;">Câu hỏi được lấy trực tiếp từ Google Sheet này mỗi khi có người bắt đầu làm bài — sửa nội dung trong Sheet là web tự cập nhật theo, không cần làm gì thêm ở đây. Sheet cần chia sẻ ở chế độ "Bất kỳ ai có đường liên kết – Người xem". Nếu để trống hoặc tải lỗi, hệ thống sẽ dùng tạm ngân hàng câu hỏi cục bộ (mục "Quản lý câu hỏi" bên dưới).</p>
+    <div class="form-field"><label>URL Google Sheet chứa câu hỏi</label><input type="text" id="set-quizSheetUrl" placeholder="https://docs.google.com/spreadsheets/d/..." value="${escapeAttr(sheetUrl)}"></div>
+    <p style="font-size:12.5px;color:var(--ink-soft);margin-top:-6px;">⚠️ Một số trình duyệt có thể chặn cách tải trực tiếp ở trên do chính sách CORS của Google. Nếu bài ôn tập báo lỗi và dùng tạm ngân hàng cục bộ dù Sheet vẫn đúng, hãy cấu hình thêm URL Apps Script trung chuyển bên dưới (đáng tin cậy hơn, không bao giờ bị chặn) — xem hướng dẫn kèm theo.</p>
+    <div class="form-field"><label>URL Apps Script trung chuyển đọc câu hỏi (không bắt buộc, dự phòng)</label><input type="text" id="set-quizSheetProxyUrl" placeholder="https://script.google.com/macros/s/xxx/exec" value="${escapeAttr(DATA.settings.quizSheetProxyUrl||'')}"></div>
     <div class="form-field">
+      <label>Số câu hỏi ngẫu nhiên mỗi lượt làm bài</label>
+      <input type="number" id="set-quizRandomCount" min="1" max="200" value="${randomCount}">
+    </div>
+
+    <div class="form-field" style="margin-top:16px;">
       <label>Thời gian làm bài (phút)</label>
       <input type="number" id="set-examDuration" min="1" max="180" value="${durMin}">
     </div>
@@ -1593,8 +1723,8 @@ function setActiveNav(){
 }
 function renderBrand(){
   document.getElementById('brand-emblem').innerHTML = buildEmblemMarkup();
-  document.getElementById('org-name-display').textContent = "TRUNG TÂM ĐÀO TẠO THUYỀN VIÊN VÀ PHÁT TRIỂN CÔNG NGHỆ BIỂN";
-  document.querySelector('.brand-app').textContent = "Ôn tập lý thuyết Luật và các quy định liên quan";
+  document.getElementById('org-name-display').textContent = DATA.settings.orgName;
+  document.querySelector('.brand-app').textContent = DATA.settings.appTitle;
   document.getElementById('footer-text').innerHTML = `© <strong>${escapeHtml(DATA.settings.orgName)}</strong> — ${escapeHtml(DATA.settings.footerNote)}`;
 }
 function renderView(){
@@ -1833,6 +1963,11 @@ function addNewQuiz(){
 ========================================================= */
 function saveWebhookUrl(){
   DATA.settings.resultsWebhookUrl = document.getElementById('set-webhookUrl').value.trim();
+  DATA.settings.quizSheetUrl = document.getElementById('set-quizSheetUrl').value.trim();
+  DATA.settings.quizSheetProxyUrl = document.getElementById('set-quizSheetProxyUrl').value.trim();
+  const countInput = document.getElementById('set-quizRandomCount');
+  const count = parseInt(countInput.value, 10);
+  DATA.settings.quizRandomCount = (!isNaN(count) && count > 0) ? count : (DATA.settings.quizRandomCount || 20);
   const durInput = document.getElementById('set-examDuration');
   const dur = parseInt(durInput.value, 10);
   DATA.settings.examDurationMinutes = (!isNaN(dur) && dur > 0) ? dur : (DATA.settings.examDurationMinutes || 10);
@@ -2048,7 +2183,7 @@ function onViewRootClick(e){
   if ((el = e.target.closest('[data-quiz-opt]'))){
     if (quizSelected===null){
       quizSelected = parseInt(el.dataset.quizOpt,10);
-      const q = DATA.quiz[quizIndex];
+      const q = quizSessionQuestions[quizIndex];
       if (quizSelected===q.correct) quizScore++;
       renderView();
     }
@@ -2056,7 +2191,7 @@ function onViewRootClick(e){
   }
   if (e.target.closest('[data-quiz-next]')){
     quizIndex++; quizSelected=null;
-    if (quizIndex>=DATA.quiz.length){
+    if (quizIndex>=quizSessionQuestions.length){
       quizFinished = true;
       clearQuizTimer();
       submitQuizResult();
@@ -2068,6 +2203,7 @@ function onViewRootClick(e){
     clearQuizTimer();
     quizDeadline = null;
     quizIndex=0; quizScore=0; quizSelected=null; quizFinished=false; quizTaker=null; quizAutoSubmitted=false;
+    quizSessionQuestions = null; quizLoadError = '';
     renderView();
     return;
   }
