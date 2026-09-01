@@ -86,13 +86,13 @@ a{color:var(--ocean-mid);}
 
 /* ===== Buttons ===== */
 .btn{
-  border:1.5px solid transparent;border-radius:10px;padding:9px 18px;font-size:14px;font-weight:700;
-  transition:transform .1s ease, box-shadow .15s ease, background .15s ease;
+  background:#ffffff;border-color: rgb(255 255 255 / 50%);color:#032e48;border-radius: 10px;padding: 9px 18px;font-size: 14px;font-weight: 700;transition: transform .1s ease, box-shadow .15s ease, background .15s ease;
+}
 }
 .btn:active{transform:translateY(1px);}
-.btn-primary{background:var(--ocean-mid);color:#fff;box-shadow:var(--shadow-sm);}
+.btn-primary{background:linear-gradient(135deg,#f4cf63,#dcae3f);color:#092943;box-shadow:var(--shadow-sm);}
 .btn-primary:hover{background:#3f8fbd;}
-.btn-outline{background:transparent;border-color:rgba(255,255,255,0.5);color:#fff;}
+.btn-outline{background:#ffffff;border-color:rgba(255,255,255,0.5);color:#032e48;}
 .btn-outline:hover{background:rgba(255,255,255,0.12);}
 .btn-brass{background:var(--brass);color:#fff;}
 .btn-brass:hover{background:#b5893c;}
@@ -122,25 +122,26 @@ main{flex:1 1 auto;padding:28px 22px 60px;max-width:1180px;margin:0 auto;width:1
 /* ===== Hero ===== */
 .hero{
   position:relative;overflow:hidden;
-  background:linear-gradient(135deg, var(--navy) 0%, var(--ocean-deep) 55%, #082238 100%);
+  background:linear-gradient(rgba(10, 25, 47, 0.3), rgba(10, 25, 47, 0.82)),url('https://i.ibb.co/mFBbY8jQ/Gemini-Generated-Image-gr5yuzgr5yuzgr5y.png');
   border-radius:var(--radius-lg);
   padding:48px 40px;color:#fff;margin-bottom:28px;
   box-shadow:var(--shadow-lg);
 }
-.hero-radar{position:absolute;right:-90px;top:50%;transform:translateY(-50%);width:420px;height:420px;opacity:0.35;pointer-events:none;}
+.hero-radar
+{position:absolute;right:-90px;top:50%;transform:translateY(-50%);width:420px;height:420px;opacity:1;pointer-events:none;}
 .hero-sweep{transform-origin:210px 210px;animation:sweep 6s linear infinite;}
 @media (prefers-reduced-motion: reduce){.hero-sweep{animation:none;}}
 @keyframes sweep{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
 .radar-blip{animation:blipPulse 1.6s ease-in-out infinite;transform-origin:center;}
 @keyframes blipPulse{0%,100%{opacity:1;}50%{opacity:0.35;}}
 @media (prefers-reduced-motion: reduce){.radar-blip{animation:none;}}
-.hero-eyebrow{font-family:var(--font-body);font-size:14px;letter-spacing:0.16em;color:#ffee00;text-transform:uppercase;margin-bottom:10px;}
-.hero h1{color:#fff;font-size:34px;max-width:640px;line-height:1.3;margin-bottom:14px;}
-.hero p.lead{color:rgba(255,255,255,0.78);max-width:560px;font-size:15.5px;}
+.hero-eyebrow{font-family:var(--font-body);font-size:14px;letter-spacing:0.16em;color:#ffee00;text-transform:uppercase;margin-bottom:10px;font-weight:900}
+.hero h1{color:#fff;font-size:84;line-height:1.2;margin-bottom:16px;margin-top:15px}
+.hero p.lead{color:#e4c077;border-color:rgb(255 255 255 / 50%);border-radius:10px;font-weight: 700;;max-width:560px;font-size:15.5px;}
 .hero-actions{display:flex;gap:12px;margin-top:22px;flex-wrap:wrap;}
 .hero-stats{display:flex;gap:28px;margin-top:34px;flex-wrap:wrap;}
-.hero-stat-num{font-family:var(--font-display);font-size:28px;color:#fff;line-height:1;}
-.hero-stat-label{font-family:var(--font-body);font-size:11.5px;color:rgba(255,255,255,0.6);letter-spacing:0.06em;text-transform:uppercase;margin-top:4px;}
+.hero-stat-num{font-family:var(--font-display);font-size:28px;color:#cd0000;line-height:0.8}
+.hero-stat-label{font-family:var(--font-body);font-size:11.5px;color:rgba(255,255,255);letter-spacing:0.06em;text-transform:uppercase;margin-top:4px;font-weight:900}
 
 /* ===== Section headers ===== */
 .section-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin:36px 0 16px;flex-wrap:wrap;}
@@ -312,7 +313,7 @@ button.sound-badge.playing{background:var(--ocean-mid);animation:blipPulse 1s ea
   <main id="view-root"></main>
 
   <footer class="app-footer">
-    <div id="footer-text">© <strong id="footer-org">Trung tâm Đào tạo Thuyền viên và Phát triển Công nghệ biển</strong> — Ứng dụng lưu hành nội bộ</div>
+    <div id="footer-text">©VĐT - <strong id="footer-org">Trung tâm Đào tạo Thuyền viên và Phát triển Công nghệ biển</strong> — Tài liệu lưu hành nội bộ</div>
   </footer>
 </div>
 
@@ -584,8 +585,7 @@ const DEFAULT_QUIZ = [
 ];
 
 const DEFAULT_SETTINGS = {
-  appTitle:"Ôn tập lý thuyết Luật và các quy định liên quan",
-  appSubtitle:"và các câu hỏi ôn tập",
+  appTitle:"Ôn tập lý thuyết COLREG 72",
   orgName:"Trung tâm Đào tạo Thuyền viên và Phát triển Công nghệ biển",
   heroEyebrow:"COLREG 72 · QUY TẮC QUỐC TẾ PHÒNG NGỪA ĐÂM VA TÀU THUYỀN TRÊN BIỂN",
   heroLead:"Trực quan hoá các tình huống tránh va theo Bảng quy tắc quốc tế phòng ngừa đâm va tàu thuyền trên biển năm 1972 (COLREG 72)",
@@ -1121,8 +1121,9 @@ function viewHomeHTML(){
       <h1>${escapeHtml(s.appTitle)}<br>${escapeHtml(s.appSubtitle)}</h1>
       <p class="lead">${escapeHtml(s.heroLead)}</p>
       <div class="hero-actions">
-        <button class="btn btn-primary" data-goto="scenarios">Vào phần mô phỏng</button>
-        <button class="btn btn-outline" data-goto="rules">Xem quy tắc</button>
+        <button class="btn btn-primary" data-goto="scenarios">Mô phỏng tình huống</button>
+        <button class="btn btn-outline" data-goto="rules">Xem Bộ quy tắc</button>
+	<button class="btn hero-quiz-btn" data-goto="quiz">Ôn tập</button>
       </div>
       <div class="hero-stats">
         <div><div class="hero-stat-num">${DATA.rules.length}</div><div class="hero-stat-label">Điều quy tắc</div></div>
@@ -1130,17 +1131,6 @@ function viewHomeHTML(){
         <div><div class="hero-stat-num">${DATA.settings.quizRandomCount||20}</div><div class="hero-stat-label">Câu hỏi mỗi lượt ôn tập</div></div>
       </div>
     </div>
-
-    <div class="section-head">
-      <div><span class="section-eyebrow">Bắt đầu</span><h2>Chọn nội dung để xem</h2></div>
-      ${isLoggedIn?`<button class="btn btn-brass btn-sm" data-toggle-settings-edit>${iconSpan('edit')} Chỉnh giao diện</button>`:''}
-    </div>
-    <div class="grid-cards">
-      <div class="card home-nav-card" data-goto="rules"><div class="icon-wrap" style="color:var(--ocean-mid)">${iconSvg('book')}</div><h3>Quy tắc COLREG 72</h3><p>Tra cứu nội dung diễn giải từng điều theo Phần A–E.</p></div>
-      <div class="card home-nav-card" data-goto="scenarios"><div class="icon-wrap" style="color:var(--ocean-mid)">${iconSvg('radar')}</div><h3>Mô phỏng tình huống</h3><p>Sơ đồ ra-đa trực quan cho từng tình huống tránh va thường gặp.</p></div>
-      <div class="card home-nav-card" data-goto="quiz"><div class="icon-wrap" style="color:var(--ocean-mid)">${iconSvg('quiz')}</div><h3>Câu hỏi ôn tập</h3><p>${DATA.settings.quizRandomCount||20} câu hỏi trắc nghiệm ngẫu nhiên mỗi lượt để tự kiểm tra kiến thức.</p></div>
-    </div>
-    ${settingsEditPanelHTML()}
   </section>`;
 }
 
