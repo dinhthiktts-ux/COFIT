@@ -43,9 +43,7 @@ body{
   font-family:var(--font-body);
   color:var(--ink);
   background:
-    radial-gradient(1200px 600px at 100% -10%, var(--ocean-pale) 0%, transparent 60%),
-    radial-gradient(900px 500px at -10% 20%, var(--ocean-light) 0%, transparent 55%),
-    var(--foam);
+radial-gradient(1200px 600px at 100% -10%, #6bb6f3 30%, transparent 50%), radial-gradient(900px 500px at -10% 20%, #44c5f3 0%, transparent 55%), var(--foam);
   min-height:100vh;
   -webkit-font-smoothing:antialiased;
 }
@@ -70,7 +68,7 @@ a{color:var(--ocean-mid);}
 .brand{display:flex;align-items:center;gap:12px;flex:0 0 auto;}
 .brand-emblem{width:40px;height:40px;flex:0 0 auto;}
 .brand-text{display:flex;flex-direction:column;line-height:1.5;}
-.brand-org{font-family:var(--font-display);font-size:11px;letter-spacing:0.14em;color:#ffab00;text-transform:uppercase;}
+.brand-org{font-family:var(--font-display);font-size:11px;letter-spacing:0.14em;color:#ffab00;text-transform:uppercase;font-weight:800}
 .brand-app{font-family:var(--font-display);font-size:15px;letter-spacing:0.03em;color:#fff;text-transform:uppercase;font-weight:700;}
 .main-nav{display:flex;gap:4px;margin-left:8px;flex:1 1 auto;flex-wrap:wrap;}
 .nav-btn{
@@ -94,6 +92,10 @@ a{color:var(--ocean-mid);}
 .btn-primary:hover{background:#3f8fbd;}
 .btn-outline{background:#ffffff;border-color:rgba(255,255,255,0.5);color:#032e48;}
 .btn-outline:hover{background:rgba(255,255,255,0.12);}
+
+.hero-quiz-btn{background:#ffffff;border-color:rgba(255,255,255,0.5);color:#032e48;}
+.hero-quiz-btn:hover{background:rgba(255,255,255,0.12);}
+
 .btn-brass{background:var(--brass);color:#fff;}
 .btn-brass:hover{background:#b5893c;}
 .btn-danger{background:var(--giveway);color:#fff;}
@@ -135,12 +137,12 @@ main{flex:1 1 auto;padding:28px 22px 60px;max-width:1180px;margin:0 auto;width:1
 .radar-blip{animation:blipPulse 1.6s ease-in-out infinite;transform-origin:center;}
 @keyframes blipPulse{0%,100%{opacity:1;}50%{opacity:0.35;}}
 @media (prefers-reduced-motion: reduce){.radar-blip{animation:none;}}
-.hero-eyebrow{font-family:var(--font-body);font-size:14px;letter-spacing:0.16em;color:#ffee00;text-transform:uppercase;margin-bottom:10px;font-weight:900}
-.hero h1{color:#fff;font-size:84;line-height:1.2;margin-bottom:16px;margin-top:15px}
+.hero-eyebrow{font-family:var(--font-body);font-size:20px;letter-spacing:0.16em;color:#ffee00;text-transform:uppercase;margin-bottom:10px;font-weight:900}
+.hero h1{color:transparent;font-size:1px;line-height:1.2;margin-bottom:16px;margin-top:15px}
 .hero p.lead{color:#e4c077;border-color:rgb(255 255 255 / 50%);border-radius:10px;font-weight: 700;;max-width:560px;font-size:15.5px;}
 .hero-actions{display:flex;gap:12px;margin-top:22px;flex-wrap:wrap;}
 .hero-stats{display:flex;gap:28px;margin-top:34px;flex-wrap:wrap;}
-.hero-stat-num{font-family:var(--font-display);font-size:28px;color:#cd0000;line-height:0.8}
+.hero-stat-num{font-family:var(--font-display);font-size:28px;color:#cd0000;line-height:0.8;font-weight:600}
 .hero-stat-label{font-family:var(--font-body);font-size:11.5px;color:rgba(255,255,255);letter-spacing:0.06em;text-transform:uppercase;margin-top:4px;font-weight:900}
 
 /* ===== Section headers ===== */
@@ -271,7 +273,7 @@ button.sound-badge.playing{background:var(--ocean-mid);animation:blipPulse 1s ea
 .app-footer strong{color:#fff;}
 
 /* ===== Toast ===== */
-#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--navy);color:#fff;padding:12px 22px;border-radius:10px;box-shadow:var(--shadow-lg);font-size:13.5px;font-weight:600;z-index:200;opacity:0;transition:opacity .2s ease, transform .2s ease;pointer-events:none;}
+#toast{position:fixed;bottom:64px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--navy);color:#fff;padding:12px 22px;border-radius:10px;box-shadow:var(--shadow-lg);font-size:13.5px;font-weight:600;z-index:200;opacity:0;transition:opacity .2s ease, transform .3s ease;pointer-events:none;}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
 /* ===== Misc ===== */
@@ -313,7 +315,7 @@ button.sound-badge.playing{background:var(--ocean-mid);animation:blipPulse 1s ea
   <main id="view-root"></main>
 
   <footer class="app-footer">
-    <div id="footer-text">©VĐT - <strong id="footer-org">Trung tâm Đào tạo Thuyền viên và Phát triển Công nghệ biển</strong> — Tài liệu lưu hành nội bộ</div>
+    <div id="footer-text">©<strong id="footer-org">Trung tâm Đào tạo Thuyền viên và Phát triển Công nghệ biển</strong> — Tài liệu lưu hành nội bộ</div>
   </footer>
 </div>
 
@@ -585,7 +587,7 @@ const DEFAULT_QUIZ = [
 ];
 
 const DEFAULT_SETTINGS = {
-  appTitle:"Ôn tập lý thuyết COLREG 72",
+  appTitle:"Quy tắc điều động, tín hiệu và an toàn",
   orgName:"Trung tâm Đào tạo Thuyền viên và Phát triển Công nghệ biển",
   heroEyebrow:"COLREG 72 · QUY TẮC QUỐC TẾ PHÒNG NGỪA ĐÂM VA TÀU THUYỀN TRÊN BIỂN",
   heroLead:"Trực quan hoá các tình huống tránh va theo Bảng quy tắc quốc tế phòng ngừa đâm va tàu thuyền trên biển năm 1972 (COLREG 72)",
@@ -598,8 +600,8 @@ const DEFAULT_SETTINGS = {
   quizSheetProxyUrl:"https://script.google.com/macros/s/AKfycbyQYowBTZorSXDCufiSvOSxZYb33_QDKJiTGzF6RGlDjub81NqIHL-wWiEtbADVBWIN5g/exec",
   quizRandomCount:20,
   bannerImages:[
-    {url:"https://trungtamdttv.edu.vn/Uploads/0/Sliders/7/img-2---web-240725212245.png", caption:""},
-    {url:"https://trungtamdttv.edu.vn/Uploads/0/Sliders/1/img_8944---web-240725211527.png", caption:""}
+    {url:"-https://trungtamdttv.edu.vn/Uploads/0/Sliders/7/img-2---web-240725212245.png", caption:"http://trungtamdttv.edu.vn/"},
+    {url:"-https://trungtamdttv.edu.vn/Uploadôns/0/Sliders/1/img_8944---web-240725211527.png", caption:"http://trungtamdttv.edu.vn/"}
   ]
 };
 
@@ -2288,7 +2290,7 @@ async function init(){
   setActiveNav();
   renderView();
   if (!storageAvailable){
-    showToast('Lưu ý: chưa kết nối được bộ nhớ lưu trữ — thay đổi chỉ tồn tại trong phiên làm việc này.');
+    showToast('Lưu ý: Tài liệu sử dụng nội bộ. Miễn trừ trách nhiệm liên quan đến bản quyển và sử dụng phi thương mại | Gmail: dinhthiktts@gmail.com');
   }
 }
 init();
