@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 <title>Mô phỏng tránh va trên biển và các câu hỏi ôn tập</title>
+<link rel="icon" type="image/png" href="https://trungtamdttv.edu.vn/uploads/0/DinhThi/LOGO/logo%20Cty%20(Final)%20.PNG.png">
 <style>
 :root{
   --ocean-light:#BFE3F0;
@@ -590,7 +591,7 @@ const DEFAULT_SETTINGS = {
   heroLead:"Trực quan hoá các tình huống tránh va theo Bảng quy tắc quốc tế phòng ngừa đâm va tàu thuyền trên biển năm 1972 (COLREG 72)",
   footerNote:"Tài liệu lưu hành nội bộ",
   emblem:"anchor",
-  logoImageUrl:"",
+  logoImageUrl:"https://trungtamdttv.edu.vn/uploads/0/DinhThi/LOGO/logo%20Cty%20(Final)%20.PNG.png",
   resultsWebhookUrl:"https://script.google.com/macros/s/AKfycbx1q3fYpe_7qyLpZSbTMiQwCd1ecNSXDC3IjkM0f_X6nQiYgJjPs-vO3up2fQy_a7lZYw/exec",
   examDurationMinutes:10,
   quizSheetUrl:"https://docs.google.com/spreadsheets/d/1N327z-MzawM8jiIJ_aBwe3uXwml6N9AmyriitH-YOy8/edit?usp=sharing",
@@ -750,6 +751,7 @@ async function loadAppData(){
       if (!mergedSettings.bannerImages || !mergedSettings.bannerImages.length){ mergedSettings.bannerImages = fallbackData.settings.bannerImages; }
       if (!mergedSettings.quizSheetUrl){ mergedSettings.quizSheetUrl = fallbackData.settings.quizSheetUrl; }
       if (!mergedSettings.quizSheetProxyUrl){ mergedSettings.quizSheetProxyUrl = fallbackData.settings.quizSheetProxyUrl; }
+      if (!mergedSettings.logoImageUrl){ mergedSettings.logoImageUrl = fallbackData.settings.logoImageUrl; }
       if (!mergedSettings.quizRandomCount){ mergedSettings.quizRandomCount = fallbackData.settings.quizRandomCount; }
       return {
         rules: parsed.rules && parsed.rules.length ? parsed.rules : fallbackData.rules,
@@ -815,7 +817,7 @@ const EMBLEMS = {
 function buildEmblemMarkup(){
   const s = DATA.settings;
   if (s.logoImageUrl && s.logoImageUrl.trim()){
-    return `<image href="${escapeAttr(s.logoImageUrl.trim())}" x="0" y="0" width="48" height="48" preserveAspectRatio="xMidYMid meet"/>`;
+    return `<image href="${escapeAttr(s.logoImageUrl.trim())}" x="0" y="0" width="48" height="48" preserveAspectRatio="xMidYMid meet" onerror="this.outerHTML=EMBLEMS.anchor;"/>`;
   }
   return EMBLEMS[s.emblem] || EMBLEMS.anchor;
 }
@@ -1726,6 +1728,13 @@ function renderBrand(){
   document.getElementById('org-name-display').textContent = DATA.settings.orgName;
   document.querySelector('.brand-app').textContent = DATA.settings.appTitle;
   document.getElementById('footer-text').innerHTML = `© <strong>${escapeHtml(DATA.settings.orgName)}</strong> — ${escapeHtml(DATA.settings.footerNote)}`;
+  const faviconUrl = (DATA.settings.logoImageUrl||'').trim();
+  if (faviconUrl){
+    let iconLink = document.querySelector('link[rel="icon"]');
+    if (!iconLink){ iconLink = document.createElement('link'); iconLink.rel = 'icon'; document.head.appendChild(iconLink); }
+    iconLink.type = 'image/png';
+    iconLink.href = faviconUrl;
+  }
 }
 function renderView(){
   const root = document.getElementById('view-root');
