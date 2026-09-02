@@ -262,8 +262,6 @@ const DEFAULT_SETTINGS = {
   ]
 };
 
-const AUTH_USER = "TTDT";
-const AUTH_PASS = "demo";
 
 /* =========================================================
    LUẬT THUỶ SẢN — Danh mục văn bản (Luật, Nghị định, Thông tư)
@@ -722,7 +720,6 @@ async function persistAppData(){
    TRẠNG THÁI ỨNG DỤNG
 ========================================================= */
 let DATA = null;
-let isLoggedIn = false;
 let currentView = (typeof INITIAL_VIEW !== 'undefined' && INITIAL_VIEW) ? INITIAL_VIEW : "home";
 let currentPart = "A";
 let currentScenarioId = null;
@@ -1141,7 +1138,7 @@ function ruleCardHTML(r){
   const editing = editingRuleId===r.id;
   return `<div class="card rule-item">
     <span class="rule-num">${escapeHtml(r.num)}</span>
-    ${isLoggedIn?`<button class="btn btn-ghost btn-sm" style="float:right" data-edit-rule="${r.id}">${iconSpan('edit')} ${editing?'Đóng':'Sửa'}</button>`:''}
+    <button class="btn btn-ghost btn-sm" style="float:right" data-edit-rule="${r.id}">${iconSpan('edit')} ${editing?'Đóng':'Sửa'}</button>
     <h3>${escapeHtml(r.title)}</h3>
     <div class="rule-body">${escapeHtml(r.body)}</div>
     ${editing?ruleEditFormHTML(r):''}
@@ -1186,7 +1183,7 @@ function viewScenariosListHTML(){
   return `<section class="view">
     <div class="section-head">
       <div><span class="section-eyebrow">Thực hành</span><h2>Mô phỏng tình huống tránh va</h2></div>
-      ${isLoggedIn?`<button class="btn btn-brass btn-sm" data-add-scenario>${iconSpan('plus')} Thêm tình huống</button>`:''}
+      <button class="btn btn-brass btn-sm" data-add-scenario>${iconSpan('plus')} Thêm tình huống</button>
     </div>
     <div class="grid-cards">
       ${DATA.scenarios.map(sc=>scenarioCardHTML(sc)).join('') || `<div class="empty-note">Chưa có tình huống nào.</div>`}
@@ -1277,7 +1274,7 @@ function viewScenarioDetailHTML(id){
     <div class="card scenario-detail">
       <div class="scenario-detail-head">
         <div><span class="rule-ref">${escapeHtml(sc.ruleRef)}</span><h2 style="margin-top:4px;">${escapeHtml(sc.title)}</h2></div>
-        ${isLoggedIn?`<button class="btn btn-brass btn-sm" data-edit-scenario="${sc.id}">${iconSpan('edit')} ${scenarioEditOpen?'Đóng chỉnh sửa':'Chỉnh sửa tình huống'}</button>`:''}
+        <button class="btn btn-brass btn-sm" data-edit-scenario="${sc.id}">${iconSpan('edit')} ${scenarioEditOpen?'Đóng chỉnh sửa':'Chỉnh sửa tình huống'}</button>
       </div>
       <div class="detail-grid">
         <div>
@@ -1304,7 +1301,7 @@ function viewScenarioDetailHTML(id){
           }).join('') : `<p style="font-style:italic;">Chưa có tín hiệu còi được thiết lập cho tình huống này.</p>`}</div>
         </div>
       </div>
-      ${(scenarioEditOpen && isLoggedIn) ? scenarioEditFormHTML(sc) : ''}
+      ${scenarioEditOpen ? scenarioEditFormHTML(sc) : ''}
     </div>
   </section>`;
 }
@@ -1561,7 +1558,7 @@ function viewMaritimeContentHTML(){
   </section>`;
 }
 function viewQuizTakeHTML(){
-  const manageBtn = isLoggedIn?`<button class="btn btn-ghost btn-sm" data-toggle-quiz-manage>${iconSpan('edit')} Quản lý câu hỏi</button>`:'';
+  const manageBtn = `<button class="btn btn-ghost btn-sm" data-toggle-quiz-manage>${iconSpan('edit')} Quản lý câu hỏi</button>`;
   const header = `<div class="section-head"><div><span class="section-eyebrow">Tự kiểm tra</span><h2>Câu hỏi ôn tập</h2></div>${manageBtn}</div>`;
   if (!quizTaker) return `<section class="view">${header}${quizTakerFormInnerHTML()}</section>`;
   if (quizLoadingQuestions) return `<section class="view">${header}${quizLoadingInnerHTML()}</section>`;
@@ -1807,7 +1804,7 @@ function viewQuizManageHTML(){
   </section>`;
 }
 function viewQuizHTML(){
-  return (quizManageMode && isLoggedIn) ? viewQuizManageHTML() : viewQuizTakeHTML();
+  return quizManageMode ? viewQuizManageHTML() : viewQuizTakeHTML();
 }
 
 /* =========================================================
@@ -1867,39 +1864,13 @@ function switchView(view){
 /* =========================================================
    ĐĂNG NHẬP / ĐĂNG XUẤT
 ========================================================= */
+// Chế độ chỉnh sửa được bật mặc định. Không còn đăng nhập frontend;
+// mọi thay đổi được lưu vào storage của ứng dụng.
 function updateAuthUI(){
   const statusEl = document.getElementById('login-status');
-  statusEl.textContent = isLoggedIn ? `Chế độ chỉnh sửa (${AUTH_USER})` : 'Chế độ Khách';
-  statusEl.classList.toggle('on', isLoggedIn);
-  document.getElementById('login-toggle-btn').textContent = isLoggedIn ? 'Đăng xuất' : 'Đăng nhập';
-}
-function openLoginModal(){
-  document.getElementById('login-modal').classList.remove('hidden');
-  document.getElementById('login-user').value = '';
-  document.getElementById('login-pass').value = '';
-  document.getElementById('login-error').textContent = '';
-  setTimeout(()=>document.getElementById('login-user').focus(), 30);
-}
-function closeLoginModal(){ document.getElementById('login-modal').classList.add('hidden'); }
-function attemptLogin(){
-  const u = document.getElementById('login-user').value.trim();
-  const p = document.getElementById('login-pass').value;
-  if (u===AUTH_USER && p===AUTH_PASS){
-    isLoggedIn = true;
-    closeLoginModal();
-    updateAuthUI();
-    renderView();
-    showToast('Đăng nhập thành công — chế độ chỉnh sửa đã bật.');
-  } else {
-    document.getElementById('login-error').textContent = 'Sai tài khoản hoặc mật khẩu.';
-  }
-}
-function doLogout(){
-  isLoggedIn = false;
-  settingsEditOpen=false; scenarioEditOpen=false; editingRuleId=null; quizManageMode=false; editingQuizId=null;
-  updateAuthUI();
-  renderView();
-  showToast('Đã đăng xuất khỏi chế độ chỉnh sửa.');
+  if (statusEl){ statusEl.textContent = 'Chế độ chỉnh sửa'; statusEl.classList.add('on'); }
+  const toggle = document.getElementById('login-toggle-btn');
+  if (toggle) toggle.style.display = 'none';
 }
 
 /* =========================================================
@@ -2397,12 +2368,6 @@ function wireGlobalEvents(){
       document.querySelectorAll('.nav-dropdown.open').forEach(d=>d.classList.remove('open'));
     }
   });
-  document.getElementById('login-toggle-btn').addEventListener('click', ()=>{ isLoggedIn ? doLogout() : openLoginModal(); });
-  document.getElementById('login-modal-close').addEventListener('click', closeLoginModal);
-  document.getElementById('login-submit-btn').addEventListener('click', attemptLogin);
-  document.getElementById('login-pass').addEventListener('keydown', e=>{ if (e.key==='Enter') attemptLogin(); });
-  document.getElementById('login-user').addEventListener('keydown', e=>{ if (e.key==='Enter') attemptLogin(); });
-  document.getElementById('login-modal').addEventListener('click', e=>{ if (e.target.id==='login-modal') closeLoginModal(); });
   document.addEventListener('keydown', e=>{ if (e.key==='Escape'){ closeLoginModal(); document.querySelectorAll('.nav-dropdown.open').forEach(d=>d.classList.remove('open')); } });
   const audioPlayer = document.getElementById('global-audio-player');
   audioPlayer.addEventListener('ended', ()=>{
