@@ -720,6 +720,8 @@ async function persistAppData(){
    TRẠNG THÁI ỨNG DỤNG
 ========================================================= */
 let DATA = null;
+// Ứng dụng công khai ở chế độ chỉ đọc; dữ liệu phải được sửa trong mã nguồn HTML/JS.
+const isLoggedIn = false;
 let currentView = (typeof INITIAL_VIEW !== 'undefined' && INITIAL_VIEW) ? INITIAL_VIEW : "home";
 let currentPart = "A";
 let currentScenarioId = null;
@@ -1138,7 +1140,7 @@ function ruleCardHTML(r){
   const editing = editingRuleId===r.id;
   return `<div class="card rule-item">
     <span class="rule-num">${escapeHtml(r.num)}</span>
-    <button class="btn btn-ghost btn-sm" style="float:right" data-edit-rule="${r.id}">${iconSpan('edit')} ${editing?'Đóng':'Sửa'}</button>
+    ${isLoggedIn?`<button class="btn btn-ghost btn-sm" style="float:right" data-edit-rule="${r.id}">${iconSpan('edit')} ${editing?'Đóng':'Sửa'}</button>`:''}
     <h3>${escapeHtml(r.title)}</h3>
     <div class="rule-body">${escapeHtml(r.body)}</div>
     ${editing?ruleEditFormHTML(r):''}
@@ -1183,7 +1185,7 @@ function viewScenariosListHTML(){
   return `<section class="view">
     <div class="section-head">
       <div><span class="section-eyebrow">Thực hành</span><h2>Mô phỏng tình huống tránh va</h2></div>
-      <button class="btn btn-brass btn-sm" data-add-scenario>${iconSpan('plus')} Thêm tình huống</button>
+      ${isLoggedIn?`<button class="btn btn-brass btn-sm" data-add-scenario>${iconSpan('plus')} Thêm tình huống</button>`:''}
     </div>
     <div class="grid-cards">
       ${DATA.scenarios.map(sc=>scenarioCardHTML(sc)).join('') || `<div class="empty-note">Chưa có tình huống nào.</div>`}
@@ -1274,7 +1276,7 @@ function viewScenarioDetailHTML(id){
     <div class="card scenario-detail">
       <div class="scenario-detail-head">
         <div><span class="rule-ref">${escapeHtml(sc.ruleRef)}</span><h2 style="margin-top:4px;">${escapeHtml(sc.title)}</h2></div>
-        <button class="btn btn-brass btn-sm" data-edit-scenario="${sc.id}">${iconSpan('edit')} ${scenarioEditOpen?'Đóng chỉnh sửa':'Chỉnh sửa tình huống'}</button>
+        ${isLoggedIn?`<button class="btn btn-brass btn-sm" data-edit-scenario="${sc.id}">${iconSpan('edit')} ${scenarioEditOpen?'Đóng chỉnh sửa':'Chỉnh sửa tình huống'}</button>`:''}
       </div>
       <div class="detail-grid">
         <div>
@@ -1301,7 +1303,7 @@ function viewScenarioDetailHTML(id){
           }).join('') : `<p style="font-style:italic;">Chưa có tín hiệu còi được thiết lập cho tình huống này.</p>`}</div>
         </div>
       </div>
-      ${scenarioEditOpen ? scenarioEditFormHTML(sc) : ''}
+      ${(scenarioEditOpen && isLoggedIn) ? scenarioEditFormHTML(sc) : ''}
     </div>
   </section>`;
 }
@@ -1558,7 +1560,7 @@ function viewMaritimeContentHTML(){
   </section>`;
 }
 function viewQuizTakeHTML(){
-  const manageBtn = `<button class="btn btn-ghost btn-sm" data-toggle-quiz-manage>${iconSpan('edit')} Quản lý câu hỏi</button>`;
+  const manageBtn = isLoggedIn?`<button class="btn btn-ghost btn-sm" data-toggle-quiz-manage>${iconSpan('edit')} Quản lý câu hỏi</button>`:'';
   const header = `<div class="section-head"><div><span class="section-eyebrow">Tự kiểm tra</span><h2>Câu hỏi ôn tập</h2></div>${manageBtn}</div>`;
   if (!quizTaker) return `<section class="view">${header}${quizTakerFormInnerHTML()}</section>`;
   if (quizLoadingQuestions) return `<section class="view">${header}${quizLoadingInnerHTML()}</section>`;
@@ -1804,7 +1806,7 @@ function viewQuizManageHTML(){
   </section>`;
 }
 function viewQuizHTML(){
-  return quizManageMode ? viewQuizManageHTML() : viewQuizTakeHTML();
+  return (quizManageMode && isLoggedIn) ? viewQuizManageHTML() : viewQuizTakeHTML();
 }
 
 /* =========================================================
@@ -1864,11 +1866,10 @@ function switchView(view){
 /* =========================================================
    ĐĂNG NHẬP / ĐĂNG XUẤT
 ========================================================= */
-// Chế độ chỉnh sửa được bật mặc định. Không còn đăng nhập frontend;
-// mọi thay đổi được lưu vào storage của ứng dụng.
+// Ứng dụng công khai ở chế độ chỉ đọc.
 function updateAuthUI(){
   const statusEl = document.getElementById('login-status');
-  if (statusEl){ statusEl.textContent = 'Chế độ chỉnh sửa'; statusEl.classList.add('on'); }
+  if (statusEl){ statusEl.textContent = 'Chế độ chỉ đọc'; statusEl.classList.remove('on'); }
   const toggle = document.getElementById('login-toggle-btn');
   if (toggle) toggle.style.display = 'none';
 }
@@ -2193,6 +2194,8 @@ async function clearResultsHandler(){
    UỶ QUYỀN SỰ KIỆN (event delegation) TRONG #view-root
 ========================================================= */
 function onViewRootClick(e){
+  // Không cho phép thay đổi dữ liệu qua giao diện công khai.
+  if (!isLoggedIn && e.target.closest('[data-toggle-settings-edit],[data-save-settings],[data-cancel-settings],[data-reset-defaults],[data-add-banner-image],[data-remove-banner-image],[data-edit-rule],[data-save-rule],[data-cancel-rule],[data-add-scenario],[data-edit-scenario],[data-save-scenario],[data-cancel-scenario],[data-delete-scenario],[data-add-signal],[data-remove-signal],[data-save-quiz],[data-delete-quiz],[data-edit-quiz],[data-toggle-quiz-manage],[data-add-quiz],[data-save-webhook],[data-import-file],[data-import-sheet],[data-commit-import],[data-cancel-import]')) return;
   let el;
   if ((el = e.target.closest('[data-goto]'))){ switchView(el.dataset.goto); return; }
   if ((el = e.target.closest('[data-open-scenario]'))){ currentScenarioId = el.dataset.openScenario; scenarioEditOpen=false; renderView(); window.scrollTo({top:0,behavior:'smooth'}); return; }
@@ -2301,7 +2304,7 @@ function onViewRootClick(e){
     renderView();
     return;
   }
-  if (e.target.closest('[data-toggle-quiz-manage]')){ quizManageMode = !quizManageMode; editingQuizId=null; renderView(); return; }
+  if (e.target.closest('[data-toggle-quiz-manage]')){ return; }
   if (e.target.closest('[data-add-quiz]')){ addNewQuiz(); return; }
   if (e.target.closest('[data-toggle-webhook-panel]')){ webhookPanelOpen = !webhookPanelOpen; renderView(); return; }
   if (e.target.closest('[data-save-webhook]')){ saveWebhookUrl(); return; }
