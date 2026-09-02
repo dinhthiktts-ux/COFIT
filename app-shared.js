@@ -2353,7 +2353,20 @@ function playSignalAudio(url, btnEl){
 
 function wireGlobalEvents(){
   document.getElementById('view-root').addEventListener('click', onViewRootClick);
-  document.getElementById('main-nav').addEventListener('click', e=>{
+  const mainNav = document.getElementById('main-nav');
+  // Hiển thị menu con khi rê chuột vào mục menu cha. Vẫn giữ click để hỗ trợ thiết bị cảm ứng.
+  if (mainNav){
+    mainNav.querySelectorAll('.nav-dropdown').forEach(dropdown=>{
+      dropdown.addEventListener('pointerenter', ()=>{
+        document.querySelectorAll('.nav-dropdown.open').forEach(d=>{ if (d!==dropdown) d.classList.remove('open'); });
+        dropdown.classList.add('open');
+      });
+      dropdown.addEventListener('pointerleave', ()=>{
+        dropdown.classList.remove('open');
+      });
+    });
+  }
+  mainNav.addEventListener('click', e=>{
     const toggleBtn = e.target.closest('[data-nav-toggle]');
     if (toggleBtn){
       const dropdown = toggleBtn.closest('.nav-dropdown');
