@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<title>Mô phỏng tránh va trên biển và các câu hỏi ôn tập</title>
+<title>Trung tâm Đào tạo Thuyền viên và Phát triển Công nghệ biển</title>
 <link rel="icon" type="image/png" href="https://trungtamdttv.edu.vn/uploads/0/DinhThi/LOGO/logo%20Cty%20(Final)%20.PNG.png">
 <style>
 :root{
@@ -78,6 +78,27 @@ a{color:var(--ocean-mid);}
 }
 .nav-btn:hover{background:rgba(255,255,255,0.10);color:#fff;}
 .nav-btn.active{background:var(--ocean-mid);color:#fff;}
+.nav-dropdown{position:relative;}
+.nav-btn-parent{display:inline-flex;align-items:center;gap:5px;}
+.nav-caret{display:inline-block;font-size:10px;transition:transform .15s ease;}
+.nav-dropdown.open .nav-caret{transform:rotate(180deg);}
+.nav-dropdown-menu{
+  position:absolute;top:calc(100% + 6px);left:0;min-width:170px;
+  background:var(--navy);border:1px solid rgba(255,255,255,0.12);
+  border-radius:var(--radius-sm);box-shadow:var(--shadow-md);
+  padding:6px;display:flex;flex-direction:column;gap:2px;
+  opacity:0;visibility:hidden;transform:translateY(-4px);
+  transition:opacity .15s ease, transform .15s ease, visibility .15s ease;
+  z-index:50;
+}
+.nav-dropdown.open .nav-dropdown-menu,
+.nav-dropdown:hover .nav-dropdown-menu{opacity:1;visibility:visible;transform:translateY(0);}
+.nav-dropdown-item{
+  display:block;width:100%;text-align:left;border:none;background:transparent;
+  color:rgba(255,255,255,0.78);padding:8px 12px;border-radius:8px;font-size:13.5px;font-weight:600;
+}
+.nav-dropdown-item:hover{background:rgba(255,255,255,0.10);color:#fff;}
+.nav-dropdown-item.active{background:var(--ocean-mid);color:#fff;}
 .auth-area{display:flex;align-items:center;gap:10px;flex:0 0 auto;}
 .login-status{font-size:12px;color:rgba(255,255,255,0.65);font-family:var(--font-body);letter-spacing:0.03em;}
 .login-status.on{color:var(--brass-soft);}
@@ -143,12 +164,12 @@ main{flex:1 1 auto;padding:28px 22px 60px;max-width:1180px;margin:0 auto;width:1
 .hero-actions{display:flex;gap:12px;margin-top:22px;flex-wrap:wrap;}
 .hero-stats{display:flex;gap:28px;margin-top:34px;flex-wrap:wrap;}
 .hero-stat-num{font-family:var(--font-display);font-size:28px;color:#cd0000;line-height:0.8;font-weight:600}
-.hero-stat-label{font-family:var(--font-body);font-size:11.5px;color:rgba(255,255,255);letter-spacing:0.06em;text-transform:uppercase;margin-top:4px;font-weight:900}
+.hero-stat-label{font-family:var(--font-body);font-size:11.5px;color:rgba(255,255,255);letter-spacing:0.06em;text-transform:uppercase;margin-top:4px;font-weight:600}
 
 /* ===== Section headers ===== */
 .section-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin:36px 0 16px;flex-wrap:wrap;}
 .section-head h2{font-size:20px;}
-.section-eyebrow{font-family:var(--font-body);font-size:11.5px;color:var(--ocean-mid);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:4px;display:block;}
+.section-eyebrow{font-family:var(--font-body);font-size:15px;color:var(--ocean-mid);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:4px;display:block;font-weight:1000}
 
 /* ===== Cards ===== */
 .card{
@@ -165,6 +186,40 @@ main{flex:1 1 auto;padding:28px 22px 60px;max-width:1180px;margin:0 auto;width:1
 .home-nav-card .icon-wrap svg{width:24px;height:24px;}
 .home-nav-card h3{font-size:16px;margin-bottom:2px;}
 .home-nav-card p{font-size:13.5px;margin:0;}
+
+/* ===== Trang chủ — giới thiệu tổng quan ===== */
+.home-intro{
+  background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-lg);
+  padding:36px 38px;margin-bottom:8px;box-shadow:var(--shadow-sm);position:relative;overflow:hidden;
+}
+.home-intro::before{
+  content:'';position:absolute;right:-70px;top:-70px;width:240px;height:240px;border-radius:50%;
+  background:radial-gradient(circle, var(--ocean-pale) 0%, transparent 70%);pointer-events:none;
+}
+.home-intro-eyebrow{font-family:var(--font-body);font-size:11.5px;color:var(--ocean-mid);letter-spacing:0.14em;text-transform:uppercase;font-weight:800;margin-bottom:8px;display:block;}
+.home-intro h1{font-size:25px;line-height:1.32;margin-bottom:12px;max-width:760px;position:relative;}
+.home-intro p.lead{font-size:15px;max-width:900px;color:var(--ink-soft);margin-bottom:0;position:relative;}
+.home-intro-stats{display:flex;gap:36px;margin-top:24px;flex-wrap:wrap;position:relative;}
+.home-intro-stat-num{font-family:var(--font-display);font-size:26px;color:var(--navy);line-height:0.9;}
+.home-intro-stat-label{font-size:11px;color:var(--ink-soft);letter-spacing:0.05em;text-transform:uppercase;margin-top:5px;font-weight:600;}
+
+.home-modules-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;}
+.module-card{
+  padding:26px;cursor:pointer;display:flex;flex-direction:column;gap:12px;position:relative;
+  transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+.module-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:var(--ocean-mid);}
+.module-card .icon-wrap{width:48px;height:48px;border-radius:14px;background:var(--ocean-pale);display:flex;align-items:center;justify-content:center;color:var(--ocean-mid);}
+.module-card .icon-wrap svg{width:26px;height:26px;}
+.module-card h3{font-size:17.5px;margin-bottom:2px;padding-right:88px;}
+.module-card p{font-size:13.5px;margin:0;}
+.module-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px;}
+.module-tag{font-size:11px;font-weight:700;letter-spacing:0.02em;padding:4px 10px;border-radius:999px;background:var(--line-soft);color:var(--navy-soft);}
+.module-status{position:absolute;top:24px;right:24px;font-size:10px;font-weight:800;letter-spacing:0.05em;text-transform:uppercase;padding:4px 10px;border-radius:999px;white-space:nowrap;}
+.module-status.live{background:var(--standon-soft);color:var(--standon);}
+.module-status.soon{background:var(--both-soft);color:var(--both);}
+.module-cta{margin-top:auto;padding-top:4px;display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--ocean-mid);}
+@media (max-width:520px){ .home-intro{padding:26px 22px;} .home-intro h1{font-size:21px;} .module-card h3{padding-right:0;} .module-status{position:static;display:inline-flex;margin-bottom:4px;} }
 
 /* ===== Rules view ===== */
 .rules-layout{display:grid;grid-template-columns:220px 1fr;gap:24px;align-items:start;}
@@ -302,20 +357,26 @@ button.sound-badge.playing{background:var(--ocean-mid);animation:blipPulse 1s ea
     </div>
     <nav class="main-nav" id="main-nav">
       <button class="nav-btn" data-view="home">Trang chủ</button>
-      <button class="nav-btn" data-view="rules">Quy tắc</button>
-      <button class="nav-btn" data-view="scenarios">Mô phỏng</button>
-      <button class="nav-btn" data-view="quiz">Ôn tập</button>
+      <div class="nav-dropdown" id="nav-dropdown-colreg" data-nav-group="colreg">
+        <button class="nav-btn nav-btn-parent" data-nav-toggle="colreg">COLREG72 <span class="nav-caret">▾</span></button>
+        <div class="nav-dropdown-menu">
+          <button class="nav-dropdown-item" data-view="intro">Giới thiệu</button>
+          <button class="nav-dropdown-item" data-view="rules">Quy tắc</button>
+	  <button class="nav-dropdown-item" data-view="scenarios">Mô phỏng</button>
+          <button class="nav-dropdown-item" data-view="quiz">Ôn tập</button>
+        </div>
+      </div>
+      <button class="nav-btn" data-view="fisheries">Luật thuỷ sản</button>
+      <button class="nav-btn" data-view="maritime">Luật hàng hải</button>
     </nav>
     <div class="auth-area">
       <span class="login-status" id="login-status">Chế độ Khách</span>
       <button class="btn btn-outline btn-sm" id="login-toggle-btn">Đăng nhập</button>
     </div>
   </header>
-
   <main id="view-root"></main>
-
   <footer class="app-footer">
-    <div id="footer-text">©<strong id="footer-org">Trung tâm Đào tạo Thuyền viên và Phát triển Công nghệ biển</strong> — Tài liệu lưu hành nội bộ</div>
+    <div id="footer-text">©VĐT-Trung tâm Đào tạo Thuyền viên và Phát triển Công nghệ biển — Tài liệu lưu hành nội bộ</div>
   </footer>
 </div>
 
@@ -591,7 +652,7 @@ const DEFAULT_SETTINGS = {
   orgName:"Trung tâm Đào tạo Thuyền viên",
   heroEyebrow:"COLREG 72 · QUY TẮC QUỐC TẾ PHÒNG NGỪA ĐÂM VA TÀU THUYỀN TRÊN BIỂN",
   heroLead:"Trực quan hoá các tình huống tránh va theo Bảng quy tắc quốc tế phòng ngừa đâm va tàu thuyền trên biển năm 1972 (COLREG 72)",
-  footerNote:"Tài liệu lưu hành nội bộ",
+  footerText:"©VĐT - Trung tâm Đào tạo Thuyền viên và Phát triển Công nghệ biển — Tài liệu lưu hành nội bộ",
   emblem:"anchor",
   logoImageUrl:"https://trungtamdttv.edu.vn/uploads/0/DinhThi/LOGO/logo%20Cty%20(Final)%20.PNG.png",
   resultsWebhookUrl:"https://script.google.com/macros/s/AKfycbx1q3fYpe_7qyLpZSbTMiQwCd1ecNSXDC3IjkM0f_X6nQiYgJjPs-vO3up2fQy_a7lZYw/exec",
@@ -600,8 +661,8 @@ const DEFAULT_SETTINGS = {
   quizSheetProxyUrl:"https://script.google.com/macros/s/AKfycbyQYowBTZorSXDCufiSvOSxZYb33_QDKJiTGzF6RGlDjub81NqIHL-wWiEtbADVBWIN5g/exec",
   quizRandomCount:20,
   bannerImages:[
-    {url:"https://trungtamdttv.edu.vn/Uploads/0/Sliders/7/img-2---web-240725212245.png", caption:"http://trungtamdttv.edu.vn/"},
-    {url:"https://trungtamdttv.edu.vn/Uploadôns/0/Sliders/1/img_8944---web-240725211527.png", caption:"http://trungtamdttv.edu.vn/"}
+    {url:"https://trungtamdttv.edu.vn/Uploads/0/Sliders/7/img-2---web-240725212245.png", caption:""},
+    {url:"https://trungtamdttv.edu.vn/Uploads/0/Sliders/1/img_8944---web-240725211527.png", caption:""}
   ]
 };
 
@@ -806,7 +867,9 @@ const ICONS = {
   x:`<path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>`,
   arrowLeft:`<path d="M15 5 8 12l7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`,
   plus:`<path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>`,
-  trash:`<path d="M5 7h14M9 7V5.2A1.2 1.2 0 0 1 10.2 4h3.6A1.2 1.2 0 0 1 15 5.2V7M7 7l.7 12a1.5 1.5 0 0 0 1.5 1.4h5.6a1.5 1.5 0 0 0 1.5-1.4L17 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>`
+  trash:`<path d="M5 7h14M9 7V5.2A1.2 1.2 0 0 1 10.2 4h3.6A1.2 1.2 0 0 1 15 5.2V7M7 7l.7 12a1.5 1.5 0 0 0 1.5 1.4h5.6a1.5 1.5 0 0 0 1.5-1.4L17 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>`,
+  fish:`<path d="M3 12c3.2-4.2 8.4-6.2 13.4-4.2l2.6 4.2-2.6 4.2C11.4 18.2 6.2 16.2 3 12Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M16.4 8.4 19.5 6v3.2M16.4 15.6l3.1 2.4v-3.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="7.6" cy="12" r="0.95" fill="currentColor"/>`,
+  anchor:`<circle cx="12" cy="5.3" r="2.1" fill="none" stroke="currentColor" stroke-width="1.6"/><line x1="12" y1="7.4" x2="12" y2="19.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><line x1="8.2" y1="10" x2="15.8" y2="10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M4.8 13.2a7.2 7.2 0 0 0 7.2 7.2 7.2 7.2 0 0 0 7.2-7.2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>`
 };
 
 const EMBLEMS = {
@@ -1086,7 +1149,7 @@ function settingsEditPanelHTML(){
     <div class="form-field"><label>Đơn vị quản lý</label><input type="text" id="set-orgName" value="${escapeAttr(s.orgName)}"></div>
     <div class="form-field"><label>Dòng giới thiệu nhỏ (trên tiêu đề)</label><input type="text" id="set-heroEyebrow" value="${escapeAttr(s.heroEyebrow)}"></div>
     <div class="form-field"><label>Đoạn giới thiệu</label><textarea id="set-heroLead">${escapeHtml(s.heroLead)}</textarea></div>
-    <div class="form-field"><label>Ghi chú chân trang</label><input type="text" id="set-footerNote" value="${escapeAttr(s.footerNote)}"></div>
+    <div class="form-field"><label>Nội dung chân trang (Footer)</label><input type="text" id="set-footerText" value="${escapeAttr(s.footerText)}"><small style="display:block;color:var(--ink-soft);font-size:11.5px;margin-top:4px;">Toàn bộ dòng chữ hiển thị ở cuối trang — có thể chỉnh sửa tự do, không phụ thuộc Tên ứng dụng/Đơn vị quản lý.</small></div>
     <div class="form-row-2">
       <div class="form-field"><label>Biểu tượng logo mặc định</label>
         <select id="set-emblem">
@@ -1115,23 +1178,65 @@ function settingsEditPanelHTML(){
 
 function viewHomeHTML(){
   const s = DATA.settings;
+  const totalQuiz = (DATA.quiz||[]).length;
   return `<section class="view">
     ${bannerCarouselHTML()}
-    <div class="hero">
-      ${heroRadarSVG()}
-      <span class="hero-eyebrow">${escapeHtml(s.heroEyebrow)}</span>
-      <h1>${escapeHtml(s.appTitle)}<br>${escapeHtml(s.appSubtitle)}</h1>
-      <p class="lead">${escapeHtml(s.heroLead)}</p>
-      <div class="hero-actions">
-        <button class="btn btn-primary" data-goto="scenarios">Mô phỏng tình huống</button>
-        <button class="btn btn-outline" data-goto="rules">Xem Bộ quy tắc</button>
-	<button class="btn hero-quiz-btn" data-goto="quiz">Ôn tập</button>
+
+    <div class="home-intro">
+      <h1>Nền tảng đào tạo và ôn tập trực tuyến</h1>
+      <p class="lead">Xây dựng nhằm hỗ trợ học viên nắm vững hệ thống pháp luật và quy định liên quan đến hoạt động điều động, khai thác thủy sản trên biển — thông qua tra cứu điều luật trực quan, mô phỏng tình huống thực tế và tạo bộ đề ôn tập trắc nghiệm bám sát nội dung.</p>
+      <div class="home-intro-stats">
+	<div><div class="home-intro-stat-num">Luật</div><div class="home-intro-stat-label">Luật thủy sản và các văn bản hướng dẫn</div></div>
+	<div><div class="home-intro-stat-num">COLREG 72</div><div class="home-intro-stat-label">31 Điều trong COLREG 72</div></div>
+	<div><div class="home-intro-stat-num">Luật Biển</div><div class="home-intro-stat-label">Phân định, quyền và nghĩa vụ</div></div>
+	<div><div class="home-intro-stat-num">Luật hàng hải</div><div class="home-intro-stat-label">Giải quyết tranh chấp</div></div>
       </div>
-      <div class="hero-stats">
-        <div><div class="hero-stat-num">${DATA.rules.length}</div><div class="hero-stat-label">Điều quy tắc</div></div>
-        <div><div class="hero-stat-num">${DATA.scenarios.length}</div><div class="hero-stat-label">Tình huống mô phỏng</div></div>
-        <div><div class="hero-stat-num">${DATA.settings.quizRandomCount||20}</div><div class="hero-stat-label">Câu hỏi mỗi lượt ôn tập</div></div>
+    </div>
+
+    <div class="section-head">
+      <div><span class="section-eyebrow">Nội dung</h2></div>
+    </div>
+    <div class="home-modules-grid">
+      <div class="card module-card" data-goto="intro">
+        <span class="module-status live">Đang hoạt động</span>
+        <div class="icon-wrap">${iconSpan('radar')}</div>
+        <h3>COLREG72</h3>
+        <p>Quy tắc quốc tế phòng ngừa đâm va tàu thuyền trên biển — học qua mô phỏng tình huống thực tế, tra cứu đầy đủ các điều quy tắc và tự kiểm tra bằng bộ đề trắc nghiệm.</p>
+        <div class="module-tags">
+         <span class="module-tag">Mô phỏng</span><span class="module-tag">Quy tắc</span><span class="module-tag">Ôn tập</span>
+        </div>
+        <div class="module-cta">Xem chi tiết →</div>
       </div>
+
+      <div class="card module-card" data-goto="fisheries">
+        <span class="module-status soon">Sắp ra mắt</span>
+        <div class="icon-wrap">${iconSpan('fish')}</div>
+        <h3>Luật Thuỷ sản</h3>
+        <p>Hệ thống hoá các quy định về khai thác, bảo vệ nguồn lợi thuỷ sản và quản lý tàu cá theo pháp luật hiện hành. Nội dung đang được biên soạn.</p>
+        <div class="module-tags"><span class="module-tag">Đang xây dựng</span></div>
+        <div class="module-cta">Xem chi tiết →</div>
+      </div>
+
+      <div class="card module-card" data-goto="maritime">
+        <span class="module-status soon">Sắp ra mắt</span>
+        <div class="icon-wrap">${iconSpan('anchor')}</div>
+        <h3>Luật Hàng hải</h3>
+        <p>Tổng hợp quy định về hoạt động hàng hải, đăng ký tàu biển, cảng biển và trách nhiệm của các bên liên quan. Nội dung đang được biên soạn.</p>
+        <div class="module-tags"><span class="module-tag">Đang xây dựng</span></div>
+        <div class="module-cta">Xem chi tiết →</div>
+      </div>
+    </div>
+  </section>`;
+}
+
+/* =========================================================
+   TRANG TRỐNG (chưa triển khai nội dung)
+========================================================= */
+function viewPlaceholderHTML(title, note){
+  return `<section class="view">
+    <div class="section-head"><div><span class="section-eyebrow">Đang cập nhật</span><h2>${escapeHtml(title)}</h2></div></div>
+    <div class="card" style="padding:40px 24px;">
+      <div class="empty-note">${escapeHtml(note || 'Nội dung mục này đang được xây dựng và sẽ sớm được cập nhật.')}</div>
     </div>
   </section>`;
 }
@@ -1461,6 +1566,30 @@ function quizActiveInnerHTML(){
       <div class="edit-actions"><button class="btn btn-primary btn-sm" data-quiz-next>${quizIndex+1<total?'Câu tiếp theo':'Xem kết quả'}</button></div>`:''}
     </div>`;
 }
+function quizHeroHTML(){
+  const s = DATA.settings;
+  return `<div class="hero">
+      ${heroRadarSVG()}
+      <span class="hero-eyebrow">${escapeHtml(s.heroEyebrow)}</span>
+      <h1>${escapeHtml(s.appTitle)}<br>${escapeHtml(s.appSubtitle)}</h1>
+      <p class="lead">${escapeHtml(s.heroLead)}</p>
+      <div class="hero-actions">
+        <button class="btn btn-primary" data-goto="scenarios">Mô phỏng tình huống</button>
+        <button class="btn btn-outline" data-goto="rules">Xem Bộ quy tắc</button>
+	<button class="btn hero-quiz-btn" data-goto="quiz">Ôn tập</button>
+      </div>
+      <div class="hero-stats">
+        <div><div class="hero-stat-num">${DATA.rules.length}</div><div class="hero-stat-label">Điều quy tắc</div></div>
+        <div><div class="hero-stat-num">${DATA.scenarios.length}</div><div class="hero-stat-label">Tình huống mô phỏng</div></div>
+        <div><div class="hero-stat-num">${DATA.settings.quizRandomCount||20}</div><div class="hero-stat-label">Câu hỏi mỗi lượt ôn tập</div></div>
+      </div>
+    </div>`;
+}
+function viewIntroHTML(){
+  return `<section class="view">
+    ${quizHeroHTML()}
+  </section>`;
+}
 function viewQuizTakeHTML(){
   const manageBtn = isLoggedIn?`<button class="btn btn-ghost btn-sm" data-toggle-quiz-manage>${iconSpan('edit')} Quản lý câu hỏi</button>`:'';
   const header = `<div class="section-head"><div><span class="section-eyebrow">Tự kiểm tra</span><h2>Câu hỏi ôn tập</h2></div>${manageBtn}</div>`;
@@ -1712,14 +1841,18 @@ function viewQuizHTML(){
 /* =========================================================
    ĐIỀU HƯỚNG / RENDER GỐC
 ========================================================= */
+const COLREG_VIEWS = ['intro','rules','scenarios','quiz'];
 function setActiveNav(){
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active', b.dataset.view===currentView));
+  document.querySelectorAll('.nav-btn[data-view]').forEach(b=>b.classList.toggle('active', b.dataset.view===currentView));
+  document.querySelectorAll('.nav-dropdown-item').forEach(b=>b.classList.toggle('active', b.dataset.view===currentView));
+  const colregParent = document.querySelector('[data-nav-toggle="colreg"]');
+  if (colregParent) colregParent.classList.toggle('active', COLREG_VIEWS.includes(currentView));
 }
 function renderBrand(){
   document.getElementById('brand-emblem').innerHTML = buildEmblemMarkup();
   document.getElementById('org-name-display').textContent = DATA.settings.orgName;
   document.querySelector('.brand-app').textContent = DATA.settings.appTitle;
-  document.getElementById('footer-text').innerHTML = `© <strong>${escapeHtml(DATA.settings.orgName)}</strong> — ${escapeHtml(DATA.settings.footerNote)}`;
+  document.getElementById('footer-text').textContent = DATA.settings.footerText;
   const faviconUrl = (DATA.settings.logoImageUrl||'').trim();
   if (faviconUrl){
     let iconLink = document.querySelector('link[rel="icon"]');
@@ -1732,9 +1865,12 @@ function renderView(){
   const root = document.getElementById('view-root');
   clearInterval(bannerCarouselInterval); bannerCarouselInterval = null;
   if (currentView==='home') root.innerHTML = viewHomeHTML();
+  else if (currentView==='intro') root.innerHTML = viewIntroHTML();
   else if (currentView==='rules') root.innerHTML = viewRulesHTML();
   else if (currentView==='scenarios') root.innerHTML = currentScenarioId ? viewScenarioDetailHTML(currentScenarioId) : viewScenariosListHTML();
   else if (currentView==='quiz') root.innerHTML = viewQuizHTML();
+  else if (currentView==='fisheries') root.innerHTML = viewPlaceholderHTML('Luật thuỷ sản');
+  else if (currentView==='maritime') root.innerHTML = viewPlaceholderHTML('Luật hàng hải');
   updateQuizTimerDisplay();
   if (currentView==='home') startBannerCarousel();
 }
@@ -1797,7 +1933,7 @@ function saveSettingsFromForm(){
   s.orgName = document.getElementById('set-orgName').value.trim() || s.orgName;
   s.heroEyebrow = document.getElementById('set-heroEyebrow').value.trim() || s.heroEyebrow;
   s.heroLead = document.getElementById('set-heroLead').value.trim() || s.heroLead;
-  s.footerNote = document.getElementById('set-footerNote').value.trim() || s.footerNote;
+  s.footerText = document.getElementById('set-footerText').value.trim() || s.footerText;
   s.emblem = document.getElementById('set-emblem').value;
   s.logoImageUrl = document.getElementById('set-logoUrl').value.trim();
   const bannerContainer = document.getElementById('banner-images-list');
@@ -2258,8 +2394,22 @@ function playSignalAudio(url, btnEl){
 function wireGlobalEvents(){
   document.getElementById('view-root').addEventListener('click', onViewRootClick);
   document.getElementById('main-nav').addEventListener('click', e=>{
-    const btn = e.target.closest('.nav-btn'); if (!btn) return;
+    const toggleBtn = e.target.closest('[data-nav-toggle]');
+    if (toggleBtn){
+      const dropdown = toggleBtn.closest('.nav-dropdown');
+      const wasOpen = dropdown.classList.contains('open');
+      document.querySelectorAll('.nav-dropdown.open').forEach(d=>d.classList.remove('open'));
+      if (!wasOpen) dropdown.classList.add('open');
+      return;
+    }
+    const btn = e.target.closest('.nav-btn, .nav-dropdown-item'); if (!btn || !btn.dataset.view) return;
+    document.querySelectorAll('.nav-dropdown.open').forEach(d=>d.classList.remove('open'));
     switchView(btn.dataset.view);
+  });
+  document.addEventListener('click', e=>{
+    if (!e.target.closest('.nav-dropdown')){
+      document.querySelectorAll('.nav-dropdown.open').forEach(d=>d.classList.remove('open'));
+    }
   });
   document.getElementById('login-toggle-btn').addEventListener('click', ()=>{ isLoggedIn ? doLogout() : openLoginModal(); });
   document.getElementById('login-modal-close').addEventListener('click', closeLoginModal);
@@ -2267,7 +2417,7 @@ function wireGlobalEvents(){
   document.getElementById('login-pass').addEventListener('keydown', e=>{ if (e.key==='Enter') attemptLogin(); });
   document.getElementById('login-user').addEventListener('keydown', e=>{ if (e.key==='Enter') attemptLogin(); });
   document.getElementById('login-modal').addEventListener('click', e=>{ if (e.target.id==='login-modal') closeLoginModal(); });
-  document.addEventListener('keydown', e=>{ if (e.key==='Escape') closeLoginModal(); });
+  document.addEventListener('keydown', e=>{ if (e.key==='Escape'){ closeLoginModal(); document.querySelectorAll('.nav-dropdown.open').forEach(d=>d.classList.remove('open')); } });
   const audioPlayer = document.getElementById('global-audio-player');
   audioPlayer.addEventListener('ended', ()=>{
     document.querySelectorAll('.sound-badge.playing').forEach(b=>b.classList.remove('playing'));
