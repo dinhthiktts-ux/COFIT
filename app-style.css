@@ -67,6 +67,7 @@ a{color:var(--ocean-mid);}
   border:none;background:transparent;color:rgba(255,255,255,0.72);
   padding:9px 16px;border-radius:999px;font-size:14px;font-weight:600;letter-spacing:0.01em;
   transition:background .15s ease, color .15s ease;
+  text-decoration:none;display:inline-block;
 }
 .nav-btn:hover{background:rgba(255,255,255,0.10);color:#fff;}
 .nav-btn.active{background:var(--ocean-mid);color:#fff;}
