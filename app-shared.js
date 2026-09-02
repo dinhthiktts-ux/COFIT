@@ -2356,6 +2356,24 @@ function wireGlobalEvents(){
   const mainNav = document.getElementById('main-nav');
   // Hiển thị menu con khi rê chuột vào mục menu cha. Vẫn giữ click để hỗ trợ thiết bị cảm ứng.
   if (mainNav){
+    // Bảo đảm menu con hoạt động trên mọi trang, không phụ thuộc currentView
+    // hay trạng thái active của mục menu hiện tại.
+    if (!document.getElementById('nav-hover-dropdown-style')){
+      const style = document.createElement('style');
+      style.id = 'nav-hover-dropdown-style';
+      style.textContent = `
+        #main-nav .nav-dropdown:hover > .nav-dropdown-menu,
+        #main-nav .nav-dropdown.open > .nav-dropdown-menu,
+        #main-nav .nav-dropdown:hover > .dropdown-menu,
+        #main-nav .nav-dropdown.open > .dropdown-menu {
+          display: block;
+          visibility: visible;
+          opacity: 1;
+          pointer-events: auto;
+        }
+      `;
+      document.head.appendChild(style);
+    }
     mainNav.querySelectorAll('.nav-dropdown').forEach(dropdown=>{
       dropdown.addEventListener('pointerenter', ()=>{
         document.querySelectorAll('.nav-dropdown.open').forEach(d=>{ if (d!==dropdown) d.classList.remove('open'); });
