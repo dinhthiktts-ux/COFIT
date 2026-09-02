@@ -1073,7 +1073,7 @@ function viewHomeHTML(){
     </div>
     <div class="home-modules-grid">
       <a class="card module-card" href="colreg.html">
-        <span class="module-status live">Đang hoạt động</span>
+        <span class="module-status live">Đã cập nhật</span>
         <div class="icon-wrap">${iconSpan('radar')}</div>
         <h3>COLREG72</h3>
         <p>Quy tắc quốc tế phòng ngừa đâm va tàu thuyền trên biển — học qua mô phỏng tình huống thực tế, tra cứu đầy đủ các điều quy tắc và tự kiểm tra bằng bộ đề trắc nghiệm.</p>
@@ -1084,7 +1084,7 @@ function viewHomeHTML(){
       </a>
 
       <a class="card module-card" href="fisheries.html">
-        <span class="module-status live">Đang hoạt động</span>
+        <span class="module-status live">Đã cập nhật</span>
         <div class="icon-wrap">${iconSpan('fish')}</div>
         <h3>Luật Thuỷ sản</h3>
         <p>Hệ thống hoá các quy định về khai thác, bảo vệ nguồn lợi thuỷ sản và quản lý tàu cá theo pháp luật hiện hành, kèm bộ đề tự kiểm tra.</p>
@@ -1095,7 +1095,7 @@ function viewHomeHTML(){
       </a>
 
       <a class="card module-card" href="maritime.html">
-        <span class="module-status live">Đang hoạt động</span>
+        <span class="module-status live">Đã cập nhật</span>
         <div class="icon-wrap">${iconSpan('anchor')}</div>
         <h3>Luật Hàng hải</h3>
         <p>Bộ luật Hàng hải Việt Nam và các văn bản hướng dẫn về tàu biển, cảng biển, thuyền viên và trách nhiệm của các bên liên quan, kèm bộ đề tự kiểm tra.</p>
