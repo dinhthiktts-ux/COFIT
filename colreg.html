@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>COLREG72 — Trung tâm Đào tạo Thuyền viên</title>
+<link rel="icon" type="image/png" href="https://trungtamdttv.edu.vn/uploads/0/DinhThi/LOGO/logo%20Cty%20(Final)%20.PNG.png">
+<link rel="stylesheet" href="app-style.css">
+</head>
+<body>
+<div id="app-shell">
+  <header class="topbar">
+    <div class="brand">
+      <svg id="brand-emblem" class="brand-emblem" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"></svg>
+      <div class="brand-text">
+  <span class="brand-org" id="org-name-display">TRUNG TÂM ĐÀO TẠO THUYỀN VIÊN</span>
+  <span class="brand-app">Ôn tập lý thuyết Luật và các quy định liên quan</span>
+</div>
+    </div>
+    <nav class="main-nav" id="main-nav">
+      <a class="nav-btn" href="index.html">Trang chủ</a>
+      <div class="nav-dropdown" id="nav-dropdown-colreg" data-nav-group="colreg">
+        <button class="nav-btn nav-btn-parent" data-nav-toggle="colreg">COLREG72 <span class="nav-caret">▾</span></button>
+        <div class="nav-dropdown-menu">
+          <button class="nav-dropdown-item" data-view="rules">Nội dung</button>
+          <button class="nav-dropdown-item" data-view="scenarios">Mô phỏng</button>
+          <button class="nav-dropdown-item" data-view="quiz">Ôn tập</button>
+        </div>
+      </div>
+      <a class="nav-btn" href="fisheries.html">Luật thuỷ sản</a>
+      <a class="nav-btn" href="maritime.html">Luật hàng hải</a>
+    </nav>
+    <div class="auth-area">
+      <span class="login-status" id="login-status">Chế độ Khách</span>
+      <button class="btn btn-outline btn-sm" id="login-toggle-btn">Đăng nhập</button>
+    </div>
+  </header>
+  <main id="view-root"></main>
+  <footer class="app-footer">
+    <div id="footer-text">© VĐT - Trung tâm Đào tạo Thuyền viên và Phát triển Công nghệ biển - Tài liệu lưu hành nội bộ</div>
+  </footer>
+</div>
+
+<div class="modal-overlay hidden" id="login-modal">
+  <div class="modal-box">
+    <button class="modal-close" id="login-modal-close" aria-label="Đóng">✕</button>
+    <h3>Đăng nhập quản trị</h3>
+    <p style="font-size:13px;margin-bottom:18px;">Đăng nhập để chỉnh sửa quy tắc, tình huống mô phỏng, câu hỏi ôn tập và giao diện.</p>
+    <div class="form-field">
+      <label for="login-user">Tài khoản</label>
+      <input type="text" id="login-user" autocomplete="username">
+    </div>
+    <div class="form-field">
+      <label for="login-pass">Mật khẩu</label>
+      <input type="password" id="login-pass" autocomplete="current-password">
+    </div>
+    <div class="form-error" id="login-error"></div>
+    <button class="btn btn-primary" id="login-submit-btn" style="width:100%;">Đăng nhập</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+<audio id="global-audio-player" preload="none"></audio>
+
+<script>const INITIAL_VIEW = "rules";</script>
+<script src="app-shared.js"></script>
+</body>
+</html>
