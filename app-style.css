@@ -217,6 +217,19 @@ main{flex:1 1 auto;padding:28px 22px 60px;max-width:1180px;margin:0 auto;width:1
 .module-cta{margin-top:auto;padding-top:4px;display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--ocean-mid);}
 @media (max-width:520px){ .home-intro{padding:26px 22px;} .home-intro h1{font-size:21px;} .module-card h3{padding-right:0;} .module-status{position:static;display:inline-flex;margin-bottom:4px;} }
 
+/* ===== Trang Giới thiệu ===== */
+.introduction-view{max-width:1000px;margin:0 auto;}
+.intro-hero{padding:38px 42px;margin-bottom:20px;background:linear-gradient(120deg,var(--navy),var(--ocean-deep));color:#fff;box-shadow:var(--shadow-lg);}
+.intro-hero h1{color:#fff;font-size:28px;line-height:1.25;margin:8px 0 12px;}
+.intro-hero p{max-width:760px;color:rgba(255,255,255,.82);font-size:15px;margin:0;}
+.intro-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;}
+.intro-card{padding:24px;}
+.intro-card h3{font-size:17px;color:var(--navy);margin-bottom:10px;}
+.intro-card p,.intro-card li{font-size:13.5px;line-height:1.7;color:var(--ink-soft);}
+.intro-card ol,.intro-card ul{margin:0;padding-left:21px;}
+.intro-contact{grid-column:1/-1;background:var(--ocean-pale);}
+@media(max-width:720px){.intro-hero{padding:28px 22px;}.intro-hero h1{font-size:23px;}.intro-grid{grid-template-columns:1fr;}.intro-contact{grid-column:auto;}}
+
 /* ===== Rules view ===== */
 .rules-layout{display:grid;grid-template-columns:220px 1fr;gap:24px;align-items:start;}
 .rules-parts{display:flex;flex-direction:column;gap:6px;position:sticky;top:88px;}
@@ -304,6 +317,13 @@ button.sound-badge.playing{background:var(--ocean-mid);animation:blipPulse 1s ea
 
 /* ===== Quiz ===== */
 .quiz-card{padding:28px;max-width:640px;margin:0 auto;}
+.quiz-subject-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px;}
+.quiz-subject-option{border:1px solid var(--line);background:var(--paper);border-radius:12px;padding:16px 12px;text-align:left;color:var(--navy);transition:transform .15s ease,background .15s ease,border-color .15s ease;}
+.quiz-subject-option:hover{transform:translateY(-2px);background:var(--ocean-pale);border-color:var(--ocean-mid);}
+.quiz-subject-option strong,.quiz-subject-option small{display:block;}
+.quiz-subject-option small{color:var(--ink-soft);font-size:11.5px;line-height:1.4;margin-top:6px;}
+.quiz-selected-subject{max-width:640px;margin:0 auto 12px;padding:10px 14px;border-radius:9px;background:var(--ocean-pale);color:var(--navy-soft);font-size:13px;}
+@media (max-width:720px){.quiz-subject-grid{grid-template-columns:1fr;}}
 .quiz-progress{font-family:var(--font-body);font-size:12px;color:var(--ink-soft);margin-bottom:8px;}
 .quiz-timer{font-family:var(--font-body);font-size:13px;font-weight:700;color:var(--navy);background:var(--ocean-pale);padding:3px 10px;border-radius:999px;}
 .quiz-timer.quiz-timer-warning{color:#fff;background:var(--giveway);animation:blipPulse 1s ease-in-out infinite;}
@@ -471,6 +491,35 @@ button.sound-badge.playing{background:var(--ocean-mid);animation:blipPulse 1s ea
 .animated-nautical-scene .anim-own{animation:headOnOwn 9s cubic-bezier(.45,0,.2,1) 1 both;animation-play-state:running;}
 .animated-demo-wrap.is-playing .anim-target,
 .animated-demo-wrap.is-playing .anim-own{animation-play-state:running;}
+.crossing-giveway-scene .crossing-target{animation:crossingTarget 9s cubic-bezier(.45,0,.2,1) 1 both;}
+.crossing-giveway-scene .crossing-own{animation:crossingOwn 9s cubic-bezier(.45,0,.2,1) 1 both;}
+@keyframes crossingTarget{0%{transform:translate(350px,210px) rotate(270deg)}100%{transform:translate(70px,210px) rotate(270deg)}}
+@keyframes crossingOwn{0%{transform:translate(210px,350px) rotate(0deg)}28%{transform:translate(210px,270px) rotate(0deg)}68%{transform:translate(210px,270px) rotate(0deg)}100%{transform:translate(210px,82px) rotate(0deg)}}
+.crossing-standon-scene .standon-target{animation:standonTarget 9s cubic-bezier(.45,0,.2,1) 1 both;}
+.crossing-standon-scene .standon-own{animation:standonOwn 9s linear 1 both;}
+.crossing-standon-scene .standon-target{animation:standonTarget 9s linear 1 both;}
+.overtaking-scene .overtaking-target{animation:overtakingTarget 9s linear 1 both;}
+.overtaking-scene .overtaking-own{animation:overtakingOwn 9s linear 1 both;}
+@keyframes overtakingTarget{0%{transform:translate(180px,150px) rotate(0deg)}100%{transform:translate(180px,95px) rotate(0deg)}}
+@keyframes overtakingOwn{0%{transform:translate(150px,340px) rotate(0deg)}42%{transform:translate(150px,235px) rotate(0deg)}55%{transform:translate(150px,195px) rotate(0deg)}70%{transform:translate(150px,195px) rotate(0deg)}84%{transform:translate(150px,82px) rotate(0deg)}100%{transform:translate(150px,28px) rotate(0deg)}}
+.overtaking-scene .overtake-horn{opacity:0;animation:overtakeHorn 9s linear 1 both;}
+.overtaking-scene .overtake-approval-horn{opacity:0;animation:overtakeApprovalHorn 9s linear 1 both;}
+@keyframes overtakeHorn{0%,45%{opacity:0}48%,55%{opacity:1}58%,100%{opacity:0}}
+.being-overtaken-scene .being-own{animation:overtakingTarget 9s linear 1 both;}
+.being-overtaken-scene .being-target{animation:overtakingOwn 9s linear 1 both;}
+.being-overtaken-scene .overtake-horn{animation:overtakeHorn 9s linear 1 both;}
+.being-overtaken-scene .overtake-approval-horn{animation:overtakeApprovalHorn 9s linear 1 both;}
+@keyframes overtakeApprovalHorn{0%,57%{opacity:0}60%,70%{opacity:1}73%,100%{opacity:0}}
+.power-sail-scene .sail-target{animation:sailTarget 9s linear 1 both;}
+.power-sail-scene .sail-own{animation:sailOwn 9s linear 1 both;}
+@keyframes sailTarget{0%{transform:translate(350px,190px) rotate(270deg)}100%{transform:translate(70px,190px) rotate(270deg)}}
+@keyframes sailOwn{0%{transform:translate(210px,350px) rotate(0deg)}35%{transform:translate(210px,270px) rotate(0deg)}50%{transform:translate(210px,250px) rotate(0deg)}68%{transform:translate(210px,250px) rotate(0deg)}100%{transform:translate(210px,70px) rotate(0deg)}}
+.narrow-channel-scene .channel-own{animation:channelOwn 9s linear 1 both;}
+.narrow-channel-scene .channel-target{animation:channelTarget 9s linear 1 both;}
+@keyframes channelOwn{0%{transform:translate(108px,370px) rotate(25deg)}100%{transform:translate(274px,45px) rotate(25deg)}}
+@keyframes channelTarget{0%{transform:translate(174px,45px) rotate(205deg)}100%{transform:translate(45px,370px) rotate(205deg)}}
+@keyframes standonTarget{0%{transform:translate(70px,210px) rotate(90deg)}38%{transform:translate(148px,210px) rotate(90deg)}68%{transform:translate(148px,210px) rotate(90deg)}82%{transform:translate(205px,210px) rotate(90deg)}100%{transform:translate(350px,210px) rotate(90deg)}}
+@keyframes standonOwn{0%{transform:translate(210px,350px) rotate(0deg)}25%{transform:translate(210px,275px) rotate(0deg)}50%{transform:translate(210px,200px) rotate(0deg)}75%{transform:translate(210px,125px) rotate(0deg)}100%{transform:translate(210px,48px) rotate(0deg)}}
 .replay-demo-btn{display:block;margin:12px auto 0;min-width:120px;visibility:hidden;opacity:0;pointer-events:none;transition:opacity .2s ease;}
 .replay-demo-btn.ready{visibility:visible;opacity:1;pointer-events:auto;}
 @keyframes headOnTarget{
