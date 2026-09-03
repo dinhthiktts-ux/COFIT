@@ -94,6 +94,13 @@ a{color:var(--ocean-mid);}
 }
 .nav-dropdown-item:hover{background:rgba(255,255,255,0.10);color:#fff;}
 .nav-dropdown-item.active{background:var(--ocean-mid);color:#fff;}
+.nav-submenu-group{position:relative;}
+.nav-submenu-label{display:flex;justify-content:space-between;align-items:center;cursor:default;white-space:nowrap;}
+.nav-submenu-menu{position:absolute;left:calc(100% + 6px);top:-6px;min-width:180px;background:var(--navy);border:1px solid rgba(255,255,255,.12);border-radius:var(--radius-sm);box-shadow:var(--shadow-md);padding:6px;display:flex;flex-direction:column;gap:2px;opacity:0;visibility:hidden;transform:translateX(-4px);transition:opacity .15s ease,transform .15s ease,visibility .15s ease;z-index:60;}
+.nav-submenu-group:hover>.nav-submenu-menu{opacity:1;visibility:visible;transform:translateX(0);}
+.nav-submenu-group:hover>.nav-submenu-label{background:#BFE3F0;color:#082238;}
+.nav-submenu-menu .nav-dropdown-item:hover{background:#BFE3F0;color:#082238;}
+@media(max-width:720px){.nav-submenu-menu{position:static;display:none;opacity:1;visibility:visible;transform:none;box-shadow:none;border:none;padding:2px 0 2px 10px;}.nav-submenu-group:hover>.nav-submenu-menu{display:flex;}}
 .auth-area{display:flex;align-items:center;gap:10px;flex:0 0 auto;}
 .login-status{font-size:12px;color:rgba(255,255,255,0.65);font-family:var(--font-body);letter-spacing:0.03em;}
 .login-status.on{color:var(--brass-soft);}
@@ -216,6 +223,35 @@ main{flex:1 1 auto;padding:28px 22px 60px;max-width:1180px;margin:0 auto;width:1
 .module-status.soon{background:var(--both-soft);color:var(--both);}
 .module-cta{margin-top:auto;padding-top:4px;display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--ocean-mid);}
 @media (max-width:520px){ .home-intro{padding:26px 22px;} .home-intro h1{font-size:21px;} .module-card h3{padding-right:0;} .module-status{position:static;display:inline-flex;margin-bottom:4px;} }
+
+/* ===== Mô phỏng nghề lưới vây ===== */
+.purse-seine-svg{display:block;width:100%;max-height:520px;background:#0B2E4A;border-radius:14px;}
+.purse-boat{transform:translate(310px,210px);}
+.purse-net{opacity:.18;transform-origin:310px 210px;}
+.purse-fish-school{opacity:1;}
+.purse-seine-controls{display:flex;align-items:center;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:14px;}
+.purse-seine-stage{font-size:13px;color:var(--ink-soft);}
+.purse-seine-sim.is-playing .purse-boat{animation:purseBoat 10s linear 1 both;}
+.purse-seine-sim.is-playing .purse-net{animation:purseNet 10s ease-in-out 1 both;}
+.purse-seine-sim.is-playing .purse-fish-school{animation:purseFish 10s ease-in-out 1 both;}
+@keyframes purseBoat{0%{transform:translate(70px,330px) rotate(25deg)}12%{transform:translate(120px,245px) rotate(25deg)}24%{transform:translate(210px,105px) rotate(25deg)}36%{transform:translate(350px,78px) rotate(90deg)}48%{transform:translate(500px,155px) rotate(115deg)}60%{transform:translate(455px,285px) rotate(160deg)}72%{transform:translate(310px,340px) rotate(205deg)}84%{transform:translate(135px,300px) rotate(250deg)}100%{transform:translate(70px,330px) rotate(295deg)}}
+@keyframes purseNet{0%,45%{opacity:.05;transform:scale(.15)}58%{opacity:.85;transform:scale(1)}72%{opacity:.9;transform:scale(1)}88%{opacity:1;transform:scale(.62)}100%{opacity:1;transform:scale(.38)}}
+@keyframes purseFish{0%,55%{transform:translate(0,0)}78%{transform:translate(0,8px)}100%{transform:translate(0,24px);opacity:.35}}
+
+/* ===== Banner trang giới thiệu nghề khai thác ===== */
+.fishing-banner{position:relative;overflow:hidden;display:flex;align-items:center;gap:22px;min-height:170px;padding:28px 34px;margin:-4px 0 22px;border-radius:20px;color:#fff;background:linear-gradient(120deg,#082238,#17638a);box-shadow:var(--shadow-md);}
+.fishing-banner::after{content:"";position:absolute;right:-70px;top:-120px;width:330px;height:330px;border:1px solid rgba(191,227,240,.25);border-radius:50%;box-shadow:0 0 0 28px rgba(191,227,240,.05),0 0 0 62px rgba(191,227,240,.035);}
+.fishing-banner>div:last-child{position:relative;z-index:1;display:flex;flex-direction:column;gap:8px;}
+.fishing-banner span{font-size:10px;font-weight:800;letter-spacing:.16em;color:#83d4ee;}
+.fishing-banner strong{font-family:var(--font-display);font-size:25px;line-height:1.2;color:#fff;max-width:620px;}
+.fishing-banner-art{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;min-width:170px;height:105px;border:1px solid rgba(255,255,255,.2);border-radius:18px;background:rgba(255,255,255,.08);font-size:31px;letter-spacing:5px;filter:saturate(.9);}
+
+.fishing-banner-fishing-purse-seine{background:linear-gradient(120deg,#07334d,#1b7793);}
+.fishing-banner-fishing-gillnet{background:linear-gradient(120deg,#123c5c,#287b9b);}
+.fishing-banner-fishing-trawl{background:linear-gradient(120deg,#183850,#315a73);}
+.fishing-banner-fishing-longline{background:linear-gradient(120deg,#092d4b,#236786);}
+.fishing-banner-fishing-lift-net{background:linear-gradient(120deg,#143a50,#3b7590);}
+@media(max-width:620px){.fishing-banner{padding:22px;gap:14px;min-height:145px;}.fishing-banner-art{min-width:105px;height:82px;font-size:22px;}.fishing-banner strong{font-size:19px;}.fishing-banner span{font-size:8px;}}
 
 /* ===== Trang Giới thiệu ===== */
 .introduction-view{max-width:1000px;margin:0 auto;}
