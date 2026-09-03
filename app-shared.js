@@ -1057,7 +1057,7 @@ function viewHomeHTML(){
     ${bannerCarouselHTML()}
 
     <div class="home-intro">
-      <h1>Nền tảng đào tạo và ôn tập trực tuyến</h1>
+      <h1>Nền tảng ôn tập trực tuyến</h1>
       <p class="lead">Xây dựng nhằm hỗ trợ thuyền viên, học viên hàng hải nắm vững hệ thống pháp luật và quy định liên quan đến hoạt động trên biển — thông qua tra cứu điều luật trực quan, mô phỏng tình huống thực tế và bộ đề ôn luyện trắc nghiệm bám sát nội dung thi. Nội dung được cập nhật liên tục theo ba lĩnh vực trọng tâm bên dưới.</p>
       <div class="home-intro-stats">
         <div><div class="home-intro-stat-num">03</div><div class="home-intro-stat-label">Lĩnh vực pháp luật</div></div>
