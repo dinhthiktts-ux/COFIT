@@ -1188,6 +1188,45 @@ function viewHomeHTML(){
 /* =========================================================
    TRANG TRỐNG (chưa triển khai nội dung)
 ========================================================= */
+function purseSeineSimulationSVG(){
+  return `<div class="purse-seine-sim"><svg class="purse-seine-svg" viewBox="0 0 620 420" xmlns="http://www.w3.org/2000/svg" aria-label="Mô phỏng quy trình khai thác lưới vây">
+    <defs><pattern id="fishSea" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="#BFE3F0" opacity=".10"/></pattern><marker id="fishArrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#F2C967"/></marker></defs>
+    <rect width="620" height="420" rx="16" fill="#0B2E4A"/><rect width="620" height="420" rx="16" fill="url(#fishSea)"/>
+    <text x="310" y="27" fill="#BFE3F0" font-size="14" text-anchor="middle" font-weight="700">MÔ PHỎNG NGHỀ LƯỚI VÂY · PURSE SEINE</text>
+    <path class="purse-net" d="M125 120Q310 35 495 120Q530 210 470 290Q310 365 150 290Q90 210 125 120Z" fill="none" stroke="#F2C967" stroke-width="3" stroke-dasharray="8 7"/>
+    <g class="purse-fish-school" fill="#A7E3BE"><path d="M280 150l12-6 12 6-12 6zM320 175l12-6 12 6-12 6zM270 210l12-6 12 6-12 6zM350 220l12-6 12 6-12 6zM305 245l12-6 12 6-12 6zM385 185l12-6 12 6-12 6z"/></g>
+    <g class="purse-boat"><path d="M0 -18L8 5L6 17H-6L-8 5Z" fill="#2F9E68" stroke="#fff" stroke-width="1.5"/><path d="M-20 0H-9M20 0H9" stroke="#A7E3BE" stroke-width="2" marker-end="url(#fishArrow)"/></g>
+    <g class="purse-labels"><text x="310" y="385" fill="#F2C967" font-size="12" text-anchor="middle">1. Phát hiện đàn cá → 2. Thả lưới bao vây → 3. Rút dây chì khép túi → 4. Thu cá</text></g>
+  </svg><div class="purse-seine-controls"><button class="btn btn-primary" data-replay-fishing>▶ Xem lại quy trình</button><span class="purse-seine-stage">Bấm “Xem lại quy trình” để bắt đầu</span></div></div>`;
+}
+function viewFishingSimulationHTML(){
+  return `<section class="view"><div class="section-head"><div><span class="section-eyebrow">Mô phỏng khai thác</span><h2>Nghề lưới vây (Purse seine)</h2></div></div><div class="card" style="padding:20px;">${purseSeineSimulationSVG()}<p class="fs-disclaimer" style="margin-top:18px;"><span>ℹ️</span><span>Mô phỏng minh họa quy trình cơ bản: phát hiện đàn cá, thả lưới bao vây, rút dây chì để khép đáy lưới và thu gom cá. Cần tuân thủ quy định về ngư trường, mùa vụ, kích thước mắt lưới và bảo vệ nguồn lợi thủy sản khi áp dụng thực tế.</span></p></div></section>`;
+}
+
+const FISHING_THEORY = {
+  'fishing-knowledge': {title:'Kiến thức chung về khai thác thủy sản', concept:'Khai thác thủy sản là hoạt động sử dụng tàu, ngư cụ và phương pháp phù hợp để phát hiện, tiếp cận, bắt và bảo quản nguồn lợi thủy sản. Việc lựa chọn nghề phụ thuộc vào loài mục tiêu, tập tính đàn cá, độ sâu, nền đáy, thời tiết và điều kiện tàu.', principle:'Hiệu quả khai thác phụ thuộc vào sự phù hợp giữa ngư cụ và đối tượng khai thác, khả năng xác định vị trí đàn cá, kỹ thuật thả–thu ngư cụ và xử lý sản phẩm sau khi bắt.', process:'Chuẩn bị tàu và ngư cụ → kiểm tra thời tiết, ngư trường và thiết bị → tìm kiếm, xác định đối tượng → triển khai ngư cụ → thu ngư cụ và sản phẩm → phân loại, bảo quản → ghi nhật ký và kiểm tra ngư cụ.', structure:'Tàu cá, máy chính, hệ thống điện–hàng hải, thiết bị định vị và dò cá, ngư cụ, thiết bị thu ngư cụ, thiết bị bảo quản và an toàn.'},
+  'fishing-purse-seine': {title:'Nghề lưới vây', concept:'Lưới vây là ngư cụ bao vây dùng để bao quanh đàn cá nổi, sau đó rút dây rút qua các vòng khuyên để khép đáy lưới thành túi.', principle:'Tàu phát hiện đàn cá, thả lưới tạo vòng bao quanh đàn cá; dây rút được thu để đóng phần đáy, hạn chế cá thoát xuống dưới; sản phẩm được gom vào đụt/túi và thu lên tàu.', process:'Tìm kiếm đàn cá → tiếp cận và đánh giá đàn → thả đầu lưới/phao → chạy vòng bao vây → khép vòng → rút dây chì → thu lưới, gom cá → phân loại và bảo quản.', structure:'Thân lưới, giềng phao, giềng chì, phao, chì, vòng khuyên, dây rút, đầu lưới, đụt/túi gom cá; thiết bị thường có tời, power block, cần cẩu, vợt hoặc bơm cá.', feature:'Phù hợp với loài cá sống thành đàn ở tầng mặt và tầng giữa; thường có thể vận hành bằng một tàu, đôi khi có xuồng phụ hỗ trợ.', advantage:'Bao vây nhanh đàn cá, năng suất cao và thường ít tiếp xúc với đáy biển.', risk:'Có thể bắt cá non hoặc loài không phải mục tiêu; cần kiểm soát kích thước mắt lưới, ngư trường, mùa vụ và thao tác thả lưới.'},
+  'fishing-gillnet': {title:'Nghề lưới rê', concept:'Lưới rê là vách lưới được đặt trong nước để cá mắc vào lưới, thường do đầu, mang hoặc thân bị giữ trong mắt lưới.', principle:'Độ chọn lọc phụ thuộc nhiều vào kích thước mắt lưới, vật liệu, độ chùng lưới, màu lưới, tầng nước và tập tính loài mục tiêu.', process:'Chọn ngư trường → lắp phao, chì và đánh dấu → thả đầu lưới → thả vàng lưới theo tuyến → để lưới ngâm trong thời gian phù hợp → thu lưới → gỡ cá → phân loại và bảo quản.', structure:'Tấm lưới, giềng phao, giềng chì, phao, chì, dây đầu, cờ/đèn và phao đánh dấu; có thể là lưới rê tầng mặt, tầng giữa hoặc tầng đáy.', feature:'Có thể khai thác chọn lọc nếu thông số lưới phù hợp với kích thước loài mục tiêu.', advantage:'Tiêu hao nhiên liệu tương đối thấp, cấu tạo linh hoạt và có thể phù hợp tàu nhỏ.', risk:'Ngư cụ thất lạc có thể tiếp tục bắt sinh vật; nguy cơ vướng chân vịt, gây cản trở hàng hải và bắt nhầm loài.'},
+  'fishing-trawl': {title:'Nghề lưới kéo', concept:'Lưới kéo là ngư cụ dạng túi được kéo trong nước bằng tàu hoặc tàu đôi; miệng lưới mở nhờ kết cấu và lực thủy động, cá đi vào túi lưới.', principle:'Lực kéo của tàu làm lưới di chuyển qua vùng khai thác; ván lưới hoặc khung giữ miệng mở, phần đụt giữ sản phẩm.', process:'Chuẩn bị và kiểm tra lưới → xác định tuyến kéo → thả ván và lưới → kéo với tốc độ phù hợp → thu dây và lưới → đổ cá → phân loại, bảo quản và xử lý sản phẩm.', structure:'Cánh lưới, thân lưới, đụt lưới, giềng phao, giềng chì, ván lưới hoặc khung mở miệng, dây kéo và thiết bị tời.', feature:'Có thể là lưới kéo đáy, lưới kéo tầng giữa hoặc các dạng chuyên dụng; thiết kế phải phù hợp độ sâu và đối tượng khai thác.', advantage:'Khả năng bao quét vùng nước lớn và sản lượng có thể cao.', risk:'Có thể tác động đến nền đáy, tỷ lệ khai thác ngoài ý muốn cao; dây kéo và lưới gây rủi ro lớn khi thao tác nếu không tuân thủ an toàn.'},
+  'fishing-longline': {title:'Nghề câu vàng', concept:'Câu vàng gồm dây chính dài có nhiều dây nhánh và lưỡi câu gắn mồi hoặc mồi giả, được thả theo tầng nước phù hợp đối tượng mục tiêu.', principle:'Cá bị thu hút bởi mồi và mắc vào lưỡi câu; độ sâu, loại mồi, khoảng cách lưỡi và thời gian ngâm quyết định hiệu quả và tính chọn lọc.', process:'Chuẩn bị mồi và lưỡi → lắp dây chính, dây nhánh, phao và chì → thả đầu dây → thả lần lượt dây chính và lưỡi → ngâm câu → thu dây → gỡ cá → bảo quản.', structure:'Dây chính, dây nhánh, lưỡi câu, mồi, phao, chì, dây đầu, đèn hoặc dấu hiệu đánh dấu và máy thu dây.', feature:'Có thể khai thác tầng mặt, tầng giữa hoặc tầng đáy; thường dùng cho cá ngừ và các loài cá lớn tùy cấu hình.', advantage:'Có khả năng chọn lọc theo cỡ lưỡi và loại mồi, sản phẩm thường ít bị dập nát.', risk:'Có thể bắt nhầm chim biển, rùa, cá mập hoặc loài cần bảo vệ; dây câu dài gây nguy hiểm khi thu và có thể trở thành rác nếu thất lạc.'},
+  'fishing-lift-net': {title:'Nghề lưới chụp', concept:'Lưới chụp là ngư cụ dạng lưới rơi/chụp, được đưa xuống hoặc mở quanh đàn cá rồi thu nhanh để gom cá vào phần túi.', principle:'Ánh sáng hoặc dấu hiệu tập trung cá có thể được sử dụng tùy nghề; khi đàn cá nằm trong vùng chụp, lưới được hạ và thu theo trình tự để cá không thoát.', process:'Tìm kiếm hoặc tập trung đàn cá → chuẩn bị khung và lưới → đưa lưới vào vị trí → chụp đàn cá → thu dây và lưới → gom cá → phân loại, bảo quản.', structure:'Thân lưới, đụt/túi, giềng, dây nâng–hạ, khung hoặc cần đỡ, phao/chì và hệ thống đèn nếu nghề sử dụng ánh sáng.', feature:'Thường phù hợp với cá nổi hoặc đối tượng tập trung trong vùng nước xác định.', advantage:'Thao tác nhanh, có thể tập trung vào đàn cá mục tiêu và ít tiếp xúc đáy nếu vận hành đúng.', risk:'Ánh sáng và kích thước mắt lưới có thể làm tăng khai thác cá non hoặc sản lượng ngoài ý muốn; cần kiểm soát vùng hoạt động và thiết bị.'}
+};
+function viewFishingTheoryHTML(method){
+  return viewPlaceholderHTML('Lý thuyết khai thác Thủy sản','Nội dung lý thuyết khai thác Thủy sản sẽ sớm được cập nhật.');
+  const d=FISHING_THEORY[method]||FISHING_THEORY['fishing-knowledge'];
+  const source='Nguồn tham khảo: tài liệu trong thư mục Tailieu; thuật ngữ và phân loại đối chiếu tài liệu kỹ thuật FAO. Nội dung diễn giải phục vụ đào tạo, cần đối chiếu quy định hiện hành trước khi áp dụng.';
+  const bannerIcons={
+    'fishing-knowledge':'🌊 ⚓ 🐟', 'fishing-purse-seine':'◯ 🐟 ◯', 'fishing-gillnet':'〰 🐟 〰',
+    'fishing-trawl':'▱ 🐟 ▱', 'fishing-longline':'•—•—• 🐟', 'fishing-lift-net':'⌒ 🐟 ⌒'
+  };
+  const bannerText={
+    'fishing-knowledge':'Tổng quan nghề khai thác thủy sản','fishing-purse-seine':'Bao vây đàn cá bằng lưới vây','fishing-gillnet':'Khai thác bằng lưới rê','fishing-trawl':'Kéo ngư cụ trong tầng nước','fishing-longline':'Khai thác bằng dây câu dài','fishing-lift-net':'Chụp và gom cá trong vùng khai thác'
+  };
+  const selectedBanner = `<span>${bannerIcons[method]||'🐟'}</span>`;
+  const bannerCaption = `<div><span>NGHỀ KHAI THÁC THỦY SẢN</span><strong>${escapeHtml(bannerText[method]||d.title)}</strong></div>`;
+  return `<section class="view"><div class="section-head"><div><span class="section-eyebrow">Khai thác Thủy sản</span><h2>${escapeHtml(d.title)}</h2></div></div><div class="fishing-banner fishing-banner-${escapeAttr(method)}"><div class="fishing-banner-art" aria-hidden="true">${selectedBanner}</div>${bannerCaption}</div><div class="intro-grid fishing-theory-grid"><article class="card intro-card"><h3>Kiến thức và lý thuyết</h3><p>${escapeHtml(d.concept)}</p></article><article class="card intro-card"><h3>Nguyên lý hoạt động</h3><p>${escapeHtml(d.principle)}</p></article><article class="card intro-card"><h3>Quy trình khai thác</h3><p>${escapeHtml(d.process)}</p></article><article class="card intro-card"><h3>Đặc điểm</h3><p>${escapeHtml(d.feature||'Đặc điểm cụ thể phụ thuộc vào cấu hình ngư cụ, tàu cá, đối tượng và điều kiện ngư trường.')}</p></article><article class="card intro-card"><h3>Ưu điểm</h3><p>${escapeHtml(d.advantage||'Hiệu quả phụ thuộc vào thiết kế ngư cụ, kỹ thuật vận hành và khả năng bảo quản sản phẩm.')}</p></article><article class="card intro-card"><h3>Hạn chế và rủi ro</h3><p>${escapeHtml(d.risk||'Cần kiểm soát an toàn lao động, tác động môi trường, sản lượng ngoài ý muốn và ngư cụ thất lạc.')}</p></article><article class="card intro-card"><h3>Cấu tạo ngư cụ</h3><p>${escapeHtml(d.structure)}</p></article></div><div class="fs-disclaimer" style="margin-top:18px;"><span>ℹ️</span><span>${escapeHtml(source)}</span></div></section>`;
+}
+
 function viewPlaceholderHTML(title, note){
   return `<section class="view">
     <div class="section-head"><div><span class="section-eyebrow">Đang cập nhật</span><h2>${escapeHtml(title)}</h2></div></div>
@@ -1904,7 +1943,7 @@ function viewQuizHTML(){
    ĐIỀU HƯỚNG / RENDER GỐC
 ========================================================= */
 const NAV_GROUPS = {
-  theory: ['rules','fisheries-content','maritime-content'],
+  theory: ['rules','fisheries-content','maritime-content','fishing-general','fishing-profession','fishing-preservation'],
   simulation: ['scenarios','fishing-simulation']
 };
 function setActiveNav(){
@@ -1935,6 +1974,9 @@ function renderView(){
   else if (currentView==='rules') root.innerHTML = viewRulesHTML();
   else if (currentView==='scenarios') root.innerHTML = currentScenarioId ? viewScenarioDetailHTML(currentScenarioId) : viewScenariosListHTML();
   else if (currentView==='fishing-simulation') root.innerHTML = viewPlaceholderHTML('Mô phỏng khai thác Thủy sản','Nội dung mô phỏng khai thác Thủy sản đang được xây dựng và sẽ sớm được cập nhật.');
+  else if (currentView==='fishing-general') root.innerHTML = viewPlaceholderHTML('Kiến thức chung','Thông báo: Nội dung đang cập nhật.');
+  else if (currentView==='fishing-profession') root.innerHTML = viewPlaceholderHTML('Nghề','Thông báo: Nội dung đang cập nhật.');
+  else if (currentView==='fishing-preservation') root.innerHTML = viewPlaceholderHTML('Bảo quản sản phẩm','Thông báo: Nội dung đang cập nhật.');
   else if (currentView==='quiz') root.innerHTML = viewQuizHTML();
   else if (currentView==='fisheries-content') root.innerHTML = viewFisheriesContentHTML();
   else if (currentView==='fisheries-quiz') root.innerHTML = viewQuizHTML();
@@ -2289,6 +2331,14 @@ function onViewRootClick(e){
   if (!isLoggedIn && e.target.closest('[data-toggle-settings-edit],[data-save-settings],[data-cancel-settings],[data-reset-defaults],[data-add-banner-image],[data-remove-banner-image],[data-edit-rule],[data-save-rule],[data-cancel-rule],[data-add-scenario],[data-edit-scenario],[data-save-scenario],[data-cancel-scenario],[data-delete-scenario],[data-add-signal],[data-remove-signal],[data-save-quiz],[data-delete-quiz],[data-edit-quiz],[data-toggle-quiz-manage],[data-add-quiz],[data-save-webhook],[data-import-file],[data-import-sheet],[data-commit-import],[data-cancel-import]')) return;
   let el;
   if ((el = e.target.closest('[data-goto]'))){ switchView(el.dataset.goto); return; }
+  if (e.target.closest('[data-replay-fishing]')){
+    const sim = e.target.closest('.purse-seine-sim');
+    if (sim){
+      sim.classList.remove('is-playing'); void sim.offsetWidth; sim.classList.add('is-playing');
+      const stage = sim.querySelector('.purse-seine-stage'); if(stage) stage.textContent='Đang thực hiện quy trình khai thác...';
+    }
+    return;
+  }
   if (e.target.closest('[data-replay-demo]')){
     const wrap = e.target.closest('.animated-demo-wrap');
     if (wrap){
