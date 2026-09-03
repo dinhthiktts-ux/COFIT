@@ -254,6 +254,11 @@ const DEFAULT_SETTINGS = {
   resultsWebhookUrl:"https://script.google.com/macros/s/AKfycbx1q3fYpe_7qyLpZSbTMiQwCd1ecNSXDC3IjkM0f_X6nQiYgJjPs-vO3up2fQy_a7lZYw/exec",
   examDurationMinutes:10,
   quizSheetUrl:"https://docs.google.com/spreadsheets/d/1N327z-MzawM8jiIJ_aBwe3uXwml6N9AmyriitH-YOy8/edit?usp=sharing",
+  quizSheetUrls:{
+    colreg:"https://docs.google.com/spreadsheets/d/1N327z-MzawM8jiIJ_aBwe3uXwml6N9AmyriitH-YOy8/edit#gid=0",
+    fisheries:"https://docs.google.com/spreadsheets/d/1N327z-MzawM8jiIJ_aBwe3uXwml6N9AmyriitH-YOy8/edit#gid=1636935559",
+    maritime:"https://docs.google.com/spreadsheets/d/1N327z-MzawM8jiIJ_aBwe3uXwml6N9AmyriitH-YOy8/edit#gid=180702165"
+  },
   quizSheetProxyUrl:"https://script.google.com/macros/s/AKfycbyQYowBTZorSXDCufiSvOSxZYb33_QDKJiTGzF6RGlDjub81NqIHL-wWiEtbADVBWIN5g/exec",
   quizRandomCount:20,
   bannerImages:[
@@ -571,7 +576,7 @@ function saveQuizSessionToStorage(){
   if (!quizTaker || quizFinished){ clearQuizSessionStorage(); return; }
   try{
     localStorage.setItem(QUIZ_SESSION_KEY, JSON.stringify({
-      quizTaker, quizSessionQuestions, quizIndex, quizScore, quizSelected,
+      quizSubject, quizTaker, quizSessionQuestions, quizIndex, quizScore, quizSelected,
       quizDeadline, quizAutoSubmitted, quizLoadError
     }));
   }catch(e){ /* localStorage có thể bị chặn (chế độ ẩn danh...) — bỏ qua */ }
@@ -586,6 +591,7 @@ function restoreQuizSessionFromStorage(){
   let s;
   try{ s = JSON.parse(raw); }catch(e){ clearQuizSessionStorage(); return false; }
   if (!s || !s.quizTaker || !s.quizSessionQuestions || !s.quizSessionQuestions.length) return false;
+  quizSubject = s.quizSubject || 'colreg';
   quizTaker = s.quizTaker;
   quizSessionQuestions = s.quizSessionQuestions;
   quizIndex = s.quizIndex || 0;
@@ -868,8 +874,96 @@ function headOnAnimatedSceneSVG(){
   </svg>`;
 }
 
+function crossingGivewayAnimatedSceneSVG(){
+  return `<svg class="animated-nautical-scene crossing-giveway-scene" viewBox="0 0 420 420" xmlns="http://www.w3.org/2000/svg" aria-label="Mô phỏng tình huống cắt hướng, tàu ta nhường đường">
+    <defs>
+      <pattern id="crossSeaGrid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" fill="none" stroke="#DDEFF7" stroke-width="1" opacity=".10"/></pattern>
+      <marker id="crossArrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#A7E3BE"/></marker>
+    </defs>
+    <rect width="420" height="420" rx="14" fill="#0B2E4A"/><rect width="420" height="420" rx="14" fill="url(#crossSeaGrid)"/>
+    <text x="210" y="24" fill="#BFE3F0" font-size="12" text-anchor="middle" font-weight="700">CẮT HƯỚNG · ĐIỀU 15, 16</text>
+    <path d="M210 350L210 65" stroke="#A7E3BE" stroke-width="1.5" stroke-dasharray="5 6" opacity=".45"/>
+    <path d="M350 210L70 210" stroke="#F2C967" stroke-width="1.5" stroke-dasharray="5 6" opacity=".45"/>
+    <ellipse cx="210" cy="210" rx="52" ry="38" fill="#D6524A" opacity=".12" stroke="#D6524A" stroke-dasharray="5 5"/>
+    <g class="anim-ship crossing-target"><path d="M0 -18L8 5L6 17H-6L-8 5Z" fill="#DB8F2E" stroke="#fff" stroke-width="1.5"/><path d="M-20 0H-9M20 0H9" stroke="#F2C967" stroke-width="2" marker-end="url(#crossArrow)"/></g>
+    <g class="anim-ship crossing-own"><path d="M0 -18L8 5L6 17H-6L-8 5Z" fill="#2F9E68" stroke="#fff" stroke-width="1.5"/><path d="M-20 0H-9M20 0H9" stroke="#A7E3BE" stroke-width="2" marker-end="url(#crossArrow)"/></g>
+    <text x="350" y="184" fill="#F2C967" font-size="11" text-anchor="end">Tàu mục tiêu →</text>
+    <text x="210" y="368" fill="#A7E3BE" font-size="11" text-anchor="middle">Tàu ta · nhường đường</text>
+    <text x="210" y="402" fill="#BFE3F0" font-size="11" text-anchor="middle">Tàu ta dừng chờ tàu mục tiêu đi qua mặt</text>
+  </svg>`;
+}
+
+function crossingStandonAnimatedSceneSVG(){
+  return `<svg class="animated-nautical-scene crossing-standon-scene" viewBox="0 0 420 420" xmlns="http://www.w3.org/2000/svg" aria-label="Mô phỏng tình huống cắt hướng, tàu ta giữ hướng">
+    <defs><pattern id="standonSeaGrid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" fill="none" stroke="#DDEFF7" stroke-width="1" opacity=".10"/></pattern><marker id="standonArrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#F2C967"/></marker></defs>
+    <rect width="420" height="420" rx="14" fill="#0B2E4A"/><rect width="420" height="420" rx="14" fill="url(#standonSeaGrid)"/>
+    <text x="210" y="24" fill="#BFE3F0" font-size="12" text-anchor="middle" font-weight="700">CẮT HƯỚNG · ĐIỀU 17</text>
+    <path d="M210 350L210 65" stroke="#A7E3BE" stroke-width="1.5" stroke-dasharray="5 6" opacity=".45"/><path d="M70 210L350 210" stroke="#F2C967" stroke-width="1.5" stroke-dasharray="5 6" opacity=".45"/>
+    <ellipse cx="210" cy="210" rx="52" ry="38" fill="#D6524A" opacity=".12" stroke="#D6524A" stroke-dasharray="5 5"/>
+    <g class="anim-ship standon-target"><path d="M0 -18L8 5L6 17H-6L-8 5Z" fill="#DB8F2E" stroke="#fff" stroke-width="1.5"/><path d="M-20 0H-9M20 0H9" stroke="#F2C967" stroke-width="2" marker-end="url(#standonArrow)"/></g>
+    <g class="anim-ship standon-own"><path d="M0 -18L8 5L6 17H-6L-8 5Z" fill="#2F9E68" stroke="#fff" stroke-width="1.5"/><path d="M-20 0H-9M20 0H9" stroke="#A7E3BE" stroke-width="2" marker-end="url(#standonArrow)"/></g>
+    <text x="70" y="184" fill="#F2C967" font-size="11">Tàu mục tiêu · nhường đường</text><text x="210" y="368" fill="#A7E3BE" font-size="11" text-anchor="middle">Tàu ta · giữ hướng và tốc độ</text>
+    <text x="210" y="402" fill="#BFE3F0" font-size="11" text-anchor="middle">Tàu ta giữ nguyên hướng đi</text>
+  </svg>`;
+}
+
+function overtakingAnimatedSceneSVG(){
+  return `<svg class="animated-nautical-scene overtaking-scene" viewBox="0 0 420 420" xmlns="http://www.w3.org/2000/svg" aria-label="Mô phỏng tình huống tàu ta vượt tàu khác">
+    <defs><pattern id="overtakeSeaGrid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" fill="none" stroke="#DDEFF7" stroke-width="1" opacity=".10"/></pattern><marker id="overtakeArrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#A7E3BE"/></marker></defs>
+    <rect width="420" height="420" rx="14" fill="#0B2E4A"/><rect width="420" height="420" rx="14" fill="url(#overtakeSeaGrid)"/>
+    <text x="210" y="24" fill="#BFE3F0" font-size="12" text-anchor="middle" font-weight="700">TÀU VƯỢT · ĐIỀU 13</text>
+    <path d="M150 350L150 55M180 350L180 55" stroke="#BFE3F0" stroke-width="1.5" stroke-dasharray="5 6" opacity=".35"/>
+    <path d="M150 210L180 210" stroke="#D6524A" stroke-width="1.5" stroke-dasharray="5 5" opacity=".35"/>
+    <g class="anim-ship overtaking-target"><path d="M0 -18L8 5L6 17H-6L-8 5Z" fill="#DB8F2E" stroke="#fff" stroke-width="1.5"/><path d="M-20 0H-9M20 0H9" stroke="#F2C967" stroke-width="2" marker-end="url(#overtakeArrow)"/></g>
+    <g class="anim-ship overtaking-own"><path d="M0 -18L8 5L6 17H-6L-8 5Z" fill="#2F9E68" stroke="#fff" stroke-width="1.5"/><path d="M-20 0H-9M20 0H9" stroke="#A7E3BE" stroke-width="2" marker-end="url(#overtakeArrow)"/></g>
+    <g class="overtake-horn"><path d="M126 202q-12 8 0 16M116 198q-18 12 0 24" fill="none" stroke="#F2C967" stroke-width="2" stroke-linecap="round"/><text x="95" y="194" fill="#F2C967" font-size="10">Còi xin vượt</text></g>
+    <g class="overtake-approval-horn"><path d="M198 126q12 8 0 16M208 122q18 12 0 24" fill="none" stroke="#F2C967" stroke-width="2" stroke-linecap="round"/><text x="210" y="116" fill="#F2C967" font-size="10" text-anchor="middle">Còi đồng ý</text></g>
+    <text x="180" y="96" fill="#F2C967" font-size="11" text-anchor="middle">Tàu mục tiêu</text><text x="150" y="366" fill="#A7E3BE" font-size="11" text-anchor="middle">Tàu ta · tàu vượt</text>
+    <text x="210" y="402" fill="#BFE3F0" font-size="11" text-anchor="middle">Tàu ta phát còi rồi chạy thẳng vượt qua</text>
+  </svg>`;
+}
+
+function beingOvertakenAnimatedSceneSVG(){
+  return overtakingAnimatedSceneSVG()
+    .replace('overtaking-scene','being-overtaken-scene')
+    .replace('overtaking-target','being-target')
+    .replace('overtaking-own','being-own')
+    .replace('Tàu mục tiêu</text><text x="150" y="366" fill="#A7E3BE" font-size="11" text-anchor="middle">Tàu ta · tàu vượt','Tàu ta · bị vượt</text><text x="150" y="366" fill="#F2C967" font-size="11" text-anchor="middle">Tàu mục tiêu · tàu vượt')
+    .replace('Tàu ta phát còi rồi chạy thẳng vượt qua','Tàu ta giữ hướng, tàu mục tiêu xin vượt');
+}
+
+function powerSailAnimatedSceneSVG(){
+  return `<svg class="animated-nautical-scene power-sail-scene" viewBox="0 0 420 420" xmlns="http://www.w3.org/2000/svg" aria-label="Mô phỏng tàu máy nhường tàu buồm">
+    <defs><pattern id="sailSeaGrid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" fill="none" stroke="#DDEFF7" stroke-width="1" opacity=".10"/></pattern><marker id="sailArrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#A7E3BE"/></marker></defs>
+    <rect width="420" height="420" rx="14" fill="#0B2E4A"/><rect width="420" height="420" rx="14" fill="url(#sailSeaGrid)"/>
+    <text x="210" y="24" fill="#BFE3F0" font-size="12" text-anchor="middle" font-weight="700">TÀU MÁY GẶP TÀU BUỒM · ĐIỀU 18</text>
+    <path d="M210 350L210 58" stroke="#A7E3BE" stroke-width="1.5" stroke-dasharray="5 6" opacity=".4"/><path d="M350 190L65 190" stroke="#F2C967" stroke-width="1.5" stroke-dasharray="5 6" opacity=".4"/><ellipse cx="210" cy="190" rx="52" ry="38" fill="#D6524A" opacity=".12" stroke="#D6524A" stroke-dasharray="5 5"/>
+    <g class="anim-ship sail-target"><path d="M0 -18L8 5L6 17H-6L-8 5Z" fill="#DB8F2E" stroke="#fff" stroke-width="1.5"/><path d="M0 -14L0 -34L12 -12Z" fill="#F6FBFD" stroke="#fff" stroke-width="1"/><path d="M-20 0H-9M20 0H9" stroke="#F2C967" stroke-width="2" marker-end="url(#sailArrow)"/></g>
+    <g class="anim-ship sail-own"><path d="M0 -18L8 5L6 17H-6L-8 5Z" fill="#2F9E68" stroke="#fff" stroke-width="1.5"/><path d="M-20 0H-9M20 0H9" stroke="#A7E3BE" stroke-width="2" marker-end="url(#sailArrow)"/></g>
+    <text x="350" y="166" fill="#F2C967" font-size="11" text-anchor="end">Tàu buồm · giữ hướng</text><text x="210" y="368" fill="#A7E3BE" font-size="11" text-anchor="middle">Tàu ta · tàu máy nhường đường</text><text x="210" y="402" fill="#BFE3F0" font-size="11" text-anchor="middle">Tàu máy giảm tốc, giữ khoảng cách an toàn</text>
+  </svg>`;
+}
+
+function narrowChannelAnimatedSceneSVG(){
+  return `<svg class="animated-nautical-scene narrow-channel-scene" viewBox="0 0 420 420" xmlns="http://www.w3.org/2000/svg" aria-label="Mô phỏng hai tàu đi ngược chiều trong luồng hẹp">
+    <defs><pattern id="channelGrid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" fill="none" stroke="#DDEFF7" stroke-width="1" opacity=".10"/></pattern><marker id="channelArrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#A7E3BE"/></marker></defs>
+    <rect width="420" height="420" rx="14" fill="#0B2E4A"/><rect width="420" height="420" rx="14" fill="url(#channelGrid)"/>
+    <text x="210" y="24" fill="#BFE3F0" font-size="12" text-anchor="middle" font-weight="700">LUỒNG HẸP · ĐIỀU 9</text>
+    <path d="M28 390L185 28M122 410L300 28" fill="none" stroke="#6FC7E8" stroke-width="3" opacity=".55"/><path d="M75 400L242 28" fill="none" stroke="#DDEFF7" stroke-width="1.5" stroke-dasharray="7 7" opacity=".45"/>
+    <g class="anim-ship channel-target"><path d="M0 -18L8 5L6 17H-6L-8 5Z" fill="#DB8F2E" stroke="#fff" stroke-width="1.5"/><path d="M-20 0H-9M20 0H9" stroke="#F2C967" stroke-width="2" marker-end="url(#channelArrow)"/></g>
+    <g class="anim-ship channel-own"><path d="M0 -18L8 5L6 17H-6L-8 5Z" fill="#2F9E68" stroke="#fff" stroke-width="1.5"/><path d="M-20 0H-9M20 0H9" stroke="#A7E3BE" stroke-width="2" marker-end="url(#channelArrow)"/></g>
+    <text x="320" y="55" fill="#F2C967" font-size="11">Tàu mục tiêu ↓</text><text x="84" y="380" fill="#A7E3BE" font-size="11">Tàu ta ↑</text><text x="210" y="402" fill="#BFE3F0" font-size="11" text-anchor="middle">Cả hai giữ sát mép phải của luồng</text>
+  </svg>`;
+}
+
 function radarSceneSVG(sc){
   if (sc.id==='sc-headon') return headOnAnimatedSceneSVG();
+  if (sc.id==='sc-cross-giveway') return crossingGivewayAnimatedSceneSVG();
+  if (sc.id==='sc-cross-standon') return crossingStandonAnimatedSceneSVG();
+  if (sc.id==='sc-overtaking') return overtakingAnimatedSceneSVG();
+  if (sc.id==='sc-beingovertaken') return beingOvertakenAnimatedSceneSVG();
+  if (sc.id==='sc-power-sail') return powerSailAnimatedSceneSVG();
+  if (sc.id==='sc-narrowchannel') return narrowChannelAnimatedSceneSVG();
   const cx=210, cy=210;
   let out = `<svg viewBox="0 0 420 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
   <defs>
@@ -959,6 +1053,7 @@ let scenarioEditOpen = false;
 let editingRuleId = null;
 let quizManageMode = false;
 let editingQuizId = null;
+let quizSubject = null; // colreg | fisheries | maritime
 let quizTaker = null; // {name, birthYear} — bắt buộc điền trước khi làm bài ôn tập
 let quizDeadline = null;      // mốc thời gian (ms) khi hết giờ làm bài
 let quizTimerInterval = null; // id của setInterval đếm ngược
@@ -1073,55 +1168,19 @@ function settingsEditPanelHTML(){
 }
 
 function viewHomeHTML(){
-  const s = DATA.settings;
-  const totalQuiz = (DATA.quiz||[]).length;
-  return `<section class="view">
+  return `<section class="view introduction-view">
     ${bannerCarouselHTML()}
-
-    <div class="home-intro">
-      <h1>Nền tảng ôn tập trực tuyến</h1>
-      <p class="lead">Xây dựng nhằm hỗ trợ thuyền viên, học viên hàng hải nắm vững hệ thống pháp luật và quy định liên quan đến hoạt động trên biển — thông qua tra cứu điều luật trực quan, mô phỏng tình huống thực tế và bộ đề ôn luyện trắc nghiệm bám sát nội dung thi. Nội dung được cập nhật liên tục theo ba lĩnh vực trọng tâm bên dưới.</p>
-      <div class="home-intro-stats">
-        <div><div class="home-intro-stat-num">03</div><div class="home-intro-stat-label">Lĩnh vực pháp luật</div></div>
-        <div><div class="home-intro-stat-num">${DATA.rules.length}</div><div class="home-intro-stat-label">Điều quy tắc COLREG72</div></div>
-        <div><div class="home-intro-stat-num">${DATA.scenarios.length}</div><div class="home-intro-stat-label">Tình huống mô phỏng</div></div>
-        <div><div class="home-intro-stat-num">${totalQuiz}</div><div class="home-intro-stat-label">Câu hỏi ôn luyện</div></div>
-      </div>
+    <div class="intro-hero card">
+      <span class="section-eyebrow">Giới thiệu</span>
+      <h1>Nền tảng Ôn tập lý thuyết trực tuyến</h1>
+      <p>Nền tảng ôn tập trực tuyến hỗ trợ học viên tra cứu lý thuyết, thực hành tình huống và tự kiểm tra kiến thức về COLREG72, Luật Thủy sản và Luật Hàng hải.</p>
     </div>
-
-    <div class="section-head">
-      <div><span class="section-eyebrow">Nội dung</span></div>
-    </div>
-    <div class="home-modules-grid">
-      <a class="card module-card" href="colreg.html">
-        <div class="icon-wrap">${iconSpan('radar')}</div>
-        <h3>COLREG72</h3>
-        <p>Quy tắc quốc tế phòng ngừa đâm va tàu thuyền trên biển — học qua mô phỏng tình huống thực tế, tra cứu đầy đủ các điều quy tắc và tự kiểm tra bằng bộ đề trắc nghiệm.</p>
-        <div class="module-tags">
-          <span class="module-tag">Nội dung</span><span class="module-tag">Mô phỏng</span><span class="module-tag">Ôn tập</span>
-        </div>
-        <div class="module-cta">Khám phá COLREG72 →</div>
-      </a>
-
-      <a class="card module-card" href="fisheries.html">
-        <div class="icon-wrap">${iconSpan('fish')}</div>
-        <h3>Luật Thuỷ sản</h3>
-        <p>Hệ thống hoá các quy định về khai thác, bảo vệ nguồn lợi thuỷ sản và quản lý tàu cá theo pháp luật hiện hành, kèm bộ đề tự kiểm tra.</p>
-        <div class="module-tags">
-          <span class="module-tag">Nội dung</span><span class="module-tag">Ôn tập</span>
-        </div>
-        <div class="module-cta">Khám phá Luật Thuỷ sản →</div>
-      </a>
-
-      <a class="card module-card" href="maritime.html">
-        <div class="icon-wrap">${iconSpan('anchor')}</div>
-        <h3>Luật Hàng hải</h3>
-        <p>Bộ luật Hàng hải Việt Nam và các văn bản hướng dẫn về tàu biển, cảng biển, thuyền viên và trách nhiệm của các bên liên quan, kèm bộ đề tự kiểm tra.</p>
-        <div class="module-tags">
-          <span class="module-tag">Nội dung</span><span class="module-tag">Ôn tập</span>
-        </div>
-        <div class="module-cta">Khám phá Luật Hàng hải →</div>
-      </a>
+    <div class="intro-grid">
+      <article class="card intro-card"><h3>Về Trung tâm</h3><p>Trung tâm cung cấp tài liệu đào tạo và công cụ ôn tập phục vụ thuyền viên, học viên hàng hải và những người làm việc trong lĩnh vực biển. Nội dung được trình bày trực quan, dễ tra cứu và thuận tiện sử dụng trên máy tính hoặc điện thoại.</p></article>
+      <article class="card intro-card"><h3>Hướng dẫn sử dụng</h3><ol><li>Chọn <strong>Lý thuyết</strong> để tra cứu nội dung theo từng lĩnh vực.</li><li>Chọn <strong>Mô phỏng → Tránh va</strong> để thực hành tình huống COLREG72.</li><li>Chọn <strong>Ôn tập</strong>, sau đó chọn ngân hàng câu hỏi muốn làm.</li><li>Nhập thông tin, trả lời từng câu hỏi và xem kết quả sau khi hoàn thành.</li></ol></article>
+      <article class="card intro-card"><h3>Lưu ý khi sử dụng</h3><ul><li>Nội dung trên website nhằm mục đích đào tạo và tham khảo.</li><li>Hãy đối chiếu văn bản gốc khi cần áp dụng trong công việc hoặc hồ sơ chính thức.</li><li>Câu hỏi và tình huống có thể được cập nhật theo chương trình đào tạo.</li><li>Cần có kết nối Internet để tải câu hỏi từ Google Sheet.</li></ul></article>
+      <article class="card intro-card"><h3>Bản quyền và miễn trừ trách nhiệm</h3><p>Tài liệu, nội dung diễn giải, câu hỏi và hình ảnh trên nền tảng thuộc phạm vi quản lý của Trung tâm hoặc được sử dụng cho mục đích đào tạo nội bộ. Không sao chép, phát hành hoặc sử dụng thương mại khi chưa được cho phép.</p><p>Website không thay thế văn bản pháp luật, quy tắc quốc tế hoặc hướng dẫn của cơ quan có thẩm quyền. Trung tâm không chịu trách nhiệm cho việc áp dụng nội dung tham khảo vào các tình huống thực tế mà không đối chiếu nguồn chính thức.</p></article>
+      <article class="card intro-card intro-contact"><h3>Liên hệ hỏi đáp</h3><p>Nếu cần hỗ trợ về nội dung, lỗi hiển thị hoặc quá trình làm bài, vui lòng liên hệ Trung tâm để được hướng dẫn.</p><p><strong>Email:</strong> dinhthiktts@gmail.com</p><p><strong>Đơn vị:</strong> Trung tâm Đào tạo Thuyền viên và Phát triển Công nghệ biển</p></article>
     </div>
   </section>`;
 }
@@ -1299,7 +1358,7 @@ function viewScenarioDetailHTML(id){
       </div>
       <div class="detail-grid">
         <div>
-          <div class="radar-wrap ${sc.id==='sc-headon'?'animated-demo-wrap':''}">${radarSceneSVG(sc)}${sc.id==='sc-headon'?'<button type="button" class="btn btn-primary replay-demo-btn" data-replay-demo>▶ Xem lại</button>':''}</div>
+          <div class="radar-wrap ${(['sc-headon','sc-cross-giveway','sc-cross-standon','sc-overtaking','sc-beingovertaken','sc-power-sail','sc-narrowchannel'].includes(sc.id))?'animated-demo-wrap':''}">${radarSceneSVG(sc)}${(['sc-headon','sc-cross-giveway','sc-cross-standon','sc-overtaking','sc-beingovertaken','sc-power-sail','sc-narrowchannel'].includes(sc.id))?'<button type="button" class="btn btn-primary replay-demo-btn" data-replay-demo>▶ Xem lại</button>':''}</div>
           <div class="radar-legend">
             <span><span class="legend-dot" style="background:${ROLE_COLOR.giveway}"></span>Nhường đường</span>
             <span><span class="legend-dot" style="background:${ROLE_COLOR.standon}"></span>Giữ hướng</span>
@@ -1395,7 +1454,8 @@ function fetchQuizViaAppsScriptJsonp(proxyUrl){
 // Luôn thử lấy câu hỏi MỚI NHẤT trước (Cách 1 rồi tới Cách 2 nếu có cấu hình);
 // chỉ dùng ngân hàng câu hỏi cục bộ (DATA.quiz) khi cả hai đều thất bại hoặc chưa cấu hình.
 async function loadQuizQuestionsForSession(){
-  const sheetUrl = (DATA.settings.quizSheetUrl || '').trim();
+  const configuredUrls = DATA.settings.quizSheetUrls || {};
+  const sheetUrl = (configuredUrls[quizSubject] || (quizSubject==='colreg' ? DATA.settings.quizSheetUrl : '') || '').trim();
   const proxyUrl = (DATA.settings.quizSheetProxyUrl || '').trim();
   const wantCount = DATA.settings.quizRandomCount || 20;
   quizLoadError = '';
@@ -1426,6 +1486,17 @@ async function loadQuizQuestionsForSession(){
   return pickRandomQuestions(DATA.quiz, Math.min(wantCount, DATA.quiz.length));
 }
 
+function quizSubjectPickerHTML(){
+  return `<div class="card quiz-card">
+    <h3>Chọn nội dung ôn tập</h3>
+    <p>Chọn một trong ba ngân hàng câu hỏi trước khi nhập thông tin làm bài.</p>
+    <div class="quiz-subject-grid">
+      <button class="quiz-subject-option" data-select-quiz-subject="colreg"><strong>COLREG72</strong><small>Quy tắc phòng ngừa đâm va</small></button>
+      <button class="quiz-subject-option" data-select-quiz-subject="fisheries"><strong>Luật Thủy sản</strong><small>Khai thác và bảo vệ nguồn lợi</small></button>
+      <button class="quiz-subject-option" data-select-quiz-subject="maritime"><strong>Luật Hàng hải</strong><small>Tàu biển, cảng biển, thuyền viên</small></button>
+    </div>
+  </div>`;
+}
 function quizTakerFormInnerHTML(){
   const nowYear = new Date().getFullYear();
   const durMin = DATA.settings.examDurationMinutes || 10;
@@ -1581,7 +1652,8 @@ function viewMaritimeContentHTML(){
 function viewQuizTakeHTML(){
   const manageBtn = isLoggedIn?`<button class="btn btn-ghost btn-sm" data-toggle-quiz-manage>${iconSpan('edit')} Quản lý câu hỏi</button>`:'';
   const header = `<div class="section-head"><div><span class="section-eyebrow">Tự kiểm tra</span><h2>Câu hỏi ôn tập</h2></div>${manageBtn}</div>`;
-  if (!quizTaker) return `<section class="view">${header}${quizTakerFormInnerHTML()}</section>`;
+  if (!quizSubject) return `<section class="view">${header}${quizSubjectPickerHTML()}</section>`;
+  if (!quizTaker) return `<section class="view">${header}<div class="quiz-selected-subject">Nội dung đã chọn: <strong>${escapeHtml(({colreg:'COLREG72',fisheries:'Luật Thủy sản',maritime:'Luật Hàng hải'})[quizSubject])}</strong></div>${quizTakerFormInnerHTML()}</section>`;
   if (quizLoadingQuestions) return `<section class="view">${header}${quizLoadingInnerHTML()}</section>`;
   if (!quizSessionQuestions || quizSessionQuestions.length===0) return `<section class="view">${header}<div class="empty-note">Không có câu hỏi khả dụng. Kiểm tra lại đường liên kết Google Sheet hoặc ngân hàng câu hỏi cục bộ.</div></section>`;
   let inner;
@@ -1832,9 +1904,8 @@ function viewQuizHTML(){
    ĐIỀU HƯỚNG / RENDER GỐC
 ========================================================= */
 const NAV_GROUPS = {
-  colreg: ['rules','scenarios','quiz'],
-  fisheries: ['fisheries-content','fisheries-quiz'],
-  maritime: ['maritime-content','maritime-quiz']
+  theory: ['rules','fisheries-content','maritime-content'],
+  simulation: ['scenarios','fishing-simulation']
 };
 function setActiveNav(){
   document.querySelectorAll('.nav-btn[data-view]').forEach(b=>b.classList.toggle('active', b.dataset.view===currentView));
@@ -1863,6 +1934,7 @@ function renderView(){
   if (currentView==='home') root.innerHTML = viewHomeHTML();
   else if (currentView==='rules') root.innerHTML = viewRulesHTML();
   else if (currentView==='scenarios') root.innerHTML = currentScenarioId ? viewScenarioDetailHTML(currentScenarioId) : viewScenariosListHTML();
+  else if (currentView==='fishing-simulation') root.innerHTML = viewPlaceholderHTML('Mô phỏng khai thác Thủy sản','Nội dung mô phỏng khai thác Thủy sản đang được xây dựng và sẽ sớm được cập nhật.');
   else if (currentView==='quiz') root.innerHTML = viewQuizHTML();
   else if (currentView==='fisheries-content') root.innerHTML = viewFisheriesContentHTML();
   else if (currentView==='fisheries-quiz') root.innerHTML = viewQuizHTML();
@@ -2220,10 +2292,10 @@ function onViewRootClick(e){
   if (e.target.closest('[data-replay-demo]')){
     const wrap = e.target.closest('.animated-demo-wrap');
     if (wrap){
-      const ships = wrap.querySelectorAll('.anim-ship');
-      ships.forEach(ship=>{ ship.style.animation='none'; });
+      const animatedParts = wrap.querySelectorAll('.anim-ship,.overtake-horn,.overtake-approval-horn');
+      animatedParts.forEach(part=>{ part.style.animation='none'; });
       void wrap.offsetWidth;
-      ships.forEach(ship=>{ ship.style.animation=''; });
+      animatedParts.forEach(part=>{ part.style.animation=''; });
       wrap.classList.remove('is-playing');
       wrap.classList.add('is-playing');
     }
@@ -2302,6 +2374,7 @@ function onViewRootClick(e){
     return;
   }
 
+  if ((el = e.target.closest('[data-select-quiz-subject]'))){ quizSubject = el.dataset.selectQuizSubject; renderView(); return; }
   if (e.target.closest('[data-start-quiz]')){ startQuizWithTakerInfo(); return; }
   if ((el = e.target.closest('[data-quiz-opt]'))){
     if (quizSelected===null){
@@ -2329,7 +2402,7 @@ function onViewRootClick(e){
   if (e.target.closest('[data-quiz-restart]')){
     clearQuizTimer();
     quizDeadline = null;
-    quizIndex=0; quizScore=0; quizSelected=null; quizFinished=false; quizTaker=null; quizAutoSubmitted=false;
+    quizIndex=0; quizScore=0; quizSelected=null; quizFinished=false; quizTaker=null; quizSubject=null; quizAutoSubmitted=false;
     quizSessionQuestions = null; quizLoadError = '';
     clearQuizSessionStorage();
     renderView();
@@ -2386,7 +2459,7 @@ function wireGlobalEvents(){
   const viewRoot = document.getElementById('view-root');
   viewRoot.addEventListener('click', onViewRootClick);
   viewRoot.addEventListener('animationend', e=>{
-    if (e.animationName==='headOnOwn'){
+    if (e.animationName==='headOnOwn' || e.animationName==='crossingOwn' || e.animationName==='standonOwn' || e.animationName==='overtakingOwn' || e.animationName==='sailOwn' || e.animationName==='channelOwn'){
       const btn = viewRoot.querySelector('[data-replay-demo]');
       if (btn) btn.classList.add('ready');
     }
