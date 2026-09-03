@@ -2220,8 +2220,11 @@ function onViewRootClick(e){
   if (e.target.closest('[data-replay-demo]')){
     const wrap = e.target.closest('.animated-demo-wrap');
     if (wrap){
-      wrap.classList.remove('is-playing');
+      const ships = wrap.querySelectorAll('.anim-ship');
+      ships.forEach(ship=>{ ship.style.animation='none'; });
       void wrap.offsetWidth;
+      ships.forEach(ship=>{ ship.style.animation=''; });
+      wrap.classList.remove('is-playing');
       wrap.classList.add('is-playing');
     }
     return;
