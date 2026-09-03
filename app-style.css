@@ -467,8 +467,8 @@ button.sound-badge.playing{background:var(--ocean-mid);animation:blipPulse 1s ea
 /* ===== Mô phỏng hoạt hình 2D mẫu — tình huống đối đầu ===== */
 .animated-nautical-scene{display:block;width:100%;height:auto;}
 .animated-nautical-scene .anim-ship{transform-box:fill-box;transform-origin:center;}
-.animated-nautical-scene .anim-target{animation:headOnTarget 9s cubic-bezier(.45,0,.2,1) 1 both;animation-play-state:paused;}
-.animated-nautical-scene .anim-own{animation:headOnOwn 9s cubic-bezier(.45,0,.2,1) 1 both;animation-play-state:paused;}
+.animated-nautical-scene .anim-target{animation:headOnTarget 9s cubic-bezier(.45,0,.2,1) 1 both;animation-play-state:running;}
+.animated-nautical-scene .anim-own{animation:headOnOwn 9s cubic-bezier(.45,0,.2,1) 1 both;animation-play-state:running;}
 .animated-demo-wrap.is-playing .anim-target,
 .animated-demo-wrap.is-playing .anim-own{animation-play-state:running;}
 .replay-demo-btn{display:block;margin:12px auto 0;min-width:120px;visibility:hidden;opacity:0;pointer-events:none;transition:opacity .2s ease;}
