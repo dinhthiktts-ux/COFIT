@@ -847,7 +847,29 @@ function envArrowSVG(cx,cy,dir,color,label,dashed){
   </g>`;
 }
 
+function headOnAnimatedSceneSVG(){
+  return `<svg class="animated-nautical-scene" viewBox="0 0 420 420" xmlns="http://www.w3.org/2000/svg" aria-label="Mô phỏng hoạt hình tình huống đối đầu">
+    <defs>
+      <pattern id="seaGrid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" fill="none" stroke="#DDEFF7" stroke-width="1" opacity=".10"/></pattern>
+      <marker id="animArrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#F2C967"/></marker>
+    </defs>
+    <rect width="420" height="420" rx="14" fill="#0B2E4A"/><rect width="420" height="420" rx="14" fill="url(#seaGrid)"/>
+    <text x="210" y="24" fill="#BFE3F0" font-size="12" text-anchor="middle" font-weight="700">TÌNH HUỐNG ĐỐI ĐẦU · ĐIỀU 14</text>
+    <line x1="210" y1="55" x2="210" y2="365" stroke="#BFE3F0" stroke-width="1" stroke-dasharray="5 6" opacity=".3"/>
+    <circle cx="210" cy="210" r="58" fill="#D6524A" opacity=".10" stroke="#D6524A" stroke-dasharray="5 5"/>
+    <g class="anim-ship anim-target"><path d="M0 -18L8 5L6 17H-6L-8 5Z" fill="#DB8F2E" stroke="#fff" stroke-width="1.5"/><path d="M-20 0H-9M20 0H9" stroke="#F2C967" stroke-width="2" marker-end="url(#animArrow)"/></g>
+    <g class="anim-ship anim-own"><path d="M0 -18L8 5L6 17H-6L-8 5Z" fill="#2F9E68" stroke="#fff" stroke-width="1.5"/><path d="M-20 0H-9M20 0H9" stroke="#A7E3BE" stroke-width="2" marker-end="url(#animArrow)"/></g>
+    <path d="M210 80L210 155" stroke="#BFE3F0" stroke-width="1.5" stroke-dasharray="4 5" opacity=".55"/>
+    <path d="M210 340L210 265" stroke="#BFE3F0" stroke-width="1.5" stroke-dasharray="4 5" opacity=".55"/>
+    <text x="210" y="68" text-anchor="middle" fill="#F6FBFD" font-size="11">Tàu mục tiêu</text>
+    <text x="210" y="358" text-anchor="middle" fill="#F6FBFD" font-size="11">Tàu ta</text>
+    <text x="18" y="204" fill="#F2C967" font-size="10">Mạn phải tàu mục tiêu</text><text x="300" y="204" fill="#A7E3BE" font-size="10">Mạn phải tàu ta</text>
+    <text x="210" y="400" text-anchor="middle" fill="#BFE3F0" font-size="11">Hai tàu cùng chuyển sang mạn phải của chính mình</text>
+  </svg>`;
+}
+
 function radarSceneSVG(sc){
+  if (sc.id==='sc-headon') return headOnAnimatedSceneSVG();
   const cx=210, cy=210;
   let out = `<svg viewBox="0 0 420 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
   <defs>
@@ -1277,7 +1299,7 @@ function viewScenarioDetailHTML(id){
       </div>
       <div class="detail-grid">
         <div>
-          <div class="radar-wrap">${radarSceneSVG(sc)}</div>
+          <div class="radar-wrap ${sc.id==='sc-headon'?'animated-demo-wrap':''}">${radarSceneSVG(sc)}${sc.id==='sc-headon'?'<button type="button" class="btn btn-primary replay-demo-btn" data-replay-demo>▶ Xem lại</button>':''}</div>
           <div class="radar-legend">
             <span><span class="legend-dot" style="background:${ROLE_COLOR.giveway}"></span>Nhường đường</span>
             <span><span class="legend-dot" style="background:${ROLE_COLOR.standon}"></span>Giữ hướng</span>
@@ -2195,6 +2217,15 @@ function onViewRootClick(e){
   if (!isLoggedIn && e.target.closest('[data-toggle-settings-edit],[data-save-settings],[data-cancel-settings],[data-reset-defaults],[data-add-banner-image],[data-remove-banner-image],[data-edit-rule],[data-save-rule],[data-cancel-rule],[data-add-scenario],[data-edit-scenario],[data-save-scenario],[data-cancel-scenario],[data-delete-scenario],[data-add-signal],[data-remove-signal],[data-save-quiz],[data-delete-quiz],[data-edit-quiz],[data-toggle-quiz-manage],[data-add-quiz],[data-save-webhook],[data-import-file],[data-import-sheet],[data-commit-import],[data-cancel-import]')) return;
   let el;
   if ((el = e.target.closest('[data-goto]'))){ switchView(el.dataset.goto); return; }
+  if (e.target.closest('[data-replay-demo]')){
+    const wrap = e.target.closest('.animated-demo-wrap');
+    if (wrap){
+      wrap.classList.remove('is-playing');
+      void wrap.offsetWidth;
+      wrap.classList.add('is-playing');
+    }
+    return;
+  }
   if ((el = e.target.closest('[data-open-scenario]'))){ currentScenarioId = el.dataset.openScenario; scenarioEditOpen=false; renderView(); window.scrollTo({top:0,behavior:'smooth'}); return; }
   if ((el = e.target.closest('[data-back-scenarios]'))){ currentScenarioId = null; scenarioEditOpen=false; renderView(); return; }
   if ((el = e.target.closest('[data-part]'))){ currentPart = el.dataset.part; editingRuleId=null; renderView(); return; }
@@ -2349,7 +2380,14 @@ function playSignalAudio(url, btnEl){
 }
 
 function wireGlobalEvents(){
-  document.getElementById('view-root').addEventListener('click', onViewRootClick);
+  const viewRoot = document.getElementById('view-root');
+  viewRoot.addEventListener('click', onViewRootClick);
+  viewRoot.addEventListener('animationend', e=>{
+    if (e.animationName==='headOnOwn'){
+      const btn = viewRoot.querySelector('[data-replay-demo]');
+      if (btn) btn.classList.add('ready');
+    }
+  });
   const mainNav = document.getElementById('main-nav');
   // Hiển thị menu con khi rê chuột vào mục menu cha. Vẫn giữ click để hỗ trợ thiết bị cảm ứng.
   if (mainNav){
