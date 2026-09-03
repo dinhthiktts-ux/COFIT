@@ -21,10 +21,21 @@
       <a class="nav-btn" href="index.html">Giới thiệu</a>
       <div class="nav-dropdown" data-nav-group="theory">
         <button class="nav-btn nav-btn-parent" data-nav-toggle="theory">Lý thuyết <span class="nav-caret">▾</span></button>
-        <div class="nav-dropdown-menu">
-          <button class="nav-dropdown-item" data-view="rules">COLREG72</button>
-          <button class="nav-dropdown-item" data-view="fisheries-content">Luật Thủy sản</button>
-          <button class="nav-dropdown-item" data-view="maritime-content">Luật Hàng hải</button>
+        <div class="nav-dropdown-menu theory-menu">
+          <div class="nav-submenu-group"><span class="nav-dropdown-item nav-submenu-label">Luật và Quy tắc <span>›</span></span>
+            <div class="nav-submenu-menu">
+              <button class="nav-dropdown-item" data-view="rules">COLREG72</button>
+              <button class="nav-dropdown-item" data-view="fisheries-content">Luật Thủy sản</button>
+              <button class="nav-dropdown-item" data-view="maritime-content">Luật Hàng hải</button>
+            </div>
+          </div>
+          <div class="nav-submenu-group"><span class="nav-dropdown-item nav-submenu-label">Khai thác Thủy sản <span>›</span></span>
+            <div class="nav-submenu-menu">
+              <button class="nav-dropdown-item" data-view="fishing-general">Kiến thức chung</button>
+              <button class="nav-dropdown-item" data-view="fishing-profession">Nghề</button>
+              <button class="nav-dropdown-item" data-view="fishing-preservation">Bảo quản sản phẩm</button>
+            </div>
+          </div>
         </div>
       </div>
       <div class="nav-dropdown" data-nav-group="simulation">
@@ -48,5 +59,5 @@
 
 <script>const INITIAL_VIEW = "rules";</script>
 <script src="app-shared.js"></script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a353a701dfb14639',t:'MTc4ODQyNjk1MQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
