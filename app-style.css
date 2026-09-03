@@ -463,3 +463,34 @@ button.sound-badge.playing{background:var(--ocean-mid);animation:blipPulse 1s ea
   .home-intro-stats{grid-template-columns:1fr 1fr;}
   .home-intro-stat-label{font-size:9.5px;}
 }
+
+/* ===== Mô phỏng hoạt hình 2D mẫu — tình huống đối đầu ===== */
+.animated-nautical-scene{display:block;width:100%;height:auto;}
+.animated-nautical-scene .anim-ship{transform-box:fill-box;transform-origin:center;}
+.animated-nautical-scene .anim-target{animation:headOnTarget 9s cubic-bezier(.45,0,.2,1) 1 both;animation-play-state:paused;}
+.animated-nautical-scene .anim-own{animation:headOnOwn 9s cubic-bezier(.45,0,.2,1) 1 both;animation-play-state:paused;}
+.animated-demo-wrap.is-playing .anim-target,
+.animated-demo-wrap.is-playing .anim-own{animation-play-state:running;}
+.replay-demo-btn{display:block;margin:12px auto 0;min-width:120px;visibility:hidden;opacity:0;pointer-events:none;transition:opacity .2s ease;}
+.replay-demo-btn.ready{visibility:visible;opacity:1;pointer-events:auto;}
+@keyframes headOnTarget{
+  0%{transform:translate(210px,92px) rotate(180deg)}
+  30%{transform:translate(210px,137px) rotate(180deg)}
+  43%{transform:translate(210px,158px) rotate(180deg)}
+  55%{transform:translate(202px,166px) rotate(198deg)}
+  67%{transform:translate(178px,184px) rotate(225deg)}
+  82%{transform:translate(148px,210px) rotate(225deg)}
+  100%{transform:translate(120px,238px) rotate(225deg)}
+}
+@keyframes headOnOwn{
+  0%{transform:translate(210px,328px) rotate(0deg)}
+  30%{transform:translate(210px,283px) rotate(0deg)}
+  43%{transform:translate(210px,262px) rotate(0deg)}
+  55%{transform:translate(218px,254px) rotate(18deg)}
+  67%{transform:translate(242px,236px) rotate(35deg)}
+  82%{transform:translate(272px,210px) rotate(35deg)}
+  100%{transform:translate(300px,184px) rotate(35deg)}
+}
+@media (prefers-reduced-motion:reduce){
+  .animated-nautical-scene .anim-target,.animated-nautical-scene .anim-own{animation:none;}
+}
