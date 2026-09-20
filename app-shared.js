@@ -243,8 +243,47 @@ const DEFAULT_QUIZ = [
   explain:`Điều 30 quy định tàu neo phải trưng đèn trắng toàn vòng ở nơi dễ thấy nhất phía mũi, và một đèn tương tự ở phía lái, thấp hơn, nếu tàu dài (tàu mắc cạn trưng thêm 2 đèn đỏ toàn vòng thẳng đứng).`}
 ];
 
+/* =========================================================
+   CÂU HỎI ÔN TẬP CỤC BỘ — LUẬT THUỶ SẢN
+   (dùng khi không tải được câu hỏi từ Google Sheet)
+========================================================= */
+const DEFAULT_QUIZ_FISHERIES = [
+{id:"fsq1",prompt:"Luật Thuỷ sản hiện hành của Việt Nam là văn bản nào?",options:["Luật số 18/2017/QH14","Luật số 17/2003/QH11","Luật số 31/2024/QH15","Luật số 146/2025/QH15"],correct:0,explain:"Luật Thuỷ sản số 18/2017/QH14 được Quốc hội thông qua ngày 21/11/2017, thay thế Luật Thuỷ sản 2003."},
+{id:"fsq2",prompt:"Luật Thuỷ sản 2017 có hiệu lực thi hành từ ngày nào?",options:["01/01/2019","21/11/2017","01/01/2018","01/07/2019"],correct:0,explain:"Luật Thuỷ sản 2017 được thông qua ngày 21/11/2017 và có hiệu lực từ ngày 01/01/2019."},
+{id:"fsq3",prompt:"Nghị định quy định chi tiết một số điều và biện pháp thi hành Luật Thuỷ sản là văn bản nào?",options:["Nghị định 26/2019/NĐ-CP","Nghị định 38/2024/NĐ-CP","Nghị định 37/2024/NĐ-CP","Nghị định 309/2025/NĐ-CP"],correct:0,explain:"Nghị định 26/2019/NĐ-CP là nghị định khung hướng dẫn chi tiết Luật Thuỷ sản (được sửa đổi, bổ sung bởi NĐ 37/2024 và NĐ 309/2025)."},
+{id:"fsq4",prompt:"Theo quy định, tàu cá có chiều dài bao nhiêu trở lên phải lắp thiết bị giám sát hành trình (VMS)?",options:["15 mét","12 mét","20 mét","24 mét"],correct:0,explain:"Nghị định 26/2019/NĐ-CP yêu cầu tàu cá có chiều dài từ 15 mét trở lên phải lắp thiết bị giám sát hành trình (VMS)."},
+{id:"fsq5",prompt:"Nghị định quy định xử phạt vi phạm hành chính trong lĩnh vực thuỷ sản hiện hành là văn bản nào?",options:["Nghị định 38/2024/NĐ-CP","Nghị định 42/2019/NĐ-CP","Nghị định 26/2019/NĐ-CP","Nghị định 37/2024/NĐ-CP"],correct:0,explain:"Nghị định 38/2024/NĐ-CP (hiệu lực từ 20/5/2024) thay thế Nghị định 42/2019/NĐ-CP."},
+{id:"fsq6",prompt:"Mức phạt tiền tối đa đối với cá nhân vi phạm trong lĩnh vực thuỷ sản (theo Nghị định 38/2024/NĐ-CP) là bao nhiêu?",options:["1 tỷ đồng","500 triệu đồng","2 tỷ đồng","750 triệu đồng"],correct:0,explain:"Mức phạt tối đa với cá nhân là 1 tỷ đồng; với tổ chức vi phạm, mức phạt gấp 2 lần (2 tỷ đồng)."},
+{id:"fsq7",prompt:"Thời hiệu xử phạt vi phạm hành chính trong lĩnh vực thuỷ sản theo Nghị định 38/2024/NĐ-CP là bao lâu?",options:["2 năm","1 năm","6 tháng","3 năm"],correct:0,explain:"Nghị định 38/2024/NĐ-CP nâng thời hiệu xử phạt từ 1 năm lên 2 năm so với quy định trước đó."},
+{id:"fsq8",prompt:"Thuật ngữ IUU trong khai thác thuỷ sản có nghĩa là gì?",options:["Khai thác bất hợp pháp, không báo cáo và không theo quy định","Khai thác vượt hạn ngạch cho phép","Khai thác bằng ngư cụ bị cấm","Khai thác ngoài mùa vụ quy định"],correct:0,explain:"IUU = Illegal (bất hợp pháp), Unreported (không báo cáo), Unregulated (không theo quy định)."},
+{id:"fsq9",prompt:"Điều 7 Luật Thuỷ sản 2017 quy định về nội dung nào?",options:["Các hành vi bị nghiêm cấm trong hoạt động thuỷ sản","Điều kiện cấp Giấy phép khai thác thuỷ sản","Quy định về đăng ký tàu cá","Bảo vệ và phát triển nguồn lợi thuỷ sản"],correct:0,explain:"Điều 7 Luật Thuỷ sản 2017 liệt kê các hành vi bị nghiêm cấm trong hoạt động thuỷ sản."},
+{id:"fsq10",prompt:"Thông tư 81/2025/TT-BNNMT hướng dẫn về nội dung nào?",options:["Ghi, nộp nhật ký khai thác; kiểm tra tàu cá và giám sát sản lượng tại cảng cá","Đăng kiểm và đánh dấu tàu cá","Cấp Giấy phép khai thác thuỷ sản","Xử phạt vi phạm hành chính lĩnh vực thuỷ sản"],correct:0,explain:"Thông tư 81/2025/TT-BNNMT hướng dẫn nghiệp vụ ghi nhật ký, kiểm tra tàu cá, xác nhận/chứng nhận nguồn gốc thuỷ sản khai thác phục vụ chống khai thác IUU."},
+{id:"fsq11",prompt:"Nghị định 37/2024/NĐ-CP sửa đổi, bổ sung Nghị định 26/2019/NĐ-CP với nội dung nổi bật nào?",options:["Kiểm soát thuỷ sản khai thác vận chuyển bằng tàu công-ten-nơ nhập khẩu","Tăng hạn ngạch khai thác toàn quốc","Bãi bỏ thiết bị giám sát hành trình VMS","Thay thế toàn bộ Luật Thuỷ sản"],correct:0,explain:"Nghị định 37/2024/NĐ-CP sửa đổi điều kiện cấp phép, đăng kiểm và bổ sung quy định kiểm soát thuỷ sản khai thác nhập khẩu bằng tàu công-ten-nơ."},
+{id:"fsq12",prompt:"Việc cấp Giấy phép khai thác thuỷ sản, quản lý hạn ngạch được quy định chủ yếu tại văn bản nào?",options:["Luật Thuỷ sản 2017 và Nghị định 26/2019/NĐ-CP","Bộ luật Hàng hải Việt Nam","COLREG 72","Luật Biển Việt Nam"],correct:0,explain:"Điều kiện, hạn ngạch và trình tự cấp Giấy phép khai thác thuỷ sản được quy định tại Luật Thuỷ sản 2017 và hướng dẫn chi tiết tại Nghị định 26/2019/NĐ-CP."}
+];
+
+/* =========================================================
+   CÂU HỎI ÔN TẬP CỤC BỘ — LUẬT HÀNG HẢI
+   (dùng khi không tải được câu hỏi từ Google Sheet)
+========================================================= */
+const DEFAULT_QUIZ_MARITIME = [
+{id:"mtq1",prompt:"Bộ luật Hàng hải Việt Nam hiện hành là văn bản nào?",options:["Bộ luật số 95/2015/QH13","Bộ luật số 40/2005/QH11","Luật số 18/2017/QH14","Luật số 112/2025/QH15"],correct:0,explain:"Bộ luật Hàng hải Việt Nam số 95/2015/QH13 được Quốc hội thông qua ngày 25/11/2015."},
+{id:"mtq2",prompt:"Bộ luật Hàng hải Việt Nam 2015 có hiệu lực thi hành từ ngày nào?",options:["01/07/2017","25/11/2015","01/01/2016","01/07/2016"],correct:0,explain:"Bộ luật Hàng hải Việt Nam 2015 có hiệu lực thi hành từ ngày 01/07/2017."},
+{id:"mtq3",prompt:"Nghị định hướng dẫn thi hành Bộ luật Hàng hải về quản lý hoạt động hàng hải là văn bản nào?",options:["Nghị định 58/2017/NĐ-CP","Nghị định 171/2016/NĐ-CP","Nghị định 76/2021/NĐ-CP","Nghị định 142/2017/NĐ-CP"],correct:0,explain:"Nghị định 58/2017/NĐ-CP là nghị định khung hướng dẫn thi hành Bộ luật Hàng hải về quản lý hoạt động hàng hải."},
+{id:"mtq4",prompt:"Thông tư quy định về tiêu chuẩn, chứng chỉ chuyên môn thuyền viên hiện hành là văn bản nào?",options:["Thông tư 20/2023/TT-BGTVT","Thông tư 81/2025/TT-BNNMT","Thông tư 23/2017/TT-BGTVT","Thông tư 38/2024/TT-BGTVT"],correct:0,explain:"Thông tư 20/2023/TT-BGTVT quy định tiêu chuẩn, chứng chỉ chuyên môn, đào tạo, huấn luyện thuyền viên và định biên an toàn tối thiểu (hiệu lực từ 01/9/2023)."},
+{id:"mtq5",prompt:"Nghị định quy định xử phạt vi phạm hành chính trong lĩnh vực hàng hải là văn bản nào?",options:["Nghị định 142/2017/NĐ-CP","Nghị định 38/2024/NĐ-CP","Nghị định 58/2017/NĐ-CP","Nghị định 26/2019/NĐ-CP"],correct:0,explain:"Nghị định 142/2017/NĐ-CP (hiệu lực từ 01/02/2018) quy định xử phạt vi phạm hành chính trong lĩnh vực hàng hải, đã được sửa đổi bởi NĐ 123/2021 và NĐ 80/2026."},
+{id:"mtq6",prompt:"Thời hiệu xử phạt vi phạm hành chính chung trong lĩnh vực hàng hải là bao lâu?",options:["1 năm","2 năm","6 tháng","3 năm"],correct:0,explain:"Thời hiệu xử phạt chung là 1 năm; riêng vi phạm về xây dựng cảng biển, công trình hàng hải và bảo vệ môi trường là 2 năm."},
+{id:"mtq7",prompt:"Việc đăng ký, xoá đăng ký và mua, bán, đóng mới tàu biển được quy định tại văn bản nào?",options:["Nghị định 171/2016/NĐ-CP","Nghị định 76/2021/NĐ-CP","Nghị định 58/2017/NĐ-CP","Nghị định 34/2025/NĐ-CP"],correct:0,explain:"Nghị định 171/2016/NĐ-CP quy định đăng ký tàu biển vào Sổ đăng ký tàu biển quốc gia Việt Nam (đã được sửa đổi bởi NĐ 86/2020 và NĐ 247/2025)."},
+{id:"mtq8",prompt:"Tiêu chí phân loại cảng biển Việt Nam được quy định tại văn bản nào?",options:["Nghị định 76/2021/NĐ-CP","Nghị định 58/2017/NĐ-CP","Nghị định 171/2016/NĐ-CP","Nghị định 142/2017/NĐ-CP"],correct:0,explain:"Nghị định 76/2021/NĐ-CP quy định tiêu chí phân loại cảng biển Việt Nam (cảng biển đặc biệt, loại I, II, III)."},
+{id:"mtq9",prompt:"Bộ luật Hàng hải Việt Nam 2015 quy định về những nội dung chính nào?",options:["Tàu biển, thuyền viên, cảng biển, vận tải biển và an toàn hàng hải","Chỉ về hợp đồng vận chuyển hàng hoá","Chỉ về tai nạn đâm va và cứu hộ hàng hải","Chỉ về đăng ký tàu biển"],correct:0,explain:"Bộ luật Hàng hải 2015 quy định về tàu biển, thuyền viên, cảng biển, luồng hàng hải, vận tải biển, an toàn, an ninh hàng hải và quản lý nhà nước về hàng hải."},
+{id:"mtq10",prompt:"Hoa tiêu hàng hải và hoạt động của Cảng vụ hàng hải được hướng dẫn chi tiết tại văn bản nào?",options:["Nghị định 58/2017/NĐ-CP","Thông tư 20/2023/TT-BGTVT","Nghị định 76/2021/NĐ-CP","Bộ luật Hàng hải Việt Nam"],correct:0,explain:"Nghị định 58/2017/NĐ-CP hướng dẫn thủ tục tàu thuyền vào, rời cảng biển; hoạt động của Cảng vụ, hoa tiêu hàng hải và hệ thống báo hiệu hàng hải."},
+{id:"mtq11",prompt:"Thông tư 20/2023/TT-BGTVT quy định khung định biên an toàn tối thiểu cho đối tượng nào?",options:["Tàu biển Việt Nam (bộ phận boong, bộ phận máy)","Chỉ cho tàu cá","Chỉ cho tàu công vụ","Phương tiện thuỷ nội địa"],correct:0,explain:"Thông tư 20/2023/TT-BGTVT quy định khung định biên an toàn tối thiểu bộ phận boong và bộ phận máy đối với tàu biển, tàu biển công vụ đăng ký tại Việt Nam."},
+{id:"mtq12",prompt:"Vi phạm về đăng ký tàu thuyền, bố trí thuyền viên, chứng chỉ chuyên môn bị xử phạt theo văn bản nào?",options:["Nghị định 142/2017/NĐ-CP","Nghị định 38/2024/NĐ-CP","Nghị định 58/2017/NĐ-CP","Thông tư 20/2023/TT-BGTVT"],correct:0,explain:"Nghị định 142/2017/NĐ-CP quy định xử phạt đối với vi phạm về đăng ký tàu thuyền, bố trí thuyền viên, chứng chỉ chuyên môn trong lĩnh vực hàng hải."}
+];
+
 const DEFAULT_SETTINGS = {
   appTitle:"VÀ PHÁT TRIỂN CÔNG NGHỆ BIỂN",
+  appSubtitle:"",
   orgName:"Trung tâm Đào tạo Thuyền viên",
   heroEyebrow:"COLREG 72 · QUY TẮC QUỐC TẾ PHÒNG NGỪA ĐÂM VA TÀU THUYỀN TRÊN BIỂN",
   heroLead:"Trực quan hoá các tình huống tránh va theo Bảng quy tắc quốc tế phòng ngừa đâm va tàu thuyền trên biển năm 1972 (COLREG 72)",
@@ -599,6 +638,7 @@ function restoreQuizSessionFromStorage(){
   quizSelected = (typeof s.quizSelected === 'number') ? s.quizSelected : null;
   quizDeadline = s.quizDeadline || null;
   quizAutoSubmitted = !!s.quizAutoSubmitted;
+  quizSubmittedEarly = false;
   quizLoadError = s.quizLoadError || '';
   quizFinished = false;
   quizLoadingQuestions = false;
@@ -625,6 +665,7 @@ function resumeQuizTimer(){
         quizAutoSubmitted = true;
         submitQuizResult();
         clearQuizSessionStorage();
+        closeQuizSubmitConfirm();
         if (currentView==='quiz' || currentView==='fisheries-quiz' || currentView==='maritime-quiz') renderView();
       }
       return;
@@ -863,8 +904,8 @@ function headOnAnimatedSceneSVG(){
     <text x="210" y="24" fill="#BFE3F0" font-size="12" text-anchor="middle" font-weight="700">TÌNH HUỐNG ĐỐI ĐẦU · ĐIỀU 14</text>
     <line x1="210" y1="55" x2="210" y2="365" stroke="#BFE3F0" stroke-width="1" stroke-dasharray="5 6" opacity=".3"/>
     <circle cx="210" cy="210" r="58" fill="#D6524A" opacity=".10" stroke="#D6524A" stroke-dasharray="5 5"/>
-    <g class="anim-ship anim-target"><path d="M0 -18L8 5L6 17H-6L-8 5Z" fill="#DB8F2E" stroke="#fff" stroke-width="1.5"/><path d="M-20 0H-9M20 0H9" stroke="#F2C967" stroke-width="2" marker-end="url(#animArrow)"/></g>
-    <g class="anim-ship anim-own"><path d="M0 -18L8 5L6 17H-6L-8 5Z" fill="#2F9E68" stroke="#fff" stroke-width="1.5"/><path d="M-20 0H-9M20 0H9" stroke="#A7E3BE" stroke-width="2" marker-end="url(#animArrow)"/></g>
+    <g class="anim-ship anim-target" transform="translate(210,92) rotate(180)"><path d="M0 -18L8 5L6 17H-6L-8 5Z" fill="#DB8F2E" stroke="#fff" stroke-width="1.5"/><path d="M-20 0H-9M20 0H9" stroke="#F2C967" stroke-width="2" marker-end="url(#animArrow)"/></g>
+    <g class="anim-ship anim-own" transform="translate(210,328)"><path d="M0 -18L8 5L6 17H-6L-8 5Z" fill="#2F9E68" stroke="#fff" stroke-width="1.5"/><path d="M-20 0H-9M20 0H9" stroke="#A7E3BE" stroke-width="2" marker-end="url(#animArrow)"/></g>
     <path d="M210 80L210 155" stroke="#BFE3F0" stroke-width="1.5" stroke-dasharray="4 5" opacity=".55"/>
     <path d="M210 340L210 265" stroke="#BFE3F0" stroke-width="1.5" stroke-dasharray="4 5" opacity=".55"/>
     <text x="210" y="68" text-anchor="middle" fill="#F6FBFD" font-size="11">Tàu mục tiêu</text>
@@ -885,8 +926,8 @@ function crossingGivewayAnimatedSceneSVG(){
     <path d="M210 350L210 65" stroke="#A7E3BE" stroke-width="1.5" stroke-dasharray="5 6" opacity=".45"/>
     <path d="M350 210L70 210" stroke="#F2C967" stroke-width="1.5" stroke-dasharray="5 6" opacity=".45"/>
     <ellipse cx="210" cy="210" rx="52" ry="38" fill="#D6524A" opacity=".12" stroke="#D6524A" stroke-dasharray="5 5"/>
-    <g class="anim-ship crossing-target"><path d="M0 -18L8 5L6 17H-6L-8 5Z" fill="#DB8F2E" stroke="#fff" stroke-width="1.5"/><path d="M-20 0H-9M20 0H9" stroke="#F2C967" stroke-width="2" marker-end="url(#crossArrow)"/></g>
-    <g class="anim-ship crossing-own"><path d="M0 -18L8 5L6 17H-6L-8 5Z" fill="#2F9E68" stroke="#fff" stroke-width="1.5"/><path d="M-20 0H-9M20 0H9" stroke="#A7E3BE" stroke-width="2" marker-end="url(#crossArrow)"/></g>
+    <g class="anim-ship crossing-target" transform="translate(350,210) rotate(270)"><path d="M0 -18L8 5L6 17H-6L-8 5Z" fill="#DB8F2E" stroke="#fff" stroke-width="1.5"/><path d="M-20 0H-9M20 0H9" stroke="#F2C967" stroke-width="2" marker-end="url(#crossArrow)"/></g>
+    <g class="anim-ship crossing-own" transform="translate(210,350)"><path d="M0 -18L8 5L6 17H-6L-8 5Z" fill="#2F9E68" stroke="#fff" stroke-width="1.5"/><path d="M-20 0H-9M20 0H9" stroke="#A7E3BE" stroke-width="2" marker-end="url(#crossArrow)"/></g>
     <text x="350" y="184" fill="#F2C967" font-size="11" text-anchor="end">Tàu mục tiêu →</text>
     <text x="210" y="368" fill="#A7E3BE" font-size="11" text-anchor="middle">Tàu ta · nhường đường</text>
     <text x="210" y="402" fill="#BFE3F0" font-size="11" text-anchor="middle">Tàu ta dừng chờ tàu mục tiêu đi qua mặt</text>
@@ -900,8 +941,8 @@ function crossingStandonAnimatedSceneSVG(){
     <text x="210" y="24" fill="#BFE3F0" font-size="12" text-anchor="middle" font-weight="700">CẮT HƯỚNG · ĐIỀU 17</text>
     <path d="M210 350L210 65" stroke="#A7E3BE" stroke-width="1.5" stroke-dasharray="5 6" opacity=".45"/><path d="M70 210L350 210" stroke="#F2C967" stroke-width="1.5" stroke-dasharray="5 6" opacity=".45"/>
     <ellipse cx="210" cy="210" rx="52" ry="38" fill="#D6524A" opacity=".12" stroke="#D6524A" stroke-dasharray="5 5"/>
-    <g class="anim-ship standon-target"><path d="M0 -18L8 5L6 17H-6L-8 5Z" fill="#DB8F2E" stroke="#fff" stroke-width="1.5"/><path d="M-20 0H-9M20 0H9" stroke="#F2C967" stroke-width="2" marker-end="url(#standonArrow)"/></g>
-    <g class="anim-ship standon-own"><path d="M0 -18L8 5L6 17H-6L-8 5Z" fill="#2F9E68" stroke="#fff" stroke-width="1.5"/><path d="M-20 0H-9M20 0H9" stroke="#A7E3BE" stroke-width="2" marker-end="url(#standonArrow)"/></g>
+    <g class="anim-ship standon-target" transform="translate(70,210) rotate(90)"><path d="M0 -18L8 5L6 17H-6L-8 5Z" fill="#DB8F2E" stroke="#fff" stroke-width="1.5"/><path d="M-20 0H-9M20 0H9" stroke="#F2C967" stroke-width="2" marker-end="url(#standonArrow)"/></g>
+    <g class="anim-ship standon-own" transform="translate(210,350)"><path d="M0 -18L8 5L6 17H-6L-8 5Z" fill="#2F9E68" stroke="#fff" stroke-width="1.5"/><path d="M-20 0H-9M20 0H9" stroke="#A7E3BE" stroke-width="2" marker-end="url(#standonArrow)"/></g>
     <text x="70" y="184" fill="#F2C967" font-size="11">Tàu mục tiêu · nhường đường</text><text x="210" y="368" fill="#A7E3BE" font-size="11" text-anchor="middle">Tàu ta · giữ hướng và tốc độ</text>
     <text x="210" y="402" fill="#BFE3F0" font-size="11" text-anchor="middle">Tàu ta giữ nguyên hướng đi</text>
   </svg>`;
@@ -914,8 +955,8 @@ function overtakingAnimatedSceneSVG(){
     <text x="210" y="24" fill="#BFE3F0" font-size="12" text-anchor="middle" font-weight="700">TÀU VƯỢT · ĐIỀU 13</text>
     <path d="M150 350L150 55M180 350L180 55" stroke="#BFE3F0" stroke-width="1.5" stroke-dasharray="5 6" opacity=".35"/>
     <path d="M150 210L180 210" stroke="#D6524A" stroke-width="1.5" stroke-dasharray="5 5" opacity=".35"/>
-    <g class="anim-ship overtaking-target"><path d="M0 -18L8 5L6 17H-6L-8 5Z" fill="#DB8F2E" stroke="#fff" stroke-width="1.5"/><path d="M-20 0H-9M20 0H9" stroke="#F2C967" stroke-width="2" marker-end="url(#overtakeArrow)"/></g>
-    <g class="anim-ship overtaking-own"><path d="M0 -18L8 5L6 17H-6L-8 5Z" fill="#2F9E68" stroke="#fff" stroke-width="1.5"/><path d="M-20 0H-9M20 0H9" stroke="#A7E3BE" stroke-width="2" marker-end="url(#overtakeArrow)"/></g>
+    <g class="anim-ship overtaking-target" transform="translate(180,150)"><path d="M0 -18L8 5L6 17H-6L-8 5Z" fill="#DB8F2E" stroke="#fff" stroke-width="1.5"/><path d="M-20 0H-9M20 0H9" stroke="#F2C967" stroke-width="2" marker-end="url(#overtakeArrow)"/></g>
+    <g class="anim-ship overtaking-own" transform="translate(150,340)"><path d="M0 -18L8 5L6 17H-6L-8 5Z" fill="#2F9E68" stroke="#fff" stroke-width="1.5"/><path d="M-20 0H-9M20 0H9" stroke="#A7E3BE" stroke-width="2" marker-end="url(#overtakeArrow)"/></g>
     <g class="overtake-horn"><path d="M126 202q-12 8 0 16M116 198q-18 12 0 24" fill="none" stroke="#F2C967" stroke-width="2" stroke-linecap="round"/><text x="95" y="194" fill="#F2C967" font-size="10">Còi xin vượt</text></g>
     <g class="overtake-approval-horn"><path d="M198 126q12 8 0 16M208 122q18 12 0 24" fill="none" stroke="#F2C967" stroke-width="2" stroke-linecap="round"/><text x="210" y="116" fill="#F2C967" font-size="10" text-anchor="middle">Còi đồng ý</text></g>
     <text x="180" y="96" fill="#F2C967" font-size="11" text-anchor="middle">Tàu mục tiêu</text><text x="150" y="366" fill="#A7E3BE" font-size="11" text-anchor="middle">Tàu ta · tàu vượt</text>
@@ -928,6 +969,9 @@ function beingOvertakenAnimatedSceneSVG(){
     .replace('overtaking-scene','being-overtaken-scene')
     .replace('overtaking-target','being-target')
     .replace('overtaking-own','being-own')
+    .replace('translate(180,150)','translate(__TMP_SWAP__)')
+    .replace('translate(150,340)','translate(180,150)')
+    .replace('translate(__TMP_SWAP__)','translate(150,340)')
     .replace('Tàu mục tiêu</text><text x="150" y="366" fill="#A7E3BE" font-size="11" text-anchor="middle">Tàu ta · tàu vượt','Tàu ta · bị vượt</text><text x="150" y="366" fill="#F2C967" font-size="11" text-anchor="middle">Tàu mục tiêu · tàu vượt')
     .replace('Tàu ta phát còi rồi chạy thẳng vượt qua','Tàu ta giữ hướng, tàu mục tiêu xin vượt');
 }
@@ -938,8 +982,8 @@ function powerSailAnimatedSceneSVG(){
     <rect width="420" height="420" rx="14" fill="#0B2E4A"/><rect width="420" height="420" rx="14" fill="url(#sailSeaGrid)"/>
     <text x="210" y="24" fill="#BFE3F0" font-size="12" text-anchor="middle" font-weight="700">TÀU MÁY GẶP TÀU BUỒM · ĐIỀU 18</text>
     <path d="M210 350L210 58" stroke="#A7E3BE" stroke-width="1.5" stroke-dasharray="5 6" opacity=".4"/><path d="M350 190L65 190" stroke="#F2C967" stroke-width="1.5" stroke-dasharray="5 6" opacity=".4"/><ellipse cx="210" cy="190" rx="52" ry="38" fill="#D6524A" opacity=".12" stroke="#D6524A" stroke-dasharray="5 5"/>
-    <g class="anim-ship sail-target"><path d="M0 -18L8 5L6 17H-6L-8 5Z" fill="#DB8F2E" stroke="#fff" stroke-width="1.5"/><path d="M0 -14L0 -34L12 -12Z" fill="#F6FBFD" stroke="#fff" stroke-width="1"/><path d="M-20 0H-9M20 0H9" stroke="#F2C967" stroke-width="2" marker-end="url(#sailArrow)"/></g>
-    <g class="anim-ship sail-own"><path d="M0 -18L8 5L6 17H-6L-8 5Z" fill="#2F9E68" stroke="#fff" stroke-width="1.5"/><path d="M-20 0H-9M20 0H9" stroke="#A7E3BE" stroke-width="2" marker-end="url(#sailArrow)"/></g>
+    <g class="anim-ship sail-target" transform="translate(350,190) rotate(270)"><path d="M0 -18L8 5L6 17H-6L-8 5Z" fill="#DB8F2E" stroke="#fff" stroke-width="1.5"/><path d="M0 -14L0 -34L12 -12Z" fill="#F6FBFD" stroke="#fff" stroke-width="1"/><path d="M-20 0H-9M20 0H9" stroke="#F2C967" stroke-width="2" marker-end="url(#sailArrow)"/></g>
+    <g class="anim-ship sail-own" transform="translate(210,350)"><path d="M0 -18L8 5L6 17H-6L-8 5Z" fill="#2F9E68" stroke="#fff" stroke-width="1.5"/><path d="M-20 0H-9M20 0H9" stroke="#A7E3BE" stroke-width="2" marker-end="url(#sailArrow)"/></g>
     <text x="350" y="166" fill="#F2C967" font-size="11" text-anchor="end">Tàu buồm · giữ hướng</text><text x="210" y="368" fill="#A7E3BE" font-size="11" text-anchor="middle">Tàu ta · tàu máy nhường đường</text><text x="210" y="402" fill="#BFE3F0" font-size="11" text-anchor="middle">Tàu máy giảm tốc, giữ khoảng cách an toàn</text>
   </svg>`;
 }
@@ -950,8 +994,8 @@ function narrowChannelAnimatedSceneSVG(){
     <rect width="420" height="420" rx="14" fill="#0B2E4A"/><rect width="420" height="420" rx="14" fill="url(#channelGrid)"/>
     <text x="210" y="24" fill="#BFE3F0" font-size="12" text-anchor="middle" font-weight="700">LUỒNG HẸP · ĐIỀU 9</text>
     <path d="M28 390L185 28M122 410L300 28" fill="none" stroke="#6FC7E8" stroke-width="3" opacity=".55"/><path d="M75 400L242 28" fill="none" stroke="#DDEFF7" stroke-width="1.5" stroke-dasharray="7 7" opacity=".45"/>
-    <g class="anim-ship channel-target"><path d="M0 -18L8 5L6 17H-6L-8 5Z" fill="#DB8F2E" stroke="#fff" stroke-width="1.5"/><path d="M-20 0H-9M20 0H9" stroke="#F2C967" stroke-width="2" marker-end="url(#channelArrow)"/></g>
-    <g class="anim-ship channel-own"><path d="M0 -18L8 5L6 17H-6L-8 5Z" fill="#2F9E68" stroke="#fff" stroke-width="1.5"/><path d="M-20 0H-9M20 0H9" stroke="#A7E3BE" stroke-width="2" marker-end="url(#channelArrow)"/></g>
+    <g class="anim-ship channel-target" transform="translate(174,45) rotate(205)"><path d="M0 -18L8 5L6 17H-6L-8 5Z" fill="#DB8F2E" stroke="#fff" stroke-width="1.5"/><path d="M-20 0H-9M20 0H9" stroke="#F2C967" stroke-width="2" marker-end="url(#channelArrow)"/></g>
+    <g class="anim-ship channel-own" transform="translate(108,370) rotate(25)"><path d="M0 -18L8 5L6 17H-6L-8 5Z" fill="#2F9E68" stroke="#fff" stroke-width="1.5"/><path d="M-20 0H-9M20 0H9" stroke="#A7E3BE" stroke-width="2" marker-end="url(#channelArrow)"/></g>
     <text x="320" y="55" fill="#F2C967" font-size="11">Tàu mục tiêu ↓</text><text x="84" y="380" fill="#A7E3BE" font-size="11">Tàu ta ↑</text><text x="210" y="402" fill="#BFE3F0" font-size="11" text-anchor="middle">Cả hai giữ sát mép phải của luồng</text>
   </svg>`;
 }
@@ -1058,6 +1102,9 @@ let quizTaker = null; // {name, birthYear} — bắt buộc điền trước khi
 let quizDeadline = null;      // mốc thời gian (ms) khi hết giờ làm bài
 let quizTimerInterval = null; // id của setInterval đếm ngược
 let quizAutoSubmitted = false; // true nếu bài bị tự động nộp do hết giờ
+let quizSubmittedEarly = false; // true nếu bài được NỘP SỚM (kết quả = câu đúng / tổng số câu phải làm)
+let quizSubmitConfirmOpen = false; // true khi hộp thoại xác nhận nộp bài đang mở
+let quizSubmitConfirmMessage = ''; // nội dung hộp thoại xác nhận nộp bài
 let quizSessionQuestions = null; // bộ câu hỏi (rút ngẫu nhiên) dùng cho LƯỢT làm bài hiện tại
 let quizLoadingQuestions = false; // đang tải câu hỏi từ Google Sheet
 let quizLoadError = ''; // thông báo lỗi (nếu có) khi tải câu hỏi từ Google Sheet
@@ -1168,21 +1215,133 @@ function settingsEditPanelHTML(){
 }
 
 function viewHomeHTML(){
+  const org = DATA.settings.orgName || "Trung tâm Đào tạo Thuyền viên";
   return `<section class="view introduction-view">
+
     ${bannerCarouselHTML()}
-    <div class="intro-hero card">
-      <span class="section-eyebrow">Giới thiệu</span>
-      <h1>Nền tảng Ôn tập lý thuyết trực tuyến</h1>
-      <p>Nền tảng ôn tập trực tuyến hỗ trợ học viên tra cứu lý thuyết, thực hành tình huống và tự kiểm tra kiến thức về COLREG72, Luật Thủy sản và Luật Hàng hải.</p>
+
+    <!-- ===== 3 LĨNH VỰC ===== -->
+    <div class="section-head" data-reveal>
+      <div><span class="section-eyebrow">Nội dung</span><h2>Ôn tập</h2></div>
+      <p class="section-sub">Chọn nội dung để xem</p>
     </div>
-    <div class="intro-grid">
-      <article class="card intro-card"><h3>Về Trung tâm</h3><p>Trung tâm cung cấp tài liệu đào tạo và công cụ ôn tập phục vụ thuyền viên, học viên hàng hải và những người làm việc trong lĩnh vực biển. Nội dung được trình bày trực quan, dễ tra cứu và thuận tiện sử dụng trên máy tính hoặc điện thoại.</p></article>
-      <article class="card intro-card"><h3>Hướng dẫn sử dụng</h3><ol><li>Chọn <strong>Lý thuyết</strong> để tra cứu nội dung theo từng lĩnh vực.</li><li>Chọn <strong>Mô phỏng → Tránh va</strong> để thực hành tình huống COLREG72.</li><li>Chọn <strong>Ôn tập</strong>, sau đó chọn ngân hàng câu hỏi muốn làm.</li><li>Nhập thông tin, trả lời từng câu hỏi và xem kết quả sau khi hoàn thành.</li></ol></article>
-      <article class="card intro-card"><h3>Lưu ý khi sử dụng</h3><ul><li>Nội dung trên website nhằm mục đích đào tạo và tham khảo.</li><li>Hãy đối chiếu văn bản gốc khi cần áp dụng trong công việc hoặc hồ sơ chính thức.</li><li>Câu hỏi và tình huống có thể được cập nhật theo chương trình đào tạo.</li><li>Cần có kết nối Internet để tải câu hỏi từ Google Sheet.</li></ul></article>
-      <article class="card intro-card"><h3>Bản quyền và miễn trừ trách nhiệm</h3><p>Tài liệu, nội dung diễn giải, câu hỏi và hình ảnh trên nền tảng thuộc phạm vi quản lý của Trung tâm hoặc được sử dụng cho mục đích đào tạo nội bộ. Không sao chép, phát hành hoặc sử dụng thương mại khi chưa được cho phép.</p><p>Website không thay thế văn bản pháp luật, quy tắc quốc tế hoặc hướng dẫn của cơ quan có thẩm quyền. Trung tâm không chịu trách nhiệm cho việc áp dụng nội dung tham khảo vào các tình huống thực tế mà không đối chiếu nguồn chính thức.</p></article>
-      <article class="card intro-card intro-contact"><h3>Liên hệ hỏi đáp</h3><p>Nếu cần hỗ trợ về nội dung, lỗi hiển thị hoặc quá trình làm bài, vui lòng liên hệ Trung tâm để được hướng dẫn.</p><p><strong>Email:</strong> dinhthiktts@gmail.com</p><p><strong>Đơn vị:</strong> Trung tâm Đào tạo Thuyền viên và Phát triển Công nghệ biển</p></article>
+    <div class="home-fields">
+      <button type="button" class="home-field-card f-colreg" data-goto="rules" data-reveal style="--d:0ms">
+        <span class="home-field-ic">🚢</span>
+        <span class="home-field-no">01</span>
+        <h3>COLREG 72</h3>
+        <p>Quy tắc quốc tế phòng ngừa đâm va tàu thuyền trên biển — tra cứu theo từng điều kèm tình huống minh họa.</p>
+        <span class="home-field-go">Khám phá <i>→</i></span>
+      </button>
+      <button type="button" class="home-field-card f-fisheries" data-goto="fisheries-content" data-reveal style="--d:90ms">
+        <span class="home-field-ic">🐟</span>
+        <span class="home-field-no">02</span>
+        <h3>Luật Thủy sản</h3>
+        <p>Hệ thống Luật, Nghị định, Thông tư về khai thác &amp; bảo vệ nguồn lợi thủy sản, chống khai thác IUU.</p>
+        <span class="home-field-go">Khám phá <i>→</i></span>
+      </button>
+      <button type="button" class="home-field-card f-maritime" data-goto="maritime-content" data-reveal style="--d:180ms">
+        <span class="home-field-ic">⚓</span>
+        <span class="home-field-no">03</span>
+        <h3>Luật Hàng hải</h3>
+        <p>Bộ luật Hàng hải Việt Nam cùng các văn bản hướng dẫn về tàu biển, cảng biển và thuyền viên.</p>
+        <span class="home-field-go">Khám phá <i>→</i></span>
+      </button>
+    </div>
+
+    <!-- ===== VỀ TRUNG TÂM ===== -->
+    <div class="home-about">
+      <div class="home-about-main" data-reveal>
+        <span class="section-eyebrow">Về Trung tâm</span>
+        <h2>Đào tạo thuyền viên, gắn liền công nghệ biển</h2>
+        <p>Trung tâm cung cấp tài liệu đào tạo và công cụ ôn tập phục vụ thuyền viên, học viên hàng hải và những người làm việc trong lĩnh vực biển. Nội dung được trình bày trực quan, dễ tra cứu và thuận tiện sử dụng trên máy tính hoặc điện thoại.</p>
+        <ul class="home-about-list">
+          <li>Nội dung bám sát chương trình đào tạo</li>
+          <li>Mô phỏng tình huống trực quan</li>
+          <li>Tra cứu nhanh trên mọi thiết bị</li>
+          <li>Câu hỏi cập nhật từ ngân hàng đề</li>
+        </ul>
+      </div>
+      <div class="home-about-side">
+        <div class="home-photo" data-reveal style="--d:90ms" role="img" aria-label="Tàu cá Việt Nam kéo lưới lúc bình minh, chụp từ trên cao"></div>
+        <div class="home-live-chip" data-reveal style="--d:180ms">🟢 Tài liệu lưu hành nội bộ · Miễn phí cho học viên</div>
+      </div>
+    </div>
+
+    <!-- ===== LƯU Ý & BẢN QUYỀN ===== -->
+    <div class="home-notices">
+      <div class="home-notice card notice-warn" data-reveal style="--d:0ms">
+        <span class="home-notice-ic">⚠️</span>
+        <h3>Lưu ý khi sử dụng</h3>
+        <ul>
+          <li>Nội dung trên website nhằm mục đích đào tạo và tham khảo.</li>
+          <li>Hãy đối chiếu văn bản gốc khi áp dụng trong công việc hoặc hồ sơ chính thức.</li>
+          <li>Câu hỏi và tình huống có thể được cập nhật theo chương trình đào tạo.</li>
+          <li>Cần có kết nối Internet để tải câu hỏi từ Google Sheet.</li>
+        </ul>
+      </div>
+      <div class="home-notice card notice-copy" data-reveal style="--d:90ms">
+        <span class="home-notice-ic">©️</span>
+        <h3>Bản quyền &amp; miễn trừ trách nhiệm</h3>
+        <p>Tài liệu, nội dung diễn giải, câu hỏi và hình ảnh thuộc phạm vi quản lý của Trung tâm hoặc được sử dụng cho mục đích đào tạo nội bộ. Không sao chép, phát hành hoặc sử dụng thương mại khi chưa được cho phép.</p>
+        <p>Website không thay thế văn bản pháp luật; Trung tâm không chịu trách nhiệm cho việc áp dụng nội dung tham khảo khi chưa đối chiếu nguồn chính thức.</p>
+      </div>
+    </div>
+
+    <!-- ===== LIÊN HỆ ===== -->
+    <div class="home-contact card" data-reveal>
+      <span class="home-contact-ic">📮</span>
+      <div class="home-contact-info">
+        <strong>Liên hệ hỏi đáp</strong>
+        <span>Email: <a href="mailto:dinhthiktts@gmail.com">dinhthiktts@gmail.com</a></span>
+      </div>
+      <div class="home-contact-info">
+        <strong>Đơn vị</strong>
+        <span>${escapeHtml(org)} và Phát triển Công nghệ biển</span>
+      </div>
     </div>
   </section>`;
+}
+
+/* =========================================================
+   TRANG GIỚI THIỆU — hiệu ứng cuộn & đếm số
+========================================================= */
+let homeRevealObserver = null;
+function animateCount(el, target){
+  const dur = 1200;
+  const start = performance.now();
+  function tick(now){
+    const t = Math.min(1, (now - start) / dur);
+    const eased = 1 - Math.pow(1 - t, 3); // easeOutCubic
+    el.textContent = Math.round(eased * target);
+    if (t < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+function initHomeAnimations(){
+  const root = document.getElementById('view-root');
+  if (!root) return;
+  // Đếm số động cho các ô thống kê
+  root.querySelectorAll('[data-count]').forEach(el=>{
+    const target = parseInt(el.getAttribute('data-count'), 10) || 0;
+    if (!el.dataset.counted){ el.dataset.counted = '1'; animateCount(el, target); }
+  });
+  // Hiện dần các khối khi cuộn tới
+  const items = root.querySelectorAll('[data-reveal]');
+  if (!('IntersectionObserver' in window)){
+    items.forEach(el=>el.classList.add('is-visible'));
+    return;
+  }
+  if (homeRevealObserver) homeRevealObserver.disconnect();
+  homeRevealObserver = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if (entry.isIntersecting){
+        entry.target.classList.add('is-visible');
+        homeRevealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  items.forEach(el=>homeRevealObserver.observe(el));
 }
 
 /* =========================================================
@@ -1437,6 +1596,13 @@ function pickRandomQuestions(list, n){
   return arr.slice(0, Math.min(n, arr.length));
 }
 
+// Ngân hàng câu hỏi cục bộ theo từng môn học — dùng khi không lấy được câu hỏi từ Google Sheet.
+function localQuizBankFor(subject){
+  if (subject === 'fisheries') return DEFAULT_QUIZ_FISHERIES;
+  if (subject === 'maritime') return DEFAULT_QUIZ_MARITIME;
+  return (DATA.quiz && DATA.quiz.length) ? DATA.quiz : DEFAULT_QUIZ;
+}
+
 // Cách 1 — đơn giản, không cần cài thêm gì: tải trực tiếp CSV từ Google Sheet.
 // LƯU Ý: trình duyệt đôi khi CHẶN cách này do chính sách CORS của Google (tuỳ từng
 // trường hợp/trình duyệt) — nếu gặp, hãy cấu hình thêm "URL Apps Script trung chuyển"
@@ -1491,7 +1657,7 @@ function fetchQuizViaAppsScriptJsonp(proxyUrl){
 }
 
 // Luôn thử lấy câu hỏi MỚI NHẤT trước (Cách 1 rồi tới Cách 2 nếu có cấu hình);
-// chỉ dùng ngân hàng câu hỏi cục bộ (DATA.quiz) khi cả hai đều thất bại hoặc chưa cấu hình.
+// chỉ dùng ngân hàng câu hỏi cục bộ THEO ĐÚNG MÔN HỌC khi cả hai đều thất bại hoặc chưa cấu hình.
 async function loadQuizQuestionsForSession(){
   const configuredUrls = DATA.settings.quizSheetUrls || {};
   const sheetUrl = (configuredUrls[quizSubject] || (quizSubject==='colreg' ? DATA.settings.quizSheetUrl : '') || '').trim();
@@ -1521,8 +1687,9 @@ async function loadQuizQuestionsForSession(){
     }
   }
 
+  const localBank = localQuizBankFor(quizSubject);
   if (quizLoadError) quizLoadError += ' Đang dùng tạm ngân hàng câu hỏi cục bộ.';
-  return pickRandomQuestions(DATA.quiz, Math.min(wantCount, DATA.quiz.length));
+  return pickRandomQuestions(localBank, Math.min(wantCount, localBank.length));
 }
 
 function quizSubjectPickerHTML(){
@@ -1559,9 +1726,12 @@ function quizActiveInnerHTML(){
   const q = quizSessionQuestions[quizIndex];
   return `<div class="card quiz-card">
       ${quizLoadError?`<div class="quiz-explain" style="margin-bottom:14px;border-left:3px solid var(--giveway);">${escapeHtml(quizLoadError)}</div>`:''}
-      <div class="quiz-progress" style="display:flex;justify-content:space-between;align-items:center;">
+      <div class="quiz-progress" style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
         <span>Câu ${quizIndex+1} / ${total} · Điểm hiện tại: ${quizScore}</span>
-        <span class="quiz-timer" id="quiz-timer-display">--:--</span>
+        <span style="display:inline-flex;align-items:center;gap:8px;">
+          <span class="quiz-timer" id="quiz-timer-display">--:--</span>
+          <button class="btn btn-danger btn-sm" data-quiz-submit title="Kết thúc bài làm và nộp ngay">⏹ Nộp bài</button>
+        </span>
       </div>
       <div class="quiz-bar"><div class="quiz-bar-fill" style="width:${(quizIndex/total)*100}%"></div></div>
       <div class="quiz-q">${escapeHtml(q.prompt)}</div>
@@ -1579,7 +1749,7 @@ function quizHeroHTML(){
   return `<div class="hero">
       ${heroRadarSVG()}
       <span class="hero-eyebrow">${escapeHtml(s.heroEyebrow)}</span>
-      <h1>${escapeHtml(s.appTitle)}<br>${escapeHtml(s.appSubtitle)}</h1>
+      <h1>${escapeHtml(s.orgName)}<br>${escapeHtml(s.appTitle)}${s.appSubtitle?`<br>${escapeHtml(s.appSubtitle)}`:''}</h1>
       <p class="lead">${escapeHtml(s.heroLead)}</p>
       <div class="hero-actions">
         <button class="btn btn-primary" data-goto="scenarios">Mô phỏng tình huống</button>
@@ -1692,7 +1862,7 @@ function viewQuizTakeHTML(){
   const manageBtn = isLoggedIn?`<button class="btn btn-ghost btn-sm" data-toggle-quiz-manage>${iconSpan('edit')} Quản lý câu hỏi</button>`:'';
   const header = `<div class="section-head"><div><span class="section-eyebrow">Tự kiểm tra</span><h2>Câu hỏi ôn tập</h2></div>${manageBtn}</div>`;
   if (!quizSubject) return `<section class="view">${header}${quizSubjectPickerHTML()}</section>`;
-  if (!quizTaker) return `<section class="view">${header}<div class="quiz-selected-subject">Nội dung đã chọn: <strong>${escapeHtml(({colreg:'COLREG72',fisheries:'Luật Thủy sản',maritime:'Luật Hàng hải'})[quizSubject])}</strong></div>${quizTakerFormInnerHTML()}</section>`;
+  if (!quizTaker) return `<section class="view">${header}<button class="back-link" data-back-quiz-subject>${iconSpan('arrowLeft')} Chọn nội dung khác</button><div class="quiz-selected-subject">Nội dung đã chọn: <strong>${escapeHtml(({colreg:'COLREG72',fisheries:'Luật Thủy sản',maritime:'Luật Hàng hải'})[quizSubject])}</strong></div>${quizTakerFormInnerHTML()}</section>`;
   if (quizLoadingQuestions) return `<section class="view">${header}${quizLoadingInnerHTML()}</section>`;
   if (!quizSessionQuestions || quizSessionQuestions.length===0) return `<section class="view">${header}<div class="empty-note">Không có câu hỏi khả dụng. Kiểm tra lại đường liên kết Google Sheet hoặc ngân hàng câu hỏi cục bộ.</div></section>`;
   let inner;
@@ -1726,6 +1896,7 @@ function startQuizTimer(){
         quizAutoSubmitted = true;
         submitQuizResult();
         clearQuizSessionStorage();
+        closeQuizSubmitConfirm();
         if (currentView==='quiz' || currentView==='fisheries-quiz' || currentView==='maritime-quiz') renderView();
       }
       return;
@@ -1751,7 +1922,7 @@ async function startQuizWithTakerInfo(){
   quizSessionQuestions = await loadQuizQuestionsForSession();
 
   quizLoadingQuestions = false;
-  quizIndex=0; quizScore=0; quizSelected=null; quizFinished=false; quizAutoSubmitted=false;
+  quizIndex=0; quizScore=0; quizSelected=null; quizFinished=false; quizAutoSubmitted=false; quizSubmittedEarly = false;
   startQuizTimer();
   saveQuizSessionToStorage();
   renderView();
@@ -1782,6 +1953,82 @@ async function submitQuizResult(){
     }catch(e){ /* lỗi mạng/CORS khi dùng no-cors là bình thường, bỏ qua */ }
   }
 }
+// NỘP BÀI SỚM: kết thúc bài làm ngay, kết quả tính theo số câu ĐÃ TRẢ LỜI.
+function submitQuizEarly(){
+  if (quizFinished || !quizTaker || !quizSessionQuestions || quizSubmitConfirmOpen) return;
+  const totalQ = quizSessionQuestions.length;
+  const answered = quizIndex + (quizSelected !== null ? 1 : 0);
+  const unanswered = totalQ - answered;
+  let msg;
+  if (answered === 0){
+    msg = 'Bạn chưa trả lời câu hỏi nào. Nộp bài ngay bây giờ? Toàn bộ câu hỏi sẽ được tính là sai.';
+  } else {
+    msg = `Bạn đã trả lời ${answered}/${totalQ} câu (còn ${unanswered} câu chưa trả lời). Nộp bài và kết thúc ngay? Những câu chưa trả lời sẽ được tính là sai.`;
+  }
+  quizSubmitConfirmMessage = msg;
+  renderQuizSubmitConfirm();
+}
+
+// Hộp thoại xác nhận nộp bài HIỂN THỊ NGAY TRONG TRANG (không dùng alert/confirm của trình duyệt).
+function renderQuizSubmitConfirm(){
+  closeQuizSubmitConfirm(); // dọn hộp thoại cũ nếu có
+  const overlay = document.createElement('div');
+  overlay.id = 'quiz-submit-confirm';
+  overlay.className = 'modal-overlay';
+  overlay.innerHTML = `
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="qsc-title">
+      <button type="button" class="modal-close" data-qsc-close aria-label="Đóng">✕</button>
+      <h3 id="qsc-title" style="font-size:17px;margin:0 0 10px;">Xác nhận nộp bài</h3>
+      <p style="font-size:14px;line-height:1.6;color:var(--ink-soft);margin:0 0 18px;">${escapeHtml(quizSubmitConfirmMessage)}</p>
+      <div style="display:flex;gap:10px;justify-content:flex-end;">
+        <button type="button" class="btn btn-ghost" data-qsc-cancel>Huỷ</button>
+        <button type="button" class="btn btn-danger" data-qsc-confirm>Nộp bài ngay</button>
+      </div>
+    </div>`;
+  overlay.addEventListener('click', function(e){
+    if (e.target === overlay || e.target.closest('[data-qsc-close]') || e.target.closest('[data-qsc-cancel]')){
+      closeQuizSubmitConfirm();
+      return;
+    }
+    if (e.target.closest('[data-qsc-confirm]')){
+      closeQuizSubmitConfirm();
+      confirmQuizSubmitEarly();
+    }
+  });
+  document.body.appendChild(overlay);
+  quizSubmitConfirmOpen = true;
+}
+
+function closeQuizSubmitConfirm(){
+  const el = document.getElementById('quiz-submit-confirm');
+  if (el) el.remove();
+  quizSubmitConfirmOpen = false;
+}
+
+function confirmQuizSubmitEarly(){
+  if (quizFinished || !quizTaker || !quizSessionQuestions) return;
+  quizSubmittedEarly = true;
+  quizFinished = true;
+  quizAutoSubmitted = false;
+  clearQuizTimer();
+  quizDeadline = null;
+  submitQuizResult();
+  clearQuizSessionStorage();
+  renderView();
+}
+// Quay lại màn hình CHỌN NỘI DUNG ôn tập (dọn toàn bộ trạng thái làm bài hiện tại).
+function backToQuizSubjectPicker(){
+  closeQuizSubmitConfirm();
+  clearQuizTimer();
+  quizDeadline = null;
+  quizSubject = null;
+  quizTaker = null;
+  quizIndex = 0; quizScore = 0; quizSelected = null; quizFinished = false;
+  quizAutoSubmitted = false; quizSubmittedEarly = false;
+  quizSessionQuestions = null; quizLoadError = '';
+  clearQuizSessionStorage();
+  renderView();
+}
 function quizResultInnerHTML(){
   const total = quizSessionQuestions ? quizSessionQuestions.length : 0;
   const pct = total? Math.round((quizScore/total)*100) : 0;
@@ -1792,8 +2039,12 @@ function quizResultInnerHTML(){
         <div class="score-num">${quizScore}/${total}</div>
         <p>${msg}</p>
         ${quizAutoSubmitted?`<p style="font-size:12.5px;color:var(--giveway);font-weight:700;">⏱ Đã hết thời gian làm bài — bài của bạn được tự động nộp.</p>`:''}
+        ${quizSubmittedEarly?`<p style="font-size:12.5px;color:var(--both);font-weight:700;">⏹ Đã nộp bài sớm — các câu chưa trả lời được tính là sai.</p>`:''}
         <p style="font-size:12.5px;color:var(--ink-soft);">Kết quả của bạn đã được ghi nhận.</p>
-        <button class="btn btn-primary" data-quiz-restart>Làm lại từ đầu</button>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px;">
+          <button class="btn btn-primary" data-quiz-restart>Làm lại từ đầu</button>
+          <button class="btn btn-ghost" data-back-quiz-subject>${iconSpan('arrowLeft')} Chọn nội dung khác</button>
+        </div>
       </div>
     </div>`;
 }
@@ -1983,7 +2234,7 @@ function renderView(){
   else if (currentView==='maritime-content') root.innerHTML = viewMaritimeContentHTML();
   else if (currentView==='maritime-quiz') root.innerHTML = viewQuizHTML();
   updateQuizTimerDisplay();
-  if (currentView==='home') startBannerCarousel();
+  if (currentView==='home'){ startBannerCarousel(); initHomeAnimations(); }
 }
 function switchView(view){
   currentView = view;
@@ -2043,7 +2294,7 @@ function resetToDefaults(){
     settings: deepClone(DEFAULT_SETTINGS)
   };
   settingsEditOpen = false; scenarioEditOpen = false; editingRuleId = null; editingQuizId = null; quizManageMode = false;
-  clearQuizTimer(); quizDeadline = null; quizAutoSubmitted = false; quizTaker = null;
+  clearQuizTimer(); quizDeadline = null; quizAutoSubmitted = false; quizTaker = null; quizSubmittedEarly = false;
   quizIndex = 0; quizScore = 0; quizSelected = null; quizFinished = false;
   currentView = 'home'; currentScenarioId = null; currentPart = 'A';
   persistAppData();
@@ -2436,6 +2687,7 @@ function onViewRootClick(e){
     }
     return;
   }
+  if (e.target.closest('[data-quiz-submit]')){ submitQuizEarly(); return; }
   if (e.target.closest('[data-quiz-next]')){
     quizIndex++; quizSelected=null;
     if (quizIndex>=quizSessionQuestions.length){
@@ -2449,10 +2701,11 @@ function onViewRootClick(e){
     renderView();
     return;
   }
+  if (e.target.closest('[data-back-quiz-subject]')){ backToQuizSubjectPicker(); return; }
   if (e.target.closest('[data-quiz-restart]')){
     clearQuizTimer();
     quizDeadline = null;
-    quizIndex=0; quizScore=0; quizSelected=null; quizFinished=false; quizTaker=null; quizSubject=null; quizAutoSubmitted=false;
+    quizIndex=0; quizScore=0; quizSelected=null; quizFinished=false; quizTaker=null; quizSubject=null; quizAutoSubmitted=false; quizSubmittedEarly = false;
     quizSessionQuestions = null; quizLoadError = '';
     clearQuizSessionStorage();
     renderView();
@@ -2563,7 +2816,7 @@ function wireGlobalEvents(){
       document.querySelectorAll('.nav-dropdown.open').forEach(d=>d.classList.remove('open'));
     }
   });
-  document.addEventListener('keydown', e=>{ if (e.key==='Escape'){ closeLoginModal(); document.querySelectorAll('.nav-dropdown.open').forEach(d=>d.classList.remove('open')); } });
+  document.addEventListener('keydown', e=>{ if (e.key==='Escape'){ closeQuizSubmitConfirm(); document.querySelectorAll('.nav-dropdown.open').forEach(d=>d.classList.remove('open')); } });
   const audioPlayer = document.getElementById('global-audio-player');
   audioPlayer.addEventListener('ended', ()=>{
     document.querySelectorAll('.sound-badge.playing').forEach(b=>b.classList.remove('playing'));
